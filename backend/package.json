@@ -1,0 +1,33 @@
+{
+  "name": "blata-ditz-online-retail-store",
+  "version": "1.0.0",
+  "description": "Blata Ditz Online Retail Store is a web-based e-commerce platform designed to provide a seamless shopping experience for customers. It allows users to search for products, add them to cart, and complete purchases. The system will include an admin dashboard for managing products, categories, and orders efficiently.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiefgc/Blata-Ditz-Online-Retail-Store.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kiefgc/Blata-Ditz-Online-Retail-Store/issues"
+  },
+  "homepage": "https://github.com/kiefgc/Blata-Ditz-Online-Retail-Store#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
