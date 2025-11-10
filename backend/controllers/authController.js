@@ -1,5 +1,6 @@
 import { Customer } from "../models/Customer.js";
 import { Admin } from "../models/Admin.js";
+import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -101,6 +102,43 @@ export async function login(req, res) {
     res.status(401).json({ message: "Invalid email or password" });
   } catch (error) {
     console.error("Login error: ", error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+export async function updateProfile(req, res) {
+  try {
+    const { id, role } = req.user;
+    const updates = req.body;
+
+    if (!updates || Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: "No data provided for update" });
+    }
+
+    delete updates.role;
+    delete updates._id;
+    delete updates.created_at;
+
+    if (updates.password) {
+      updates.password = await bcrypt.hash(updates.password, 10);
+    }
+
+    const Model = role === "admin" ? Admin : Customer;
+
+    const result = await Model.collection().updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updates }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res
+        .status(400)
+        .json({ message: "No changes made or user not found" });
+    }
+
+    res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Update profile error:", error);
     res.status(500).json({ message: "Server error" });
   }
 }

@@ -1,5 +1,5 @@
 import express from "express";
-import { createAdmin, getAllAdmins } from "../controllers/adminController.js";
+import * as adminController from "../controllers/adminController.js";
 import {
   authenticateToken,
   requireAdmin,
@@ -7,7 +7,13 @@ import {
 
 const router = express.Router();
 
-router.post("/", authenticateToken, requireAdmin, createAdmin);
-router.get("/", authenticateToken, requireAdmin, getAllAdmins);
+router.post("/", authenticateToken, requireAdmin, adminController.createAdmin);
+router.get("/", authenticateToken, requireAdmin, adminController.getAllAdmins);
+router.get(
+  "/users/:id",
+  authenticateToken,
+  requireAdmin,
+  adminController.getUserById
+);
 
 export default router;

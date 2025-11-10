@@ -1,4 +1,6 @@
 import { Admin } from "../models/Admin.js";
+import { Customer } from "../models/Customer.js";
+import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -40,5 +42,28 @@ export async function getAllAdmins(req, res) {
     res.status(200).json(admins);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getUserById(req, res) {
+  try {
+    const { id } = req.params;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const user = await Customer.collection().findOne({ _id: new ObjectId(id) });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { password, ...userData } = user;
+
+    res.status(200).json(userData);
+  } catch (error) {
+    console.error("Get user ID by error: ", error);
+    res.status(500).json({ message: "Server error" });
   }
 }
