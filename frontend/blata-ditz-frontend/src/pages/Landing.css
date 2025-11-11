@@ -1,0 +1,57 @@
+.page-content {
+  margin-left: 10vw;
+  margin-right: 10vw;
+}
+
+.featured-container {
+  width: 100%;
+  height: 50vh;
+
+  display: flex;
+  flex-direction: row;
+
+  border-radius: 10px;
+  margin-top: 3vh;
+}
+
+.bg-red {
+  background: linear-gradient(-45deg, #690000, #ad0000, #c70000);
+  background-size: 400% 400%;
+  animation: gradient 10s ease infinite;
+}
+
+.bg-blue {
+  background: linear-gradient(-45deg, #00062f, #000f6e, #000b52);
+  background-size: 400% 400%;
+  animation: gradient 10s ease infinite;
+}
+
+.bg-green {
+  background: linear-gradient(-45deg, #002f1a, #004e2c);
+  background-size: 400% 400%;
+  animation: gradient 10s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.backtotop {
+  margin-top: 2vh;
+
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: 0.3s ease-in;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
