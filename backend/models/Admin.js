@@ -19,7 +19,7 @@ export class Admin {
 
   static async getAll() {
     return await this.collection().find().toArray();
-  }
+  } //May remove later on
 
   static async findById(id) {
     return await this.collection().findOne({ _id: new ObjectId(id) });

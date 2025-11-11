@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(cors({ origin: "http://localhost:5713" }));
 
 app.use("/admin", adminRoutes);
 app.use("/authentication", authRoutes);
+app.use("/products", productRoutes);
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });

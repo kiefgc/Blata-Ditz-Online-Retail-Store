@@ -43,7 +43,7 @@ export async function getAllAdmins(req, res) {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+} //May remove later on
 
 export async function getUserById(req, res) {
   try {
