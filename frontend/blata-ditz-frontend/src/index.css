@@ -49,6 +49,8 @@ select,
   font-weight: 500;
 }
 
+/*navbar*/
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -83,4 +85,35 @@ select,
   border: none;
   width: 100%;
   color: #d5d6d9;
+}
+
+/*footer*/
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+
+  width: 100%;
+  height: 20vh;
+  bottom: 0;
+
+  background-color: #131416;
+}
+
+.footer > p {
+  margin-bottom: 2px;
+}
+
+.footer .copyright {
+  color: #d5d6d9;
+  font-size: 1rem;
+}
+
+.footer .copyright {
+  color: #d5d6d9;
+  font-size: 1rem;
+  font-style: italic;
 }

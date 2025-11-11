@@ -41,6 +41,13 @@ function Landing() {
           </a>
         </div>
       </div>
+      <div class="footer">
+        <a href="#" class="logo">
+          BLATADITZ
+        </a>
+        <p class="copyright">Copyright &copy; 2025</p>
+        <p class="disclaimer">FOR ACADEMIC PURPOSES ONLY</p>
+      </div>
     </>
   );
 }
