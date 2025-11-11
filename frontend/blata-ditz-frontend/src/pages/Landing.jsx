@@ -62,9 +62,32 @@ function Landing() {
         </div>
       </div>
       <div class="page-content">
-        <div class="featured-container bg-red">test</div>
-        <div class="featured-container bg-blue">test</div>
-        <div class="featured-container bg-green">test</div>
+        <div class="featured-container bg-red">
+          <div class="featuredleft">
+            <div class="sectiontitle">
+              Featured Nintendo<br></br>Switch Games
+            </div>
+          </div>
+          <div class="featuredright">test</div>
+        </div>
+        <div class="featured-container bg-blue">
+          {" "}
+          <div class="featuredleft">
+            <div class="sectiontitle">
+              Featured Xbox<br></br>Games
+            </div>
+          </div>
+          <div class="featuredright">test</div>
+        </div>
+        <div class="featured-container bg-green">
+          {" "}
+          <div class="featuredleft">
+            <div class="sectiontitle">
+              Featured PlayStation<br></br>Games
+            </div>
+          </div>
+          <div class="featuredright">test</div>
+        </div>
 
         <a id="gotop" class="backtotop" href="javascript:void(0)">
           <img

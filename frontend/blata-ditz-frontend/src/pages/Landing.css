@@ -3,6 +3,8 @@
   margin-right: 10vw;
 }
 
+/*featured games sections*/
+
 .featured-container {
   width: 100%;
   height: 50vh;
@@ -12,6 +14,8 @@
 
   border-radius: 10px;
   margin-top: 3vh;
+
+  padding: 6vh 3vw;
 }
 
 .bg-red {
@@ -43,6 +47,29 @@
     background-position: 0% 50%;
   }
 }
+
+.featuredleft {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+.featuredright {
+  width: 70%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.sectiontitle {
+  font-family: "Ubuntu", sans-serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 2rem;
+
+  color: white;
+}
+/*scroll back to top button*/
 
 .backtotop {
   margin-top: 2vh;
