@@ -53,7 +53,10 @@ export async function getUserById(req, res) {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
-    const user = await Customer.collection().findOne({ _id: new ObjectId(id) });
+    const user = await Customer.collection().findOne(
+      { _id: new ObjectId(id) },
+      { projection: { password: 0 } }
+    );
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

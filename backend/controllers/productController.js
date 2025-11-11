@@ -82,6 +82,14 @@ export async function updateProduct(req, res) {
     const { id } = req.params;
     const updates = req.body;
 
+    if (!updates || Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: "No data provided for update" });
+    }
+
+    delete updates.product_id;
+    delete updates.created_at;
+    delete updates.updated_at;
+
     if (updates.unit_price !== undefined) {
       const unitPriceNum = parseFloat(updates.unit_price);
       if (unitPriceNum <= 0)
@@ -120,6 +128,7 @@ export async function updateProduct(req, res) {
     */
 
     const result = await Product.update(id, updates);
+
     if (result.matchedCount === 0)
       return res.status(404).json({ message: "Product not found" });
 
