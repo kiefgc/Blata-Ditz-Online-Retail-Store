@@ -5,12 +5,14 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #070709;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  font-size: 62.5% /* 1rem = 10px */;
 }
 *,
 *::before,
@@ -20,7 +22,65 @@
 body {
   margin: 0;
   padding: 0;
-
+  font-family: "Ubuntu", sans-serif;
   min-width: 320px;
   min-height: 100vh;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
+}
+
+.logo {
+  font-weight: 700;
+  font-style: italic;
+  color: #ffd033;
+  font-size: 3.2rem;
+  width: auto;
+}
+
+input,
+textarea,
+button,
+select,
+::placeholder {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 500;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 8vw, 8rem);
+  flex-direction: row;
+  width: 100%;
+  z-index: 1000;
+  position: sticky;
+  background-color: #070709;
+  gap: 6rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: clamp(1rem, 2vw, 3rem);
+  align-items: center;
+}
+.search-bar {
+  background-image: linear-gradient(to right, black, #131416);
+  width: clamp(10rem, 60vw, 85rem);
+  border-radius: 5px;
+  border: 1px solid #d5d6d9;
+  padding: 0.8rem 1.2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
+}
+
+.search-bar input {
+  background: transparent;
+  border: none;
+  width: 100%;
+  color: #d5d6d9;
 }
