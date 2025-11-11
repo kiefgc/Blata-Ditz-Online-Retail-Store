@@ -103,7 +103,19 @@ function Landing() {
             {/* USERS SECTION */}
             <div class="users-section"></div>
             {/* ORDERS SECTION */}
-            <div class="orders-section"></div>
+            <div class="orders-section">
+              <input type="text" placeholder="Search orders" />
+              <div class="orders-tab">
+                <ul>
+                  <li>All</li>
+                  <li>To Pay</li>
+                  <li>To Ship</li>
+                  <li>To Receive</li>
+                  <li>Completed</li>
+                  <li>Cancelled</li>
+                </ul>
+              </div>
+            </div>
             {/* INVENTORY SECTION */}
             <div class="inventory-section"></div>
             {/* CATEGORIES SECTION */}
