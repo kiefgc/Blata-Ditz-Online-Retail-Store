@@ -21,11 +21,12 @@ li {
   display: flex;
   flex-direction: row;
   width: 100%;
-  gap: 5rem;
+  gap: clamp(2rem, 4vw, 5rem);
 }
 
 .sidebar {
   width: 20%;
+  min-width: 160px;
 }
 
 .sidebar li {
@@ -45,7 +46,37 @@ li {
   width: 100%;
 }
 /* STYLES FOR ORDERS-TAB */
-.orders-tab {
+.admin-orders-section {
+  gap: 1.6rem;
+  display: flex;
+  flex-direction: column;
+}
+.admin-orders-section .search-bar {
+  width: 100%;
+}
+
+.orders-filter {
+  display: flex;
+  flex-direction: row;
+  gap: 1.3rem;
+  align-items: center;
+}
+.orders-filter label {
+  font-size: 1.6rem;
+}
+
+.orders-filter select {
+  background-color: #131416;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+  width: 120px;
+  font-weight: 400;
+  padding: 5px 10px;
+  border-right: 10px solid transparent;
+}
+
+.admin-orders-tab {
   background-color: #010101;
   border-radius: 5px;
   border: 1px solid #d5d6d9;
@@ -53,7 +84,7 @@ li {
   padding: 1rem 2rem;
 }
 
-.orders-tab ul {
+.admin-orders-tab ul {
   display: flex;
   flex-direction: row;
   gap: 3.2rem;
@@ -61,4 +92,20 @@ li {
   font-size: 1.6rem;
   text-transform: uppercase;
   color: #ffcf33;
+}
+
+.admin-orders-columnHeader {
+  display: grid;
+  grid-template-columns: 1fr 0.3fr 2fr 1fr 1fr 1fr 1fr;
+  font-size: 1.6rem;
+  color: #ffcf33;
+  padding: 0 1.2rem;
+}
+
+.admin-orders-list {
+  display: grid;
+  grid-template-columns: 1fr 0.3fr 2fr 1fr 1fr 1fr 1fr;
+  font-size: 1.6rem;
+
+  padding: 0 1.2rem;
 }
