@@ -103,9 +103,17 @@ function Landing() {
             {/* USERS SECTION */}
             <div class="users-section"></div>
             {/* ORDERS SECTION */}
-            <div class="orders-section">
-              <input type="text" placeholder="Search orders" />
-              <div class="orders-tab">
+            <div class="admin-orders-section">
+              <div class="search-bar">
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+                  alt="search--v1"
+                />
+                <input type="text" placeholder="Search orders" />
+              </div>
+              <div class="admin-orders-tab">
                 <ul>
                   <li>All</li>
                   <li>To Pay</li>
@@ -114,6 +122,38 @@ function Landing() {
                   <li>Completed</li>
                   <li>Cancelled</li>
                 </ul>
+              </div>
+              <div class="orders-filter">
+                <label for="orders-filterOptions">Filter by:</label>
+                <select name="orders-filterOptions" id="orders-filterOptions">
+                  <option value="" disabled hidden>
+                    {" "}
+                  </option>
+                  <option value="title">Title</option>
+                  <option value="date">Last Edited</option>
+                  <option value="published_date">Published Date</option>
+                </select>
+              </div>
+              <div class="admin-orders-columnHeader">
+                <span>Order ID</span>
+                <span></span>
+                <span>Product</span>
+                <span>Date</span>
+                <span>Status</span>
+                <span>Total Amount</span>
+                <span>Customer's Email</span>
+              </div>
+              <div class="admin-orders-list">
+                <span>001</span>
+                <span>x1</span>
+                <span>
+                  Pulsar XBOARD QS Mechanical Gaming Keyboard with Quick
+                  Switching Technology, Win/Mac Switch Key (Black)
+                </span>
+                <span>06-11-2025</span>
+                <span>Completed</span>
+                <span>₱16,450.00</span>
+                <span>dana.alania@fmail.com</span>
               </div>
             </div>
             {/* INVENTORY SECTION */}
