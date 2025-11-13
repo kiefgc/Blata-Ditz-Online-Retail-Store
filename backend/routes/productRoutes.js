@@ -13,11 +13,11 @@ import {
 
 const router = express.Router();
 
-// Public
+// Public Routes
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 
-// Admin only
+// Admin-only Routes
 router.post("/", authenticateToken, requireAdmin, createProduct);
 router.patch("/:id", authenticateToken, requireAdmin, updateProduct);
 router.delete("/:id", authenticateToken, requireAdmin, deleteProduct);

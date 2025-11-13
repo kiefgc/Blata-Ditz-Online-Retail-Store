@@ -68,7 +68,7 @@ export async function createProduct(req, res) {
       //supplier_id,
       unit_price: parseFloat(unit_price),
       cost_price: parseFloat(cost_price),
-      is_active: true,
+      is_active: false,
     });
 
     res.status(201).json({ message: "Product created successfully" });

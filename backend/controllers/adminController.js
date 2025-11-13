@@ -3,6 +3,7 @@ import { Customer } from "../models/Customer.js";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import * as validators from "../utils/validators.js";
 
 export async function seedFirstAdmin() {
   const existing = await Admin.findByEmail(process.env.ADMIN_EMAIL);
@@ -22,6 +23,27 @@ export async function createAdmin(req, res) {
     const { username, email, password } = req.body;
     if (!username || !email || !password)
       return res.status(400).json({ message: "Missing required fields" });
+
+    if (!validators.isValidUsername(username)) {
+      return res
+        .status(400)
+        .json({ message: "Username bust be 3-20 letters/numbers" });
+    }
+
+    if (!validators.isValidUsername(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    if (!validators.isValidPassword(password)) {
+      return res.status(400).json({
+        message:
+          "Password but be at least 8 characters, include uppercase, lowercase, and number",
+      });
+    }
+
+    if (!validators.isValidPhone(phone)) {
+      return res.status(400).json({ message: "Invalid phone number" });
+    }
 
     const existing = await Admin.findByEmail(email);
     if (existing)
