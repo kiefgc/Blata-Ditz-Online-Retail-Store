@@ -13,14 +13,18 @@ function Landing() {
       gototop.classList.remove("active");
     }
   };
-  window.addEventListener("scroll", onScroll);
 
-  gototop.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
+  document.addEventListener("DOMContentLoaded", () => {
+    window.addEventListener("scroll", onScroll);
+
+    gototop.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     });
   });
+
   return (
     <>
       <div class="navbar">
