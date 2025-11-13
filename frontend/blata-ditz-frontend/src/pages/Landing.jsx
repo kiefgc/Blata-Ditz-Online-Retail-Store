@@ -5,6 +5,18 @@ import ps4 from "../assets/ps4.png";
 import xbox from "../assets/xbox.png";
 import nswitch from "../assets/switch.png";
 
+import pokemonns from "../assets/nswitch-pokemon.png";
+import kirbyns from "../assets/nswitch-kirby.png";
+import littlenightmaresns from "../assets/nslittlenightmares.png";
+
+import eriksholmps from "../assets/ps5eriksholm.png";
+import pawpatrolps from "../assets/ps5pawpatrol.jpg";
+import ddreviveps from "../assets/ps5ddrevive.png";
+
+import nba2k26xb from "../assets/xboxnba2k26.jpg";
+import wuchangxb from "../assets/xboxwuchang.jpg";
+import suicidesquadxb from "../assets/xboxssktjl.png";
+
 function Landing() {
   const gototopRef = useRef(null);
 
@@ -90,11 +102,38 @@ function Landing() {
         <div class="featured-container bg-red">
           <div class="featuredleft">
             <div class="sectiontitle">
-              Featured Nintendo<br></br>Switch Games
+              FEATURED NINTENDO<br></br>SWITCH GAMES
             </div>
             <img class="featuredimage2" src={nswitch}></img>
           </div>
-          <div class="featuredright">test</div>
+          <div class="featuredright">
+            <div class="featuredgames">
+              <div class="ftgame">
+                <img src={pokemonns}></img>
+                <div class="ftgame-title">
+                  <p>Pokémon™ Legends: Z-A – Nintendo Switch™ 2 Edition</p>
+                  <p>₱3,095.00</p>
+                </div>
+              </div>
+              <div class="ftgame">
+                <img src={kirbyns}></img>
+                <div class="ftgame-title">
+                  <p>
+                    Kirby™ and the Forgotten Land – Nintendo Switch™ 2 Edition +
+                    Star-Crossed World
+                  </p>
+                  <p>₱3,395.00</p>
+                </div>
+              </div>
+              <div class="ftgame">
+                <img src={littlenightmaresns}></img>
+                <div class="ftgame-title">
+                  <p>Little Nightmares III</p>
+                  <p>₱2,095.00</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="featured-container bg-blue">
           <div class="featuredleft">
@@ -103,7 +142,31 @@ function Landing() {
             </div>
             <img class="featuredimage" src={ps4}></img>
           </div>
-          <div class="featuredright">test</div>
+          <div class="featuredright">
+            <div class="featuredgames">
+              <div class="ftgame">
+                <img src={eriksholmps}></img>
+                <div class="ftgame-title">
+                  <p>Eriksholm: The Stolen Dream</p>
+                  <p>₱1,795.00</p>
+                </div>
+              </div>
+              <div class="ftgame">
+                <img src={pawpatrolps}></img>
+                <div class="ftgame-title">
+                  <p>PAW Patrol Rescue Wheels Championship</p>
+                  <p>₱1,850.00</p>
+                </div>
+              </div>
+              <div class="ftgame">
+                <img src={ddreviveps}></img>
+                <div class="ftgame-title">
+                  <p>Double Dragon Revive</p>
+                  <p>₱2,095.00</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="featured-container bg-green">
           <div class="featuredleft">
@@ -112,7 +175,31 @@ function Landing() {
             </div>
             <img class="featuredimage" src={xbox}></img>
           </div>
-          <div class="featuredright">test</div>
+          <div class="featuredright">
+            <div class="featuredgames">
+              <div class="ftgame">
+                <img src={nba2k26xb}></img>
+                <div class="ftgame-title">
+                  <p>NBA 2K26 Superstar Edition</p>
+                  <p>₱4,190.00</p>
+                </div>
+              </div>
+              <div class="ftgame">
+                <img src={wuchangxb}></img>
+                <div class="ftgame-title">
+                  <p>Wuchang: Fallen Feathers Day One</p>
+                  <p>₱3,250.00</p>
+                </div>
+              </div>
+              <div class="ftgame">
+                <img src={suicidesquadxb}></img>
+                <div class="ftgame-title">
+                  <p>Suicide Squad: Kill the Justice League</p>
+                  <p>₱1.715.00</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <a
