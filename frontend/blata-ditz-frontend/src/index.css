@@ -13,6 +13,8 @@
   -moz-osx-font-smoothing: grayscale;
 
   font-size: 62.5% /* 1rem = 10px */;
+
+  scroll-behavior: smooth;
 }
 *,
 *::before,
