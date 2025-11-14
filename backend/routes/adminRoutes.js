@@ -7,8 +7,10 @@ import {
 
 const router = express.Router();
 
+// Admin-only routes
+
 router.post("/", authenticateToken, requireAdmin, adminController.createAdmin);
-router.get("/", authenticateToken, requireAdmin, adminController.getAllAdmins); //Might remove later on as in production, this typically isn't allowed.
+router.get("/", authenticateToken, requireAdmin, adminController.getAllAdmins); //Might remove later on as in production this typically isn't allowed.
 router.get(
   "/users/:id",
   authenticateToken,

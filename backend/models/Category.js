@@ -1,5 +1,4 @@
 import { getDB } from "../config/db.js";
-import { ObjectId } from "mongodb";
 
 export class Category {
   static collection() {
@@ -11,32 +10,38 @@ export class Category {
   }
 
   static async findById(id) {
-    return await this.collection().findOne({ _id: new ObjectId(id) });
+    const { ObjectId } = await import("mongodb");
+    return this.collection().findOne({ _id: new ObjectId(id) });
   }
 
   static async create(data) {
-    const result = await this.collection().insertOne({
+    return this.collection().insertOne({
       ...data,
       created_at: new Date(),
       updated_at: new Date(),
     });
-    return result;
   }
 
   static async update(id, updates) {
-    const result = await this.collection().updateOne(
+    const { ObjectId } = await import("mongodb");
+    return this.collection().updateOne(
       { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...updates,
-          updated_at: new Date(),
-        },
-      }
+      { $set: { ...updates, updated_at: new Date() } }
     );
-    return result;
   }
 
   static async delete(id) {
-    return await this.collection().deleteOne({ _id: new ObjectId(id) });
+    const { ObjectId } = await import("mongodb");
+    return this.collection().deleteOne({ _id: new ObjectId(id) });
+  }
+
+  static async toObjectId(id) {
+    const { ObjectId } = await import("mongodb");
+    return new ObjectId(id);
+  }
+
+  static async toObjectIdArray(ids = []) {
+    const { ObjectId } = await import("mongodb");
+    return ids.map((id) => new ObjectId(id));
   }
 }

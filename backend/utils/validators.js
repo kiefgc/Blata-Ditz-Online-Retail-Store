@@ -15,6 +15,6 @@ export function isValidPassword(password) {
 }
 
 export function isValidPhone(phone) {
-  const regex = /^\d{10,15}$/; // adjust based on format you want
+  const regex = /^\d{10,15}$/; // Might adjust later on
   return regex.test(phone);
 }

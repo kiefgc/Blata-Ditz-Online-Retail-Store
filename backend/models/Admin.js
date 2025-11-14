@@ -1,6 +1,5 @@
 import { getDB } from "../config/db.js";
 import bcrypt from "bcrypt";
-import { ObjectId } from "mongodb";
 
 export class Admin {
   static collection() {
@@ -17,11 +16,20 @@ export class Admin {
     return await this.collection().insertOne(admin);
   }
 
+  static async update(id, updates) {
+    const { ObjectId } = await import("mongodb");
+    return this.collection().updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updates }
+    );
+  }
+
   static async getAll() {
     return await this.collection().find().toArray();
   } //May remove later on
 
   static async findById(id) {
-    return await this.collection().findOne({ _id: new ObjectId(id) });
+    const { ObjectId } = await import("mongodb");
+    return this.collection().findOne({ _id: new ObjectId(id) });
   }
 }
