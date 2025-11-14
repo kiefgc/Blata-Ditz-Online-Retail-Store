@@ -1,0 +1,89 @@
+.page-content {
+  margin-left: 6vw;
+  margin-right: 6vw;
+  margin-top: 5vh;
+
+  font-family: "Ubuntu", sans-serif;
+}
+
+.main-product-container {
+  width: 100%;
+  height: 70vh;
+  padding-left: 5vw;
+  padding-right: 5vw;
+
+  background-color: #131416;
+
+  border-width: 2px;
+  border-style: solid;
+  border-color: #d5d6d9;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.main-product-images {
+  width: 55%;
+}
+
+.main-product-descriptions {
+  width: 45%;
+
+  padding-top: 6vh;
+  padding-bottom: 4vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.main-product-descriptions-inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  line-height: 8px;
+}
+
+.main-product-name {
+  color: #ffcf33;
+
+  font-size: 1.5vw;
+  font-weight: 500;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+
+  background-color: #d5d6d9;
+}
+
+.main-product-sections {
+  font-size: 1.1vw;
+  font-weight: 400;
+  margin-right: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: white;
+}
+
+.main-product-textdesc {
+  font-size: 0.9vw;
+  color: white;
+
+  margin-bottom: 10px;
+}
+
+.main-product-text {
+  font-size: 0.9vw;
+  color: white;
+}
+
+.main-product-price {
+  font-size: 1.25vw;
+  font-weight: 400;
+  color: #ffcf33;
+}
