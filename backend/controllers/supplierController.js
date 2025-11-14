@@ -1,9 +1,4 @@
 import { Supplier } from "../models/Supplier.js";
-/* not sure if these are needed
-import { ObjectId } from "mongodb";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-*/
 import * as validators from "../utils/validators.js";
 
 export async function getAllSuppliers(req, res) {
@@ -27,7 +22,7 @@ export async function getSupplierById(req, res) {
     if (!supplier)
       return res.status(404).json({ message: "Supplier not found" });
 
-    res.status(200).json(product);
+    res.status(200).json(supplier);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -74,7 +69,7 @@ export async function addSupplier(req, res) {
 
 export async function updateSupplier(req, res) {
   try {
-    const { id } = req.user;
+    const { id } = req.params;
     const updates = req.body;
 
     if (!updates || Object.keys(updates).length === 0) {
@@ -85,13 +80,7 @@ export async function updateSupplier(req, res) {
     delete updates.created_at;
     delete updates.updated_at;
 
-    const result = await Supplier.update(id, updates);
-
-    if (result.matchedCount === 0)
-      return res.status(404).json({ message: "Supplier not found" });
-
-    if (result.modifiedCount === 0)
-      return res.status(200).json({ message: "No changes made" });
+    const errors = [];
 
     if (updates.email && !validators.isValidEmail(updates.email)) {
       errors.push("Invalid email format");
@@ -104,11 +93,13 @@ export async function updateSupplier(req, res) {
       return res.status(400).json({ message: errors });
     }
 
-    if (result.modifiedCount === 0) {
-      return res
-        .status(200)
-        .json({ message: "No changes made or supplier not found" });
-    }
+    const result = await Supplier.update(id, updates);
+
+    if (result.matchedCount === 0)
+      return res.status(404).json({ message: "Supplier not found" });
+
+    if (result.modifiedCount === 0)
+      return res.status(200).json({ message: "No changes made" });
 
     res.status(200).json({ message: "Supplier updated successfully" });
   } catch (error) {

@@ -1,7 +1,7 @@
 import { Product } from "../models/Product.js";
 import { Inventory } from "../models/Inventory.js";
 import { Category } from "../models/Category.js";
-// import { Supplier } from "../models/Supplier.js"; // For later use
+import { Supplier } from "../models/Supplier.js";
 
 export async function getAllProducts(req, res) {
   try {
@@ -32,8 +32,14 @@ export async function getProductById(req, res) {
 
 export async function createProduct(req, res) {
   try {
-    const { product_name, description, unit_price, cost_price, category_ids } =
-      req.body;
+    const {
+      product_name,
+      description,
+      unit_price,
+      cost_price,
+      category_ids,
+      supplier_id,
+    } = req.body;
 
     if (!product_name || !description || !unit_price || !cost_price)
       return res.status(400).json({ message: "Missing required fields" });
@@ -57,6 +63,7 @@ export async function createProduct(req, res) {
       unit_price: unitPriceNum,
       cost_price: costPriceNum,
       category_ids: category_ids || [],
+      supplier_id: supplier_id || null,
       is_active: false,
     });
 

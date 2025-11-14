@@ -7,11 +7,19 @@ import {
 
 const router = express.Router();
 
-// Public Routes
-router.get("/", supplierController.getAllSuppliers);
-router.get("/:id", supplierController.getSupplieryById);
-
 // Admin-only Routes
+router.get(
+  "/",
+  authenticateToken,
+  requireAdmin,
+  supplierController.getAllSuppliers
+);
+router.get(
+  "/:id",
+  authenticateToken,
+  requireAdmin,
+  supplierController.getSupplierById
+);
 router.post(
   "/",
   authenticateToken,
