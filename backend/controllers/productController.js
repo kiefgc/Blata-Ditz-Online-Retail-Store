@@ -1,12 +1,15 @@
 import { Product } from "../models/Product.js";
-//not final as it still needs other models/etc to be done first.
+import { Inventory } from "../models/Inventory.js";
+import { Category } from "../models/Category.js";
+// import { Supplier } from "../models/Supplier.js"; // For later use
+
 export async function getAllProducts(req, res) {
   try {
     const { category, search } = req.query;
     const filters = {};
 
-    if (category) filters.category = category;
-    if (search) filters.name = { $regex: search, $options: "i" };
+    if (category) filters.category_ids = category;
+    if (search) filters.product_name = { $regex: search, $options: "i" };
 
     const products = await Product.getAll(filters);
     res.status(200).json(products);
@@ -21,7 +24,6 @@ export async function getProductById(req, res) {
     const product = await Product.findById(id);
 
     if (!product) return res.status(404).json({ message: "Product not found" });
-
     res.status(200).json(product);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -30,7 +32,8 @@ export async function getProductById(req, res) {
 
 export async function createProduct(req, res) {
   try {
-    const { product_name, description, unit_price, cost_price } = req.body;
+    const { product_name, description, unit_price, cost_price, category_ids } =
+      req.body;
 
     if (!product_name || !description || !unit_price || !cost_price)
       return res.status(400).json({ message: "Missing required fields" });
@@ -38,41 +41,42 @@ export async function createProduct(req, res) {
     const unitPriceNum = parseFloat(unit_price);
     const costPriceNum = parseFloat(cost_price);
 
-    if (unitPriceNum <= 0 || costPriceNum <= 0) {
+    if (unitPriceNum <= 0 || costPriceNum <= 0)
       return res.status(400).json({
         message: "Unit price and cost price must be positive numbers",
       });
-    }
 
-    if (unitPriceNum < costPriceNum) {
+    if (unitPriceNum < costPriceNum)
       return res
         .status(400)
         .json({ message: "Unit price cannot be lower than cost price" });
-    }
 
-    /* hoping this works.
-    if (category_id) {
-        const categoryExists = await Category.findById(category_id);
-        if (!categoryExists) return res.status(400).json({ message: "Invalid category" });
-
-    if (supplier_id) {
-        const supplierExists = await Supplier.findById(supplier_id);
-        if (!supplierExists) return res.status(400).json({ message: "Invalid supplier" });
-    }
-    */
-
-    await Product.create({
+    const result = await Product.create({
       product_name,
       description,
-      //category_id,
-      //supplier_id,
-      unit_price: parseFloat(unit_price),
-      cost_price: parseFloat(cost_price),
+      unit_price: unitPriceNum,
+      cost_price: costPriceNum,
+      category_ids: category_ids || [],
       is_active: false,
     });
 
-    res.status(201).json({ message: "Product created successfully" });
+    const productId = result.insertedId;
+
+    await Inventory.collection().insertOne({
+      product_id: productId,
+      stock_quantity: 0,
+      reorder_level: 10,
+      max_stock_level: 0,
+      last_restocked: null,
+      updated_at: new Date(),
+    });
+
+    res.status(201).json({
+      message: "Product and inventory record created successfully",
+      product_id: productId,
+    });
   } catch (error) {
+    console.error("Create product error:", error);
     res.status(500).json({ message: error.message });
   }
 }
@@ -82,9 +86,8 @@ export async function updateProduct(req, res) {
     const { id } = req.params;
     const updates = req.body;
 
-    if (!updates || Object.keys(updates).length === 0) {
+    if (!updates || Object.keys(updates).length === 0)
       return res.status(400).json({ message: "No data provided for update" });
-    }
 
     delete updates.product_id;
     delete updates.created_at;
@@ -93,18 +96,14 @@ export async function updateProduct(req, res) {
     if (updates.unit_price !== undefined) {
       const unitPriceNum = parseFloat(updates.unit_price);
       if (unitPriceNum <= 0)
-        return res
-          .status(400)
-          .json({ message: "Unit price must be a positive number" });
+        return res.status(400).json({ message: "Unit price must be positive" });
       updates.unit_price = unitPriceNum;
     }
 
     if (updates.cost_price !== undefined) {
-      const costPriceNum = parseFloat(updates.unit_price);
+      const costPriceNum = parseFloat(updates.cost_price);
       if (costPriceNum <= 0)
-        return res
-          .status(400)
-          .json({ message: "Cost price must be a positive number" });
+        return res.status(400).json({ message: "Cost price must be positive" });
       updates.cost_price = costPriceNum;
     }
 
@@ -115,25 +114,10 @@ export async function updateProduct(req, res) {
           .json({ message: "Unit price cannot be lower than cost price" });
     }
 
-    /*
-    if (updates.category_id) {
-        const categoryExists = await Category.findById(updates.category_id);
-        if (!categoryExists) return res.status(400).json({ message: "Invalid category"});
-    }
-
-    if (updates.supplier_id) {
-        const supplierExists = await Category.findById(updates.supplier_id);
-        if (!supplierExists) return res.status(400).json({ message: "Invalid supplier"});
-    }
-    */
-
     const result = await Product.update(id, updates);
 
     if (result.matchedCount === 0)
       return res.status(404).json({ message: "Product not found" });
-
-    if (result.modifiedCount === 0)
-      return res.status(200).json({ message: "No changes made" });
 
     res.status(200).json({ message: "Product updated successfully" });
   } catch (error) {

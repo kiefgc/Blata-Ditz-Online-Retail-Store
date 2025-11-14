@@ -7,6 +7,8 @@ import {
 
 const router = express.Router();
 
+// Used by both admin and customer
+
 router.post("/register", authController.register);
 router.post("/login", authController.login);
 router.get("/users/me", authenticateToken, authController.getProfile);
