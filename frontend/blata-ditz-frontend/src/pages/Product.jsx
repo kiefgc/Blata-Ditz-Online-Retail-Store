@@ -44,7 +44,16 @@ function Product() {
       </div>
       <div class="page-content">
         <div class="main-product-container">
-          <div class="main-product-images">a</div>
+          <div class="main-product-images">
+            <div class="main-product-images-small">
+              <img src="https://picsum.photos/75"></img>
+              <img src="https://picsum.photos/75"></img>
+              <img src="https://picsum.photos/75"></img>
+            </div>
+            <div class="main-product-images-main">
+              <img src="https://picsum.photos/200"></img>
+            </div>
+          </div>
           <div class="main-product-descriptions">
             <p class="main-product-name">Some Product Name Here</p>
             <div class="divider"></div>
@@ -69,6 +78,57 @@ function Product() {
             </div>
           </div>
         </div>
+        <div class="product-specficcations">
+          <p class="product-specfications-header">Product Specifications</p>
+          <div class="product-specfications-inner">
+            <div class="product-specifications-div">
+              <div class="product-specifications-div-left">
+                <p>SPECIFICATIONS</p>
+              </div>
+              <div class="product-specifications-div-right">
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+              </div>
+            </div>
+            <div class="product-specifications-div">
+              <div class="product-specifications-div-left">
+                <p>REQUIREMENTS</p>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <p>CONNECTIVITY</p>
+              </div>
+              <div class="product-specifications-div-right">
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+                <p>test</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="recommendations-header">You may also like</p>
+      </div>
+      <div class="footer">
+        <a href="#" class="logo">
+          BLATADITZ
+        </a>
+        <p class="copyright">Copyright &copy; 2025</p>
+        <p class="disclaimer">FOR ACADEMIC PURPOSES ONLY</p>
       </div>
     </>
   );

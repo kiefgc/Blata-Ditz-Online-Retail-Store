@@ -1,6 +1,8 @@
 .page-content {
   margin-left: 6vw;
   margin-right: 6vw;
+  margin-top: 5vh;
+  margin-bottom: 2vh !important;
 }
 
 /*featured games sections*/
@@ -156,7 +158,6 @@
   align-items: center;
 
   transition: 0.3s ease-in;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 
   user-select: none;
 }
