@@ -11,6 +11,8 @@ export async function seedFirstAdmin() {
       email: process.env.ADMIN_EMAIL,
       password: process.env.ADMIN_PASSWORD,
       role: "admin",
+      is_active: true,
+      last_login: null,
     });
     console.log("First admin account created");
   }
@@ -18,9 +20,9 @@ export async function seedFirstAdmin() {
 
 export async function createAdmin(req, res) {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, full_name } = req.body;
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !full_name) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -48,7 +50,16 @@ export async function createAdmin(req, res) {
       });
     }
 
-    await Admin.create({ username, email, password, role: "admin" });
+    await Admin.create({
+      username,
+      email,
+      password,
+      full_name,
+      role: "admin",
+      is_active: true,
+      last_login: null,
+    });
+
     res.status(201).json({ message: "Admin created successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
