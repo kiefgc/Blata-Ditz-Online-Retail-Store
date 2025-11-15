@@ -80,22 +80,12 @@ function Landing() {
           </a>
         </div>
         <div class="nav-links">
-          <a href="#">
-            <img
-              width="34"
-              height="34"
-              src="https://img.icons8.com/sf-regular/48/FFFFFF/shopping-cart.png"
-              alt="shopping-cart"
-            />
-          </a>
-          <a href="#">
-            <img
-              width="32"
-              height="32"
-              src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/user-male-circle--v1.png"
-              alt="user-male-circle--v1"
-            />
-          </a>
+          <div class="pop-uo-parent-container">
+            <button class="signin-button">Sign In</button>
+          </div>
+          <div class="pop-uo-parent-container">
+            <button class="signup-button">Create Account</button>
+          </div>
         </div>
       </div>
       <div class="page-content">
