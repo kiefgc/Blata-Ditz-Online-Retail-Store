@@ -20,18 +20,20 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 5vh !important;
+  transition: 0.5 ease;
 }
 .text-banner {
   display: flex;
   flex-direction: column;
   color: white;
   width: 50%;
-  gap: 0.3rem;
+  gap: 2vh;
 }
 .banner-heading {
   font-size: 3.4rem;
   font-weight: 600;
   font-style: italic;
+  line-height: 6.5vh;
 }
 
 .text-banner p {
@@ -39,7 +41,7 @@
   font-weight: 400;
 
   margin: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 1vh;
 }
 
 .button-banner {
@@ -52,15 +54,37 @@
   font-size: 1.4rem;
 }
 
-.img-banner {
-  height: 50vh;
-  width: 35vw;
-}
-
 .img-banner img {
   height: 100%;
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .img-banner {
+    height: 40vh;
+    width: 35vw;
+  }
+}
+@media (max-width: 780px) {
+  .banner-container {
+    flex-direction: column-reverse;
+    height: auto;
+    padding: 1rem 3.5rem 4rem 3.5rem;
+  }
+  .img-banner {
+    min-height: 300px;
+    min-width: 380px;
+
+    margin-right: 3rem;
+  }
+  .text-banner {
+    width: 100%;
+    text-align: center;
+  }
+  .button-banner {
+    margin: 0 auto;
+  }
 }
 
 /* products section */
@@ -69,6 +93,7 @@
   border: 0.5px solid #d9d9d9;
   border-radius: 8px;
   margin-bottom: 2rem;
+  overflow: hidden;
 }
 
 .categories ul {
@@ -77,6 +102,8 @@
   justify-content: space-between;
   color: #ffcf33;
   font-size: 1.6rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .products {
@@ -85,7 +112,8 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 4.5rem;
   width: 100%;
-  margin: 0;
+
+  margin-bottom: 5rem;
 }
 
 .item {
@@ -113,6 +141,7 @@
   justify-content: space-between;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 .item-details {
   display: flex;
@@ -127,10 +156,16 @@
 
 .title {
   font-size: 1.4rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .view-item-btn {
-  margin-top: auto;
+  margin-bottom: 1rem;
   background-color: #070709;
   border: 0.5px solid #d5d6d9;
   border-radius: 8px;

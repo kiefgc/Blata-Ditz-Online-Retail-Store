@@ -98,8 +98,8 @@ function Landing() {
           <div class="text-banner">
             <span class="banner-heading">Your one-stop electronic store.</span>
             <p>
-              Find and purchase all your electronic needs. Lorem ipsum Lorem
-              ipsum Lorem Ipsum asdfsadfasdf sadf sdf sdfasdfas asdf
+              Find and purchase all your electronic needs. Shop the latest
+              consoles, games, gadgets, and more. All in one place.
             </p>
             <div class="button-banner">Browse Now</div>
           </div>
@@ -130,18 +130,58 @@ function Landing() {
                 <div class="item-details">
                   <span class="price">₱175.00</span>
                   <span class="title">
-                    sdfsdfds fsd fsd f sdf sdf ds f sdf sd fsd f sdf sd fsd fsd
-                    fsd f sdf Transnovo 24-in-1 Game Card Storage Case for
-                    Nintendo Switch 2
+                    Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
+                    2
                   </span>
                 </div>
                 <div class="view-item-btn">View More</div>
               </div>
             </div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+            <div class="item">
+              <div class="item-img">
+                <img src={item} />
+              </div>
+              <div class="item-content">
+                <div class="item-details">
+                  <span class="price">₱175.00</span>
+                  <span class="title">
+                    Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
+                    2
+                  </span>
+                </div>
+                <div class="view-item-btn">View More</div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="item-img">
+                <img src={item} />
+              </div>
+              <div class="item-content">
+                <div class="item-details">
+                  <span class="price">₱175.00</span>
+                  <span class="title">
+                    Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
+                    2
+                  </span>
+                </div>
+                <div class="view-item-btn">View More</div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="item-img">
+                <img src={item} />
+              </div>
+              <div class="item-content">
+                <div class="item-details">
+                  <span class="price">₱175.00</span>
+                  <span class="title">
+                    Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
+                    2
+                  </span>
+                </div>
+                <div class="view-item-btn">View More</div>
+              </div>
+            </div>
           </div>
         </div>
         {/* FEATURED SECTION */}
