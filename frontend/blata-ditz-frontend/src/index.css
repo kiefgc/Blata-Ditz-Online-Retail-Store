@@ -145,22 +145,10 @@ select,
 
 /*sign in and sign up popups*/
 
-.pop-uo-parent-container {
+.pop-up-parent-container {
   position: relative;
   display: inline-block;
-}
-
-.pop-up-container {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-
-  background-color: linear-gradient(
-    180deg,
-    rgba(7, 7, 9, 1) 0%,
-    rgba(19, 20, 22, 1) 100%
-  );
+  z-index: 1001;
 }
 
 /*footer*/

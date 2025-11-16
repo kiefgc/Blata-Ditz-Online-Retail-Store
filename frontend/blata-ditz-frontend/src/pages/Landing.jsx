@@ -1,5 +1,7 @@
 import "./Landing.css";
-import React, { useEffect, useRef } from "react";
+import AuthForm from "./AuthForm.jsx";
+
+import React, { useEffect, useRef, useState } from "react";
 
 import banner from "../assets/finalbanner.jpg";
 
@@ -21,8 +23,45 @@ import nba2k26xb from "../assets/xboxnba2k26.jpg";
 import wuchangxb from "../assets/xboxwuchang.jpg";
 import suicidesquadxb from "../assets/xboxssktjl.png";
 
+const FORM_POSITION_NONE = 0;
+const FORM_POSITION_LOGIN = 1;
+const FORM_POSITION_SIGNUP = 2;
+
 function Landing() {
   const gototopRef = useRef(null);
+  const [showForm, setShowForm] = useState(false);
+  const [activeFormPosition, setActiveFormPosition] =
+    useState(FORM_POSITION_NONE);
+  const [isLogin, setIsLogin] = useState(true);
+
+  const clickLogin = (e) => {
+    e.stopPropagation();
+    if (activeFormPosition === FORM_POSITION_LOGIN) {
+      closeForm();
+    } else {
+      setIsLogin(true);
+      setActiveFormPosition(FORM_POSITION_LOGIN);
+    }
+  };
+
+  const clickSignup = (e) => {
+    e.stopPropagation();
+    if (activeFormPosition === FORM_POSITION_SIGNUP) {
+      closeForm();
+    } else {
+      setIsLogin(false);
+      setActiveFormPosition(FORM_POSITION_SIGNUP);
+    }
+  };
+
+  const closeForm = () => {
+    setActiveFormPosition(FORM_POSITION_NONE);
+  };
+
+  const switchForm = () => {
+    setIsLogin(!isLogin);
+    setActiveFormPosition(isLogin ? FORM_POSITION_SIGNUP : FORM_POSITION_LOGIN);
+  };
 
   const onScroll = () => {
     const gototop = gototopRef.current;
@@ -62,6 +101,20 @@ function Landing() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      if (activeFormPosition !== FORM_POSITION_NONE) {
+        closeForm();
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [activeFormPosition]);
+
   return (
     <>
       <div class="navbar">
@@ -84,11 +137,29 @@ function Landing() {
           </a>
         </div>
         <div class="nav-links">
-          <div class="pop-uo-parent-container">
-            <button class="signin-button">Sign In</button>
+          <div class="pop-up-parent-container">
+            <button class="signin-button" onClick={clickLogin}>
+              Sign In
+            </button>
+            {activeFormPosition === FORM_POSITION_LOGIN && (
+              <AuthForm
+                isLogin={isLogin}
+                onClose={closeForm}
+                onSwitch={switchForm}
+              />
+            )}
           </div>
-          <div class="pop-uo-parent-container">
-            <button class="signup-button">Create Account</button>
+          <div class="pop-up-parent-container">
+            <button class="signup-button" onClick={clickSignup}>
+              Create Account
+            </button>
+            {activeFormPosition === FORM_POSITION_SIGNUP && (
+              <AuthForm
+                isLogin={isLogin}
+                onClose={closeForm}
+                onSwitch={switchForm}
+              />
+            )}
           </div>
         </div>
       </div>
