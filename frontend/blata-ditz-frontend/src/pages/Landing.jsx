@@ -182,14 +182,30 @@ function Landing() {
         <div class="product-container">
           <div class="categories">
             <ul>
-              <li>PS5</li>
-              <li>PS4</li>
-              <li>SWITCH</li>
-              <li>XBOX</li>
-              <li>PC/MAC</li>
-              <li>COLLECTIBLES</li>
-              <li>MORE</li>
-              <li>PRE-ORDERS</li>
+              <li>
+                <button>PS5</button>
+              </li>
+              <li>
+                <button>PS4</button>
+              </li>
+              <li>
+                <button>SWITCH</button>
+              </li>
+              <li>
+                <button>XBOX</button>
+              </li>
+              <li>
+                <button>PC/MAC</button>
+              </li>
+              <li>
+                <button>COLLECTIBLES</button>
+              </li>
+              <li>
+                <button>MORE</button>
+              </li>
+              <li>
+                <button>PRE-ORDERS</button>
+              </li>
             </ul>
           </div>
           <div class="products">
