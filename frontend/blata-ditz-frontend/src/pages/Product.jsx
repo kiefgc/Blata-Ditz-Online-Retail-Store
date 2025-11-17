@@ -1,7 +1,10 @@
+import { useState } from "react";
 import "./Product.css";
 import React from "react";
 
 function Product() {
+  const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+
   return (
     <>
       <div class="navbar">
@@ -26,21 +29,46 @@ function Product() {
         <div class="nav-links">
           <a href="#">
             <img
+              class="search-icon"
               width="34"
               height="34"
-              src="https://img.icons8.com/sf-regular/48/FFFFFF/shopping-cart.png"
+              src="https://img.icons8.com/ios-glyphs/30/FFFFFF/google-web-search.png"
+              alt="google-web-search"
+              onClick={() => setShowSmallSearchbar(!showSmallSearchbar)}
+            />
+          </a>
+          <a href="#">
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/shopping-cart.png"
               alt="shopping-cart"
             />
           </a>
           <a href="#">
             <img
-              width="32"
-              height="32"
-              src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/user-male-circle--v1.png"
-              alt="user-male-circle--v1"
+              width="30"
+              height="30"
+              src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/user.png"
+              alt="user"
             />
           </a>
         </div>
+        {showSmallSearchbar && (
+          <div class="small-screen-searchbar">
+            <a href="#">
+              <div class="small-searchbar">
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+                  alt="search--v1"
+                />
+                <input type="text" placeholder="Search" />
+              </div>
+            </a>
+          </div>
+        )}
       </div>
       <div class="page-content">
         <div class="main-product-container">
