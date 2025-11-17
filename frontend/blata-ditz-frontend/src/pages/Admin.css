@@ -82,6 +82,7 @@ li {
   border: 1px solid #d5d6d9;
   width: auto;
   padding: 1rem 2rem;
+  overflow: hidden;
 }
 
 .admin-orders-tab ul {
@@ -92,6 +93,7 @@ li {
   font-size: 1.6rem;
   text-transform: uppercase;
   color: #ffcf33;
+  flex-wrap: wrap;
 }
 
 .admin-orders-columnHeader,
