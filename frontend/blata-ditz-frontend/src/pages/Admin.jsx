@@ -1,6 +1,21 @@
+import { useEffect, useState } from "react";
 import "./Admin.css";
 
 function Landing() {
+  const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+  useEffect(() => {
+    const searchbarScreenResize = () => {
+      if (window.innerWidth >= 830) {
+        setShowSmallSearchbar(false);
+      }
+    };
+    window.addEventListener("resize", searchbarScreenResize);
+
+    searchbarScreenResize();
+    return () => {
+      window.removeEventListener("resize", searchbarScreenResize);
+    };
+  }, []);
   return (
     <>
       <div class="navbar">
@@ -10,27 +25,65 @@ function Landing() {
           </a>
         </div>
         <div>
-          <a href="#">
-            <div class="search-bar">
-              <img
-                width="20"
-                height="20"
-                src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
-                alt="search--v1"
-              />
-              <input type="text" placeholder="Search" />
-            </div>
-          </a>
+          <div class="search-bar search-close">
+            <img
+              width="20"
+              height="20"
+              src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+              alt="search--v1"
+            />
+            <input type="text" placeholder="Search" />
+          </div>
         </div>
         <div class="nav-links">
           <a href="#">
             <img
-              width="32"
-              height="32"
-              src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/user-male-circle--v1.png"
-              alt="user-male-circle--v1"
+              class="search-icon"
+              width="34"
+              height="34"
+              src="https://img.icons8.com/ios-glyphs/30/FFFFFF/google-web-search.png"
+              alt="google-web-search"
+              onClick={() => setShowSmallSearchbar(!showSmallSearchbar)}
             />
           </a>
+          <a href="#">
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/shopping-cart.png"
+              alt="shopping-cart"
+            />
+          </a>
+          <a href="#">
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/user.png"
+              alt="user"
+            />
+          </a>
+        </div>
+
+        <div
+          class={`small-screen-searchbar ${showSmallSearchbar ? "open" : ""}`}
+        >
+          <div class="small-searchbar">
+            <img
+              width="20"
+              height="20"
+              src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+              alt="search--v1"
+            />
+            <input type="text" placeholder="Search" />
+
+            <img
+              width="15"
+              height="15"
+              src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/multiply.png"
+              alt="multiply"
+              onClick={() => setShowSmallSearchbar(false)}
+            />
+          </div>
         </div>
       </div>
       <div class="admin-container">

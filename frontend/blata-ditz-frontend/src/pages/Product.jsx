@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Product.css";
 import React from "react";
 
 function Product() {
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+  useEffect(() => {
+    const searchbarScreenResize = () => {
+      if (window.innerWidth >= 830) {
+        setShowSmallSearchbar(false);
+      }
+    };
+    window.addEventListener("resize", searchbarScreenResize);
+
+    searchbarScreenResize();
+    return () => {
+      window.removeEventListener("resize", searchbarScreenResize);
+    };
+  }, []);
 
   return (
     <>
@@ -14,17 +27,15 @@ function Product() {
           </a>
         </div>
         <div>
-          <a href="#">
-            <div class="search-bar">
-              <img
-                width="20"
-                height="20"
-                src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
-                alt="search--v1"
-              />
-              <input type="text" placeholder="Search" />
-            </div>
-          </a>
+          <div class="search-bar search-close">
+            <img
+              width="20"
+              height="20"
+              src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+              alt="search--v1"
+            />
+            <input type="text" placeholder="Search" />
+          </div>
         </div>
         <div class="nav-links">
           <a href="#">
@@ -54,21 +65,28 @@ function Product() {
             />
           </a>
         </div>
-        {showSmallSearchbar && (
-          <div class="small-screen-searchbar">
-            <a href="#">
-              <div class="small-searchbar">
-                <img
-                  width="20"
-                  height="20"
-                  src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
-                  alt="search--v1"
-                />
-                <input type="text" placeholder="Search" />
-              </div>
-            </a>
+
+        <div
+          class={`small-screen-searchbar ${showSmallSearchbar ? "open" : ""}`}
+        >
+          <div class="small-searchbar">
+            <img
+              width="20"
+              height="20"
+              src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+              alt="search--v1"
+            />
+            <input type="text" placeholder="Search" />
+
+            <img
+              width="15"
+              height="15"
+              src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/multiply.png"
+              alt="multiply"
+              onClick={() => setShowSmallSearchbar(false)}
+            />
           </div>
-        )}
+        </div>
       </div>
       <div class="page-content">
         <div class="main-product-container">
