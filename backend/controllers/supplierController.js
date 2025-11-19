@@ -8,10 +8,6 @@ import * as validators from "../utils/validators.js";
 
 export async function getAllSuppliers(req, res) {
   try {
-    /* not sure if this is needed
-    const { search } = req.query;
-    if (search) filters.name = { $regex: search, $options: "i" };
-    */
     const suppliers = await Supplier.getAll();
     res.status(200).json(suppliers);
   } catch (error) {
