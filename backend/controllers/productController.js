@@ -57,6 +57,11 @@ export async function createProduct(req, res) {
         .status(400)
         .json({ message: "Unit price cannot be lower than cost price" });
 
+    let image = null;
+    if (req.file) {
+      image = `/uploads/${req.file.filename}`;
+    }
+
     const result = await Product.create({
       product_name,
       description,
@@ -64,6 +69,7 @@ export async function createProduct(req, res) {
       cost_price: costPriceNum,
       category_ids: category_ids || [],
       supplier_id: supplier_id || null,
+      image,
       is_active: false,
     });
 
