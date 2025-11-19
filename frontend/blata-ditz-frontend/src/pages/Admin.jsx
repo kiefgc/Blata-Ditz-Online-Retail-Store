@@ -18,14 +18,14 @@ function Landing() {
   }, []);
   return (
     <>
-      <div class="navbar">
+      <div className="navbar">
         <div>
-          <a href="#" class="logo">
+          <a href="#" className="logo">
             BLATADITZ
           </a>
         </div>
         <div>
-          <div class="search-bar search-close">
+          <div className="search-bar search-close">
             <img
               width="20"
               height="20"
@@ -35,10 +35,10 @@ function Landing() {
             <input type="text" placeholder="Search" />
           </div>
         </div>
-        <div class="nav-links">
+        <div className="nav-links">
           <a href="#">
             <img
-              class="search-icon"
+              className="search-icon"
               width="34"
               height="34"
               src="https://img.icons8.com/ios-glyphs/30/FFFFFF/google-web-search.png"
@@ -65,9 +65,11 @@ function Landing() {
         </div>
 
         <div
-          class={`small-screen-searchbar ${showSmallSearchbar ? "open" : ""}`}
+          className={`small-screen-searchbar ${
+            showSmallSearchbar ? "open" : ""
+          }`}
         >
-          <div class="small-searchbar">
+          <div className="small-searchbar">
             <img
               width="20"
               height="20"
@@ -86,14 +88,14 @@ function Landing() {
           </div>
         </div>
       </div>
-      <div class="admin-container">
-        <div class="header">
+      <div className="admin-container">
+        <div className="header">
           <h1>
             Welcome, <span style={{ color: "#FFCF33" }}>Admin!</span>
           </h1>
         </div>
-        <div class="dashboard">
-          <div class="sidebar">
+        <div className="dashboard">
+          <div className="sidebar">
             <ul>
               <li>
                 <img
@@ -152,12 +154,12 @@ function Landing() {
               </li>
             </ul>
           </div>
-          <div class="main-content">
+          <div className="main-content">
             {/* USERS SECTION */}
-            <div class="users-section"></div>
+            <div className="users-section"></div>
             {/* ORDERS SECTION */}
-            <div class="admin-orders-section">
-              <div class="search-bar">
+            <div className="admin-orders-section">
+              <div className="search-bar">
                 <img
                   width="20"
                   height="20"
@@ -166,7 +168,7 @@ function Landing() {
                 />
                 <input type="text" placeholder="Search orders" />
               </div>
-              <div class="admin-orders-tab">
+              <div className="admin-orders-tab">
                 <ul>
                   <li>All</li>
                   <li>To Pay</li>
@@ -176,7 +178,7 @@ function Landing() {
                   <li>Cancelled</li>
                 </ul>
               </div>
-              <div class="orders-filter">
+              <div className="orders-filter">
                 <label for="orders-filterOptions">Filter by:</label>
                 <select name="orders-filterOptions" id="orders-filterOptions">
                   <option value="" disabled hidden>
@@ -187,7 +189,7 @@ function Landing() {
                   <option value="published_date">Published Date</option>
                 </select>
               </div>
-              <div class="admin-orders-columnHeader">
+              <div className="admin-orders-columnHeader">
                 <span>Order ID</span>
                 <span></span>
                 <span>Product</span>
@@ -196,7 +198,7 @@ function Landing() {
                 <span>Total Amount</span>
                 <span>Customer's Email</span>
               </div>
-              <div class="admin-orders-list">
+              <div className="admin-orders-list">
                 <span>001</span>
                 <span>x1</span>
                 <span>
@@ -210,9 +212,9 @@ function Landing() {
               </div>
             </div>
             {/* INVENTORY SECTION */}
-            <div class="inventory-section"></div>
+            <div className="inventory-section"></div>
             {/* CATEGORIES SECTION */}
-            <div class="categories-section"></div>
+            <div className="categories-section"></div>
           </div>
         </div>
       </div>
