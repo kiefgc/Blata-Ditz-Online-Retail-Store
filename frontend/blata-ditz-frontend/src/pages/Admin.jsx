@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./Admin.css";
 
 function Landing() {
+  const [selectedTab, setSelectedTab] = useState("users");
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -18,14 +19,14 @@ function Landing() {
   }, []);
   return (
     <>
-      <div className="navbar">
+      <div class="navbar">
         <div>
-          <a href="#" className="logo">
+          <a href="#" class="logo">
             BLATADITZ
           </a>
         </div>
         <div>
-          <div className="search-bar search-close">
+          <div class="search-bar search-close">
             <img
               width="20"
               height="20"
@@ -35,10 +36,10 @@ function Landing() {
             <input type="text" placeholder="Search" />
           </div>
         </div>
-        <div className="nav-links">
+        <div class="nav-links">
           <a href="#">
             <img
-              className="search-icon"
+              class="search-icon"
               width="34"
               height="34"
               src="https://img.icons8.com/ios-glyphs/30/FFFFFF/google-web-search.png"
@@ -65,11 +66,11 @@ function Landing() {
         </div>
 
         <div
-          className={`small-screen-searchbar ${
+          class={`small-screen-searchbar ${
             showSmallSearchbar ? "open" : ""
           }`}
         >
-          <div className="small-searchbar">
+          <div class="small-searchbar">
             <img
               width="20"
               height="20"
@@ -88,32 +89,32 @@ function Landing() {
           </div>
         </div>
       </div>
-      <div className="admin-container">
-        <div className="header">
+      <div class="admin-container">
+        <div class="header">
           <h1>
             Welcome, <span style={{ color: "#FFCF33" }}>Admin!</span>
           </h1>
         </div>
-        <div className="dashboard">
-          <div className="sidebar">
+        <div class="dashboard">
+          <div class="sidebar">
             <ul>
-              <li>
+              <li onClick={() => setSelectedTab("users")}>
                 <img
                   width="24"
                   height="24"
                   src="https://img.icons8.com/ios-glyphs/30/FFFFFF/group.png"
                   alt="group"
                 />
-                Users
+                <span>Users</span>
               </li>
-              <li>
+              <li onClick={() => setSelectedTab("orders")}>
                 <img
                   width="22"
                   height="22"
                   src="https://img.icons8.com/ios-filled/50/FFFFFF/untested.png"
                   alt="untested"
                 />
-                Orders
+                <span>Orders</span>
               </li>
               <li>
                 <img
@@ -122,7 +123,7 @@ function Landing() {
                   src="https://img.icons8.com/material-rounded/24/FFFFFF/move-by-trolley.png"
                   alt="move-by-trolley"
                 />
-                Inventory
+                <span>Inventory</span>
               </li>
               <li>
                 <img
@@ -131,7 +132,7 @@ function Landing() {
                   src="https://img.icons8.com/material-outlined/24/FFFFFF/categorize.png"
                   alt="categorize"
                 />
-                Categories
+                <span>Categories</span>
               </li>
               <li>
                 <img
@@ -140,9 +141,11 @@ function Landing() {
                   src="https://img.icons8.com/glyph-neue/64/FFFFFF/supplier.png"
                   alt="supplier"
                 />
-                Suppliers
+                <span>Suppliers</span>
               </li>
-              <li>Reports</li>
+              <li>
+                <span>Reports</span>
+              </li>
               <li>
                 <img
                   width="21"
@@ -150,16 +153,16 @@ function Landing() {
                   src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/open-pane.png"
                   alt="open-pane"
                 />
-                Log Out
+                <span>Log Out</span>
               </li>
             </ul>
           </div>
-          <div className="main-content">
+          <div class="main-content">
             {/* USERS SECTION */}
-            <div className="users-section"></div>
+            <div class="users-section"></div>
             {/* ORDERS SECTION */}
-            <div className="admin-orders-section">
-              <div className="search-bar">
+            <div class="admin-orders-section">
+              <div class="search-bar">
                 <img
                   width="20"
                   height="20"
@@ -168,7 +171,7 @@ function Landing() {
                 />
                 <input type="text" placeholder="Search orders" />
               </div>
-              <div className="admin-orders-tab">
+              <div class="admin-orders-tab">
                 <ul>
                   <li>All</li>
                   <li>To Pay</li>
@@ -178,7 +181,7 @@ function Landing() {
                   <li>Cancelled</li>
                 </ul>
               </div>
-              <div className="orders-filter">
+              <div class="orders-filter">
                 <label for="orders-filterOptions">Filter by:</label>
                 <select name="orders-filterOptions" id="orders-filterOptions">
                   <option value="" disabled hidden>
@@ -189,7 +192,7 @@ function Landing() {
                   <option value="published_date">Published Date</option>
                 </select>
               </div>
-              <div className="admin-orders-columnHeader">
+              <div class="admin-orders-columnHeader">
                 <span>Order ID</span>
                 <span></span>
                 <span>Product</span>
@@ -198,7 +201,7 @@ function Landing() {
                 <span>Total Amount</span>
                 <span>Customer's Email</span>
               </div>
-              <div className="admin-orders-list">
+              <div class="admin-orders-list">
                 <span>001</span>
                 <span>x1</span>
                 <span>
@@ -210,11 +213,11 @@ function Landing() {
                 <span>₱16,450.00</span>
                 <span>dana.alania@fmail.com</span>
               </div>
-            </div>
+            )}
             {/* INVENTORY SECTION */}
-            <div className="inventory-section"></div>
+            <div class="inventory-section"></div>
             {/* CATEGORIES SECTION */}
-            <div className="categories-section"></div>
+            <div class="categories-section"></div>
           </div>
         </div>
       </div>
