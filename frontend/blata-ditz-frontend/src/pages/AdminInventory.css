@@ -9,6 +9,7 @@ li {
   margin: 0;
   padding: 0;
 }
+
 .admin-container {
   display: flex;
   flex-direction: column;
@@ -30,16 +31,28 @@ li {
 }
 
 .sidebar li {
-  list-style: none;
-  margin-bottom: 1.7rem;
-  font-size: 1.6rem;
-  cursor: pointer;
-  background-color: #131416;
-  padding: 1.3rem 2rem;
-  border-radius: 0 10px 10px 0;
   display: flex;
   align-items: center;
   gap: 1rem;
+  list-style: none;
+
+  margin-bottom: 1.7rem;
+  padding: 1.3rem 2rem;
+  border-radius: 0 10px 10px 0;
+
+  font-size: 1.6rem;
+  cursor: pointer;
+  background-color: #131416;
+}
+
+.unselectedtab {
+  color: #d5d6d9;
+  transition: 0.5s ease;
+}
+
+.unselectedtab:hover,
+.selectedtab {
+  color: #ffcf33;
 }
 
 .main-content {
