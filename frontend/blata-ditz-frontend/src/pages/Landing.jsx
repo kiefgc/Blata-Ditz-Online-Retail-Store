@@ -31,13 +31,32 @@ const FORM_POSITION_SIGNUP = 2;
 function Landing() {
   const navigate = useNavigate();
 
+  const [isSignedIn, setIsSignedIn] =
+    useState(false); /* For changing navbar icons when user logged in */
+
   const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
   const gototopRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
   const [activeFormPosition, setActiveFormPosition] =
     useState(FORM_POSITION_NONE);
   const [isLogin, setIsLogin] = useState(true);
+
+  useEffect(() => {
+    const searchbarScreenResize = () => {
+      if (window.innerWidth >= 830) {
+        setShowSmallSearchbar(false);
+      }
+    };
+    window.addEventListener("resize", searchbarScreenResize);
+
+    searchbarScreenResize();
+    return () => {
+      window.removeEventListener("resize", searchbarScreenResize);
+    };
+  }, []);
 
   const clickLogin = (e) => {
     e.stopPropagation();
@@ -132,7 +151,7 @@ function Landing() {
         </div>
         <div>
           <a href="#">
-            <div className="search-bar">
+            <div className="search-bar search-close">
               <img
                 width="20"
                 height="20"
@@ -144,29 +163,97 @@ function Landing() {
           </a>
         </div>
         <div className="nav-links">
-          <div className="pop-up-parent-container">
-            <button className="signin-button" onClick={clickLogin}>
-              Sign In
-            </button>
-            {activeFormPosition === FORM_POSITION_LOGIN && (
-              <AuthForm
-                isLogin={isLogin}
-                onClose={closeForm}
-                onSwitch={switchForm}
-              />
-            )}
-          </div>
-          <div className="pop-up-parent-container">
-            <button className="signup-button" onClick={clickSignup}>
-              Create Account
-            </button>
-            {activeFormPosition === FORM_POSITION_SIGNUP && (
-              <AuthForm
-                isLogin={isLogin}
-                onClose={closeForm}
-                onSwitch={switchForm}
-              />
-            )}
+          {isSignedIn ? (
+            <>
+              {" "}
+              <a href="#">
+                <img
+                  className="search-icon"
+                  width="34"
+                  height="34"
+                  src="https://img.icons8.com/ios-glyphs/30/FFFFFF/google-web-search.png"
+                  alt="google-web-search"
+                  onClick={() => setShowSmallSearchbar(!showSmallSearchbar)}
+                />
+              </a>
+              <a href="#">
+                <img
+                  width="30"
+                  height="30"
+                  src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/shopping-cart.png"
+                  alt="shopping-cart"
+                />
+              </a>
+              <a href="#">
+                <img
+                  width="30"
+                  height="30"
+                  src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/user.png"
+                  alt="user"
+                />
+              </a>
+            </>
+          ) : (
+            <>
+              <a href="#">
+                <img
+                  className="search-icon"
+                  width="34"
+                  height="34"
+                  src="https://img.icons8.com/ios-glyphs/30/FFFFFF/google-web-search.png"
+                  alt="google-web-search"
+                  onClick={() => setShowSmallSearchbar(!showSmallSearchbar)}
+                />
+              </a>
+              <div className="pop-up-parent-container">
+                <button className="signin-button" onClick={clickLogin}>
+                  Sign In
+                </button>
+                {activeFormPosition === FORM_POSITION_LOGIN && (
+                  <AuthForm
+                    isLogin={isLogin}
+                    onClose={closeForm}
+                    onSwitch={switchForm}
+                  />
+                )}
+              </div>
+              <div className="pop-up-parent-container">
+                <button className="signup-button" onClick={clickSignup}>
+                  Create Account
+                </button>
+                {activeFormPosition === FORM_POSITION_SIGNUP && (
+                  <AuthForm
+                    isLogin={isLogin}
+                    onClose={closeForm}
+                    onSwitch={switchForm}
+                  />
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div
+          className={`small-screen-searchbar ${
+            showSmallSearchbar ? "open" : ""
+          }`}
+        >
+          <div className="small-searchbar">
+            <img
+              width="20"
+              height="20"
+              src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+              alt="search--v1"
+            />
+            <input type="text" placeholder="Search" />
+
+            <img
+              width="15"
+              height="15"
+              src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/multiply.png"
+              alt="multiply"
+              onClick={() => setShowSmallSearchbar(false)}
+            />
           </div>
         </div>
       </div>
