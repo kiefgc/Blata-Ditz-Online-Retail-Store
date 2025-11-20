@@ -2,8 +2,97 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminInventory.css";
 
+// test data
+const productsData = [
+  {
+    brand: "Akko",
+    logo: "D", // Placeholder for Akko logo
+    products: [
+      {
+        id: "001",
+        image: "https://i.imgur.com/47cdfb.png", // Using a placeholder image
+        name: "Akko MU01 Mountain Seclusion Walnut Wood Case Multi-Mode RGB Hot-Swappable Mechanical Keyboard (Akko Rosewood, Akko V3 Piano Pro)",
+        inStock: 9,
+        retailPrice: "₱6,295",
+        active: true,
+      },
+      {
+        id: "002",
+        image: "https://i.imgur.com/47cdfb.png",
+        name: "Akko MU01 Mountain Seclusion Walnut Wood Case Multi-Mode RGB Hot-Swappable Mechanical Keyboard (Akko Rosewood, Akko V3 Piano Pro)",
+        inStock: 2,
+        retailPrice: "₱6,295",
+        active: true,
+      },
+    ],
+  },
+  {
+    brand: "Corsair",
+    logo: "C", // placeholder for Corsair logo
+    products: [
+      {
+        id: "101",
+        image: "https://via.placeholder.com/80x50/333333/FFFFFF?text=Corsair",
+        name: "Corsair K100 RGB Mechanical Gaming Keyboard",
+        inStock: 50,
+        retailPrice: "₱9,500",
+        active: true,
+      },
+    ],
+  },
+  {
+    brand: "Redragon",
+    logo: "R", // placeholder for Redragon logo
+    products: [],
+  },
+];
+
+// --- ProductRow Component ---
+const ProductRow = ({ product }) => (
+  <>
+    <div className="product-cell">{product.id}</div>
+    <div className="product-cell product-cell-image">
+      <img src={product.image} alt={product.name} />
+    </div>
+    <div className="product-cell product-cell-name">{product.name}</div>
+    <div className="product-cell product-cell-stock">{product.inStock}</div>
+    <div className="product-cell product-cell-price">{product.retailPrice}</div>
+    <div className="product-cell product-cell-active">
+      <input type="checkbox" checked={product.active} readOnly />
+    </div>
+  </>
+);
+
+// --- ProductTable Component ---
+const ProductTable = ({ products }) => (
+  <div className="product-table-wrapper">
+    {/* Table Header Row */}
+    <div className="product-table-header">
+      <div className="table-header-cell">Product ID</div>
+      <div className="table-header-cell">Image</div>
+      <div className="table-header-cell">Product Name</div>
+      <div className="table-header-cell">In Stock</div>
+      <div className="table-header-cell">Retail Price</div>
+      <div className="table-header-cell product-cell-active">Active</div>
+    </div>
+
+    {/* Product Rows */}
+    <div className="product-table-rows">
+      {products.map((product) => (
+        <ProductRow key={product.id} product={product} />
+      ))}
+    </div>
+  </div>
+);
+
 function AdminInventory() {
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+  const [openBrands, setOpenBrands] = useState({
+    Akko: true,
+    Corsair: false,
+    Redragon: false,
+  });
+
   useEffect(() => {
     const searchbarScreenResize = () => {
       if (window.innerWidth >= 830) {
@@ -17,6 +106,14 @@ function AdminInventory() {
       window.removeEventListener("resize", searchbarScreenResize);
     };
   }, []);
+
+  const toggleBrand = (brandName) => {
+    setOpenBrands((prev) => ({
+      ...prev,
+      [brandName]: !prev[brandName],
+    }));
+  };
+
   return (
     <>
       <div className="navbar">
@@ -186,6 +283,61 @@ function AdminInventory() {
                 <span>Log Out</span>
               </li>
             </ul>
+          </div>
+          <div className="main-content-inventory">
+            <div className="search-bar sb-inventory">
+              <img
+                width="20"
+                height="20"
+                src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+                alt="search--v1"
+              />
+              <input
+                type="text"
+                placeholder="Search by Item ID, name, or supplier"
+              />
+            </div>
+            <div className="inventory-list">
+              {productsData.map((brandData) => (
+                <div key={brandData.brand} className="brand-section">
+                  <div
+                    className={`brand-header ${
+                      openBrands[brandData.brand] ? "active" : ""
+                    }`}
+                    onClick={() => toggleBrand(brandData.brand)}
+                  >
+                    <div className="brand-logo-container">
+                      <span className="brand-logo-text">{brandData.logo}</span>
+                    </div>
+                    <span className="brand-name">{brandData.brand}</span>
+                    <img
+                      width="20"
+                      height="20"
+                      src="https://img.icons8.com/ios-filled/50/FFFFFF/sort-down.png"
+                      alt="sort-down"
+                      className="brand-dropdown-icon"
+                    />
+                  </div>
+                  {openBrands[brandData.brand] &&
+                    brandData.products.length > 0 && (
+                      <ProductTable products={brandData.products} />
+                    )}
+                  {openBrands[brandData.brand] &&
+                    brandData.products.length === 0 && (
+                      <p className="no-products-message">
+                        No inventory items found for {brandData.brand}.
+                      </p>
+                    )}
+                  {openBrands[brandData.brand] && (
+                    <div className="add-product-row">
+                      <button className="add-product-btn">
+                        + Add New Product to {brandData.brand}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
