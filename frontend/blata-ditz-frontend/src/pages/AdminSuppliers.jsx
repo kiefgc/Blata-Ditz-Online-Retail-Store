@@ -150,7 +150,7 @@ function AdminSuppliers() {
                   </Link>
                 </span>
               </li>
-              <li>
+              <li className="selectedli">
                 <img
                   width="24"
                   height="24"
