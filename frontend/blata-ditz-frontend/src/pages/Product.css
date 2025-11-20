@@ -1,0 +1,294 @@
+.page-content {
+  margin-left: 6vw;
+  margin-right: 6vw;
+  margin-top: 10vh;
+  margin-bottom: 5vh;
+
+  font-family: "Ubuntu", sans-serif;
+}
+
+/*main product section*/
+
+.main-product-container {
+  width: 100%;
+
+  padding-left: 5vw;
+  padding-right: 5vw;
+  padding-bottom: 8vh;
+  margin-bottom: 5vh;
+
+  background-color: #131416;
+
+  border-width: 2px;
+  border-style: solid;
+  border-color: #d5d6d9;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.main-product-images {
+  width: 55%;
+
+  padding-top: 7vh;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.main-product-images-small {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  padding-bottom: 10vh;
+
+  img {
+    height: 14vh;
+    width: 8vw;
+
+    object-fit: cover;
+  }
+
+  img:hover {
+    opacity: 0.5;
+    transition: 0.5s ease;
+  }
+}
+
+.main-product-images-main {
+  margin-left: 3vw;
+  img {
+    height: 55vh;
+    width: 25vw;
+
+    object-fit: cover;
+  }
+}
+
+.main-product-descriptions {
+  width: 45%;
+
+  padding-top: 4vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.main-product-descriptions-inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  line-height: 3vh;
+}
+
+.main-product-name {
+  color: #ffcf33;
+
+  font-size: 2.25rem;
+  font-weight: 500;
+
+  margin-bottom: 0.5vh;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+
+  background-color: #d5d6d9;
+}
+
+.main-product-sections {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-right: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: white;
+}
+
+.main-product-textdesc {
+  display: flex;
+  flex-wrap: wrap;
+  p {
+    font-size: 1.5rem;
+    font-weight: 200;
+    color: white;
+  }
+}
+
+.main-product-text {
+  font-size: 1.5rem;
+  font-weight: 200;
+  color: white;
+}
+
+.main-product-price {
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #ffcf33;
+}
+
+/*product specifications section*/
+
+.product-specficcations {
+  width: 100%;
+  min-height: fit-content;
+  padding-left: 4vw;
+  padding-top: 3vh;
+  padding-bottom: 4vh;
+
+  background-color: #131416;
+
+  border-width: 2px;
+  border-style: solid;
+  border-color: #d5d6d9;
+  border-radius: 10px;
+}
+
+.product-specfications-header {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.product-specfications-inner {
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+  height: 80%;
+}
+
+.product-specifications-div {
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+  height: 80%;
+}
+
+.product-specifications-div-left {
+  display: flex;
+  flex-direction: column;
+
+  p {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+}
+
+.product-specifications-div-right {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px 50px;
+
+  margin-left: 6vw;
+
+  p {
+    font-size: 1.3rem;
+  }
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.quantity-button {
+  background-color: black;
+  color: white;
+  border: 1px solid #d5d6d9;
+  font-size: 1.2rem;
+
+  padding: 5px 10px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.quantity-button:disabled {
+  background-color: #444;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.quantity-input {
+  width: 70px;
+  height: 30px;
+
+  text-align: center;
+
+  border: 1px solid white;
+  background-color: black;
+  color: white;
+
+  font-size: 1.3rem;
+
+  padding: 0;
+}
+
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.main-product-button-section {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin-top: 5vh;
+}
+
+.main-product-add2cart {
+  background-color: white;
+  border: 1px solid black;
+  width: 8vw;
+
+  color: black;
+  font-size: 1.5rem;
+  font-weight: 400;
+
+  padding: 1.5vh;
+
+  transition: 0.5s ease;
+}
+
+.main-product-buynow {
+  background-color: #ffcf33;
+  border: 1px solid black;
+  width: 8vw;
+
+  color: black;
+  font-size: 1.5rem;
+  font-weight: 400;
+
+  padding: 1.5vh;
+  transition: 0.5s ease;
+}
+
+.main-product-add2cart:hover,
+.main-product-buynow:hover {
+  background-color: black;
+  color: white;
+}
+
+/*recommendations sections*/
+
+.recommendations-header {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  font-size: 2.5rem;
+  font-weight: 500;
+
+  color: #ffcf33;
+}

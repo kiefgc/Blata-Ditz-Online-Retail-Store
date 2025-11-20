@@ -12,6 +12,18 @@ router.get("/", supplierController.getAllSuppliers);
 router.get("/:id", supplierController.getSupplierById);
 
 // Admin-only Routes
+router.get(
+  "/",
+  authenticateToken,
+  requireAdmin,
+  supplierController.getAllSuppliers
+);
+router.get(
+  "/:id",
+  authenticateToken,
+  requireAdmin,
+  supplierController.getSupplierById
+);
 router.post(
   "/",
   authenticateToken,

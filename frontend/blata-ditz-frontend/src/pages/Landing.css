@@ -1,8 +1,225 @@
 .page-content {
-  margin-left: 10vw;
-  margin-right: 10vw;
+  margin-left: 6vw;
+  margin-right: 6vw;
+  margin-top: 5vh !important;
+  margin-bottom: 2vh !important;
 }
 
+/* banner section */
+.banner-container {
+  width: 100%;
+  height: 50vh;
+  background-color: #070705;
+  border-radius: 10px;
+  border: 1px solid #d5d6d9;
+  padding: 7rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 5vh !important;
+  transition: 0.5 ease;
+}
+.text-banner {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  width: 50%;
+  gap: 2vh;
+}
+.banner-heading {
+  font-size: 3.4rem;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 0.9;
+}
+
+.text-banner p {
+  font-size: 1.6rem;
+  font-weight: 400;
+  width: 80%;
+  margin: 0;
+  margin-bottom: 0.6rem;
+}
+
+.button-banner {
+  background-color: #ffcf33;
+  padding: 1rem;
+  width: 130px;
+  text-align: center;
+  color: black;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  display: inline-block;
+  transition: 0.5s;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.button-banner:hover {
+  background-color: #131416;
+  color: white;
+  border: 1px solid white;
+}
+
+.img-banner img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+@media (max-width: 950px) {
+  .img-banner {
+    height: 40vh;
+    width: 35vw;
+  }
+}
+@media (max-width: 780px) {
+  .banner-container {
+    flex-direction: column-reverse;
+    height: auto;
+    padding: 1rem 3.5rem 4rem 3.5rem;
+  }
+  .img-banner {
+    min-height: 300px;
+    min-width: 380px;
+
+    margin-right: 3rem;
+  }
+  .text-banner {
+    width: 100%;
+    text-align: center;
+  }
+  .button-banner {
+    margin: 0 auto;
+  }
+
+  .text-banner p {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* products section */
+.categories {
+  padding: 2rem 6rem;
+  border: 0.5px solid #d9d9d9;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.categories ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: #ffcf33;
+  font-size: 1.6rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.categories li button {
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  position: relative;
+}
+
+.categories li button::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+
+  bottom: -3px;
+  height: 2px;
+  background: #d5d6d9;
+  width: 0%;
+  transition: width 0.25s ease;
+}
+
+.categories li button:hover::after {
+  width: 30px;
+}
+
+.products {
+  display: grid;
+  grid-auto-rows: min-content;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 4.5rem;
+  width: 100%;
+
+  margin-bottom: 5rem;
+}
+
+.item {
+  background-color: #131416;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 0.5px solid #d5d6d9;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-img {
+  height: 57%;
+}
+
+.item-img img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.item-content {
+  padding: 1rem 2rem 0.1rem 2rem;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.item-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #ffcf33;
+}
+
+.title {
+  font-size: 1.4rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.view-item-btn {
+  margin-bottom: 1rem;
+  background-color: #070709;
+  border: 0.5px solid #d5d6d9;
+  border-radius: 8px;
+  color: #ffcf33;
+  font-size: 1.4rem;
+  padding: 0.7rem 0;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+}
+.view-item-btn:hover {
+  background-color: #1a1b1e;
+}
 /*featured games sections*/
 
 .featured-container {
@@ -15,7 +232,7 @@
   border-radius: 10px;
   margin-top: 3vh;
 
-  padding: 6vh 3vw 3vh 3vw;
+  padding: 3vh 3vw 3vh 3vw;
 
   backdrop-filter: blur(10px); /* Blurs content behind the element */
   border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
@@ -59,6 +276,7 @@
 
 .sectiontitle {
   font-family: "Ubuntu", sans-serif;
+  padding-top: 3vh;
 
   font-weight: 600;
   font-size: 2.5rem;
@@ -83,9 +301,65 @@
 
 .featuredright {
   width: 70%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  padding-left: 30px;
+}
+
+.featuredgames {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  width: 100%;
+  height: 100%;
+}
+
+.ftgame {
+  height: 100%;
+  width: 90%;
+  margin-left: 20px;
+
+  border-radius: 10px;
+
+  background-color: black;
+  position: relative;
+  overflow: hidden;
+}
+
+.ftgame img {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+
+  object-fit: cover;
+  user-select: none;
+}
+
+.ftgame-title {
+  height: 35%;
+  width: 100%;
+
+  background: #000000;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(8, 0, 0, 0.47) 100%
+  );
+
+  opacity: 0;
+  transition: 0.5s ease;
+  border-radius: 0px 0px 10px 10px;
+
+  position: absolute;
+  bottom: 0;
+
+  padding-left: 15px;
+  padding-right: 15px;
+
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1.5rem;
+}
+
+.ftgame-title:hover {
+  opacity: 1;
 }
 
 /*scroll back to top button*/
@@ -99,7 +373,6 @@
   align-items: center;
 
   transition: 0.3s ease-in;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 
   user-select: none;
 }

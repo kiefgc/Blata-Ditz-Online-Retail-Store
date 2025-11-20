@@ -24,6 +24,7 @@ app.use("/inventory", inventoryRoutes);
 app.use("/suppliers", supplierRoutes);
 app.use("/orders", orderRoutes);
 
+app.use("/uploads", express.static("uploads"));
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });

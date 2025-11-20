@@ -1,4 +1,5 @@
 import express from "express";
+import { upload } from "../config/multer.js";
 import {
   getAllProducts,
   getProductById,
@@ -18,7 +19,13 @@ router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 
 // Admin-only Routes
-router.post("/", authenticateToken, requireAdmin, createProduct);
+router.post(
+  "/",
+  authenticateToken,
+  requireAdmin,
+  upload.single("image"),
+  createProduct
+);
 router.patch("/:id", authenticateToken, requireAdmin, updateProduct);
 router.delete("/:id", authenticateToken, requireAdmin, deleteProduct);
 
