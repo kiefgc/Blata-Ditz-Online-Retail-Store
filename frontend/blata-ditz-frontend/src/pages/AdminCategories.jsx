@@ -2,8 +2,88 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminCategories.css";
 
+const categories = [
+  {
+    id: "ps5",
+    name: "PS5",
+    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/playstation-5.png",
+  },
+  {
+    id: "ps4",
+    name: "PS4",
+    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/ps-controller.png",
+  },
+  {
+    id: "switch",
+    name: "SWITCH",
+    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/nintendo-switch--v1.png",
+  },
+  {
+    id: "xbox",
+    name: "XBOX",
+    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/xbox.png",
+  },
+  {
+    id: "pcmac",
+    name: "PC/MAC",
+    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/monitor.png",
+  },
+  {
+    id: "collectibles",
+    name: "COLLECTIBLES",
+    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/funko.png",
+  },
+  {
+    id: "more",
+    name: "MORE",
+    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/more.png",
+  },
+  {
+    id: "preorders",
+    name: "PRE-ORDERS",
+    icon: "https://img.icons8.com/pastel-glyph/64/FFFFFF/box--v1.png",
+  },
+  {
+    id: "add",
+    name: "ADD",
+    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/plus.png",
+    isAction: true,
+    link: "/admin/categories/add",
+  },
+];
+
+const CategoryCard = ({ name, icon, onClick, isAction, link }) => {
+  const CardContent = (
+    <>
+      <img src={icon} alt={`${name} icon`} className="category-card-icon" />
+      <span className="category-card-name">{name}</span>
+    </>
+  );
+
+  if (link) {
+    return (
+      <Link
+        to={link}
+        className={`category-card ${isAction ? "category-card-action" : ""}`}
+      >
+        {CardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      className={`category-card ${isAction ? "category-card-action" : ""}`}
+      onClick={onClick}
+    >
+      {CardContent}
+    </button>
+  );
+};
+
 function AdminCategories() {
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+
   useEffect(() => {
     const searchbarScreenResize = () => {
       if (window.innerWidth >= 830) {
@@ -186,6 +266,21 @@ function AdminCategories() {
                 <span>Log Out</span>
               </li>
             </ul>
+          </div>
+          <div className="main-content-categories">
+            <div className="category-grid-container">
+              {categories.map((category) => (
+                <CategoryCard
+                  key={category.id}
+                  name={category.name}
+                  icon={category.icon}
+                  isAction={category.isAction}
+                  link={category.link}
+                  // onClick is optional if using Link
+                  onClick={() => console.log(`Clicked ${category.name}`)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
