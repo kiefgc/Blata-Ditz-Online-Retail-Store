@@ -2,6 +2,7 @@ import "./Landing.css";
 import AuthForm from "./AuthForm.jsx";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import banner from "../assets/finalbanner.jpg";
 
@@ -28,6 +29,10 @@ const FORM_POSITION_LOGIN = 1;
 const FORM_POSITION_SIGNUP = 2;
 
 function Landing() {
+  const navigate = useNavigate();
+
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
   const gototopRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
   const [activeFormPosition, setActiveFormPosition] =
@@ -84,6 +89,8 @@ function Landing() {
       behavior: "smooth",
     });
   };
+
+  const browseRef = useRef(null);
 
   useEffect(() => {
     const gototop = gototopRef.current;
@@ -174,104 +181,277 @@ function Landing() {
               Find and purchase all your electronic needs. Shop the latest
               consoles, games, gadgets, and more. All in one place.
             </p>
-            <div className="button-banner">Browse Now</div>
+            <div
+              className="button-banner"
+              onClick={() =>
+                browseRef.current.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              Browse Now
+            </div>
           </div>
           <div className="img-banner">
             <img src={banner} />
           </div>
         </div>
         {/* PRODUCTS SECTION */}
-        <div className="product-container">
+        <div className="product-container" ref={browseRef}>
           <div className="categories">
             <ul>
               <li>
-                <button>PS5</button>
+                <button onClick={() => setSelectedCategory("all")}>ALL</button>
               </li>
               <li>
-                <button>PS4</button>
+                <button onClick={() => setSelectedCategory("ps5")}>PS5</button>
               </li>
               <li>
-                <button>SWITCH</button>
+                <button onClick={() => setSelectedCategory("ps4")}>PS4</button>
               </li>
               <li>
-                <button>XBOX</button>
+                <button onClick={() => setSelectedCategory("switch")}>
+                  SWITCH
+                </button>
               </li>
               <li>
-                <button>PC/MAC</button>
+                <button onClick={() => setSelectedCategory("xbox")}>
+                  XBOX
+                </button>
               </li>
               <li>
-                <button>COLLECTIBLES</button>
+                <button onClick={() => setSelectedCategory("pc/mac")}>
+                  PC/MAC
+                </button>
               </li>
               <li>
-                <button>MORE</button>
+                <button onClick={() => setSelectedCategory("collectibles")}>
+                  COLLECTIBLES
+                </button>
               </li>
               <li>
-                <button>PRE-ORDERS</button>
+                <button onClick={() => setSelectedCategory("more")}>
+                  MORE
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setSelectedCategory("pre-orders")}>
+                  PRE-ORDERS
+                </button>
               </li>
             </ul>
           </div>
-          <div className="products">
-            <div className="item">
-              <div className="item-img">
-                <img src={item} />
-              </div>
-              <div className="item-content">
-                <div className="item-details">
-                  <span className="price">₱175.00</span>
-                  <span className="title">
-                    Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
-                    2
-                  </span>
+
+          {selectedCategory === "all" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
                 </div>
-                <div className="view-item-btn">View More</div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">all all all</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
+              </div>
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
+                </div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">all all all</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="item">
-              <div className="item-img">
-                <img src={item} />
-              </div>
-              <div className="item-content">
-                <div className="item-details">
-                  <span className="price">₱175.00</span>
-                  <span className="title">
-                    Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
-                    2
-                  </span>
+          )}
+
+          {selectedCategory === "ps5" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
                 </div>
-                <div className="view-item-btn">View More</div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">
+                      Transnovo 24-in-1 Game Card Storage Case for Nintendo
+                      Switch 2 Transnovo 24-in-1 Game Card Storage Case for
+                      Nintendo Switch 2 Transnovo 24-in-1 Game Card Storage Case
+                      for Nintendo Switch 2
+                    </span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="item">
-              <div className="item-img">
-                <img src={item} />
-              </div>
-              <div className="item-content">
-                <div className="item-details">
-                  <span className="price">₱175.00</span>
-                  <span className="title">
-                    Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
-                    2
-                  </span>
+          )}
+          {selectedCategory === "ps4" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
                 </div>
-                <div className="view-item-btn">View More</div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">ps4ps4ps4</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="item">
-              <div className="item-img">
-                <img src={item} />
-              </div>
-              <div className="item-content">
-                <div className="item-details">
-                  <span className="price">₱175.00</span>
-                  <span className="title">
-                    Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
-                    2
-                  </span>
+          )}
+          {selectedCategory === "switch" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
                 </div>
-                <div className="view-item-btn">View More</div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">switch switch switch</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+          {selectedCategory === "xbox" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
+                </div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">xboxxx</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {selectedCategory === "pc/mac" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
+                </div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">pc/macccc</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {selectedCategory === "collectibles" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
+                </div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">collectiblessss</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {selectedCategory === "more" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
+                </div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">more</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {selectedCategory === "pre-orders" && (
+            <div className="products">
+              <div className="item">
+                <div className="item-img">
+                  <img src={item} />
+                </div>
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱175.00</span>
+                    <span className="title">pre-orders</span>
+                  </div>
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate("/product")}
+                  >
+                    View More
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         {/* FEATURED SECTION */}
         <div className="featured-container bg-red">

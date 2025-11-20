@@ -169,6 +169,7 @@ li {
   justify-content: flex-end;
   flex-direction: row;
   width: 100%;
+  cursor: pointer;
 }
 .admin-orders-popup-content {
   padding: 0 5rem 5rem 5rem;

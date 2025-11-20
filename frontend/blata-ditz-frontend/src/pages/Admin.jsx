@@ -262,7 +262,7 @@ function Landing() {
                 <div className="admin-orders-popup">
                   <div
                     className="admin-orders-popup-close"
-                    nClick={() => setShowOrdersPopup(false)}
+                    onClick={() => setShowOrdersPopup(false)}
                   >
                     CLOSE
                   </div>
