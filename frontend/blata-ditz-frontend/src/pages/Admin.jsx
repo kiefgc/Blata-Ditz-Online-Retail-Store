@@ -3,6 +3,9 @@ import "./Admin.css";
 
 function Landing() {
   const [selectedTab, setSelectedTab] = useState("users");
+
+  const [showOrdersPopup, setShowOrdersPopup] = useState(false);
+
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -98,7 +101,16 @@ function Landing() {
         <div className="dashboard">
           <div className="sidebar">
             <ul>
-              <li onClick={() => setSelectedTab("users")}>
+              <li
+                onClick={() => setSelectedTab("users")}
+                style={{
+                  color: selectedTab === "users" ? "#FFCF33" : "white",
+                  backgroundImage:
+                    selectedTab === "users"
+                      ? "linear-gradient(to right, black, #131416)"
+                      : "none",
+                }}
+              >
                 <img
                   width="24"
                   height="24"
@@ -107,7 +119,16 @@ function Landing() {
                 />
                 <span>Users</span>
               </li>
-              <li onClick={() => setSelectedTab("orders")}>
+              <li
+                onClick={() => setSelectedTab("orders")}
+                style={{
+                  color: selectedTab === "orders" ? "#FFCF33" : "white",
+                  backgroundImage:
+                    selectedTab === "orders"
+                      ? "linear-gradient(to right, black, #131416)"
+                      : "none",
+                }}
+              >
                 <img
                   width="22"
                   height="22"
@@ -144,6 +165,12 @@ function Landing() {
                 <span>Suppliers</span>
               </li>
               <li>
+                <img
+                  width="24"
+                  height="24"
+                  src="https://img.icons8.com/forma-regular-filled/24/FFFFFF/combo-chart.png"
+                  alt="combo-chart"
+                />
                 <span>Reports</span>
               </li>
               <li>
@@ -200,6 +227,25 @@ function Landing() {
                   <span>Payment Status</span>
                   <span>Order Status</span>
                 </div>
+                <div
+                  className="admin-orders-list"
+                  onClick={() => setShowOrdersPopup(true)}
+                >
+                  <span>001</span>
+
+                  <span>₱16,450.00</span>
+                  <span>06-11-2025</span>
+                  <span>Completed</span>
+                  <span>Completed</span>
+                </div>
+                <div className="admin-orders-list">
+                  <span>001</span>
+
+                  <span>₱16,450.00</span>
+                  <span>06-11-2025</span>
+                  <span>Completed</span>
+                  <span>Completed</span>
+                </div>
                 <div className="admin-orders-list">
                   <span>001</span>
 
@@ -210,6 +256,44 @@ function Landing() {
                 </div>
               </div>
             )}
+            {/* Orders Popup */}
+            {showOrdersPopup && (
+              <div className="admin-orders-popup-overlay">
+                <div className="admin-orders-popup">
+                  <div
+                    className="admin-orders-popup-close"
+                    nClick={() => setShowOrdersPopup(false)}
+                  >
+                    CLOSE
+                  </div>
+                  <div className="admin-orders-popup-content">
+                    <div className="orders-id">
+                      <span className="order-id-title">ID No. </span>
+                      <span className="order-id-no">001</span>
+                    </div>
+                    <div className="first-column">
+                      <div className="order-details">
+                        <span className="order-detail-title">Date</span>
+                        <span className="order-detail-value">09-23-25</span>
+                      </div>
+                      <div className="order-details">
+                        <span className="order-detail-title">
+                          Customer Contact
+                        </span>
+                        <span className="order-detail-value">
+                          <span>dana.alania@fmail.com</span>
+                          <br />
+                          <span>+63 976 348 5930</span>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="order-details"></div>
+                    <div className="order-details"></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* INVENTORY SECTION */}
             <div className="inventory-section"></div>
             {/* CATEGORIES SECTION */}
