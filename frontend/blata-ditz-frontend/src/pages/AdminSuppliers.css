@@ -55,6 +55,15 @@ li {
   color: #ffcf33;
 }
 
+.selectedli {
+  background: #070709;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 7, 9, 1) 23%,
+    rgba(19, 20, 22, 1) 100%
+  );
+}
+
 .main-content {
   width: 100%;
 }
