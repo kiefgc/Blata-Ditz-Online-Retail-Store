@@ -1,11 +1,26 @@
-import { Order_Details } from "../models/Order_Details";
-import { Order } from "../models/Order";
+import { OrderDetails } from "../models/OrderDetails.js";
+import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
+import { ObjectId } from "mongodb";
 
 export async function getOrderDetailsByOrderId(req, res) {
   try {
     const { order_id } = req.params;
-    const orderDetails = await Order_Details.getByOrderId(order_id);
+
+    if (!ObjectId.isValid(order_id)) {
+      return res.status(400).json({ message: "Invalid Order ID" });
+    }
+
+    const order = await Order.getById(order_id);
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    if (req.user.role === "customer") {
+      if (order.customer_id.toString() !== req.user.id.toString()) {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
+    }
+
+    const orderDetails = await OrderDetails.getByOrderId(order_id);
     res.status(200).json(orderDetails);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -14,17 +29,33 @@ export async function getOrderDetailsByOrderId(req, res) {
 
 export async function addOrderDetail(req, res) {
   try {
-    const { order_id, product_id, quantity, unit_price, subtotal } = req.body;
+    const { order_id, product_id, quantity, unit_price } = req.body;
 
-    if (!order_id || !product_id || !quantity || !unit_price || !subtotal) {
+    if (!order_id || !product_id || !quantity || !unit_price) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    if (quantity <= 0 || unit_price <= 0 || subtotal <= 0) {
+    if (!ObjectId.isValid(order_id) || !ObjectId.isValid(product_id)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    if (quantity <= 0 || unit_price <= 0) {
       return res.status(400).json({ message: "Positive numbers only" });
     }
 
-    await Order_Details.create({
+    const order = await Order.getById(order_id);
+    if (!order) {
+      return res.status(404).json({ message: "Order does not exist" });
+    }
+
+    const product = await Product.getById(product_id);
+    if (!product) {
+      return res.status(404).json({ message: "Product does not exist" });
+    }
+
+    const subtotal = quantity * unit_price;
+
+    await OrderDetails.create({
       order_id,
       product_id,
       quantity,
@@ -32,7 +63,7 @@ export async function addOrderDetail(req, res) {
       subtotal,
     });
 
-    res.status(201).json({ message: "Order details added successfully" });
+    res.status(201).json({ message: "Order detail added successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -49,8 +80,7 @@ export async function updateOrderDetail(req, res) {
 
     if (
       (updates.quantity && updates.quantity <= 0) ||
-      (updates.unit_price && updates.unit_price <= 0) ||
-      (updates.subtotal && updates.subtotal <= 0)
+      (updates.unit_price && updates.unit_price <= 0)
     ) {
       return res.status(400).json({ message: "Positive numbers only" });
     }
@@ -58,10 +88,21 @@ export async function updateOrderDetail(req, res) {
     delete updates.order_id;
     delete updates.product_id;
 
-    const result = await Order_Details.update(id, updates);
-    if (result.matchedCount === 0) {
+    const existing = await OrderDetails.collection().findOne({
+      _id: new ObjectId(id),
+    });
+
+    if (!existing) {
       return res.status(404).json({ message: "Order detail not found" });
     }
+
+    const qty = updates.quantity || existing.quantity;
+    const price = updates.unit_price || existing.unit_price;
+
+    updates.subtotal = qty * price;
+
+    await OrderDetails.update(id, updates);
+
     res.status(200).json({ message: "Order detail updated successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -71,10 +112,17 @@ export async function updateOrderDetail(req, res) {
 export async function deleteOrderDetail(req, res) {
   try {
     const { id } = req.params;
-    const result = await Order_Details.delete(id);
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+
+    const result = await OrderDetails.delete(id);
+
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Order detail not found" });
     }
+
     res.status(200).json({ message: "Order detail deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
