@@ -72,9 +72,9 @@ function Landing() {
     const threshold = window.innerHeight * 0.3;
 
     if (scroll > threshold) {
-      gototop.classList.add("active");
+      gototop.classNameList.add("active");
     } else {
-      gototop.classList.remove("active");
+      gototop.classNameList.remove("active");
     }
   };
 
@@ -117,15 +117,15 @@ function Landing() {
 
   return (
     <>
-      <div class="navbar">
+      <div className="navbar">
         <div>
-          <a href="#" class="logo">
+          <a href="#" className="logo">
             BLATADITZ
           </a>
         </div>
         <div>
           <a href="#">
-            <div class="search-bar">
+            <div className="search-bar">
               <img
                 width="20"
                 height="20"
@@ -136,9 +136,9 @@ function Landing() {
             </div>
           </a>
         </div>
-        <div class="nav-links">
-          <div class="pop-up-parent-container">
-            <button class="signin-button" onClick={clickLogin}>
+        <div className="nav-links">
+          <div className="pop-up-parent-container">
+            <button className="signin-button" onClick={clickLogin}>
               Sign In
             </button>
             {activeFormPosition === FORM_POSITION_LOGIN && (
@@ -149,8 +149,8 @@ function Landing() {
               />
             )}
           </div>
-          <div class="pop-up-parent-container">
-            <button class="signup-button" onClick={clickSignup}>
+          <div className="pop-up-parent-container">
+            <button className="signup-button" onClick={clickSignup}>
               Create Account
             </button>
             {activeFormPosition === FORM_POSITION_SIGNUP && (
@@ -163,24 +163,26 @@ function Landing() {
           </div>
         </div>
       </div>
-      <div class="page-content">
+      <div className="page-content">
         {/* BANNER SECTION */}
-        <div class="banner-container">
-          <div class="text-banner">
-            <span class="banner-heading">Your one-stop electronic store.</span>
+        <div className="banner-container">
+          <div className="text-banner">
+            <span className="banner-heading">
+              Your one-stop electronic store.
+            </span>
             <p>
               Find and purchase all your electronic needs. Shop the latest
               consoles, games, gadgets, and more. All in one place.
             </p>
-            <div class="button-banner">Browse Now</div>
+            <div className="button-banner">Browse Now</div>
           </div>
-          <div class="img-banner">
+          <div className="img-banner">
             <img src={banner} />
           </div>
         </div>
         {/* PRODUCTS SECTION */}
-        <div class="product-container">
-          <div class="categories">
+        <div className="product-container">
+          <div className="categories">
             <ul>
               <li>
                 <button>PS5</button>
@@ -208,89 +210,89 @@ function Landing() {
               </li>
             </ul>
           </div>
-          <div class="products">
-            <div class="item">
-              <div class="item-img">
+          <div className="products">
+            <div className="item">
+              <div className="item-img">
                 <img src={item} />
               </div>
-              <div class="item-content">
-                <div class="item-details">
-                  <span class="price">₱175.00</span>
-                  <span class="title">
+              <div className="item-content">
+                <div className="item-details">
+                  <span className="price">₱175.00</span>
+                  <span className="title">
                     Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
                     2
                   </span>
                 </div>
-                <div class="view-item-btn">View More</div>
+                <div className="view-item-btn">View More</div>
               </div>
             </div>
-            <div class="item">
-              <div class="item-img">
+            <div className="item">
+              <div className="item-img">
                 <img src={item} />
               </div>
-              <div class="item-content">
-                <div class="item-details">
-                  <span class="price">₱175.00</span>
-                  <span class="title">
+              <div className="item-content">
+                <div className="item-details">
+                  <span className="price">₱175.00</span>
+                  <span className="title">
                     Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
                     2
                   </span>
                 </div>
-                <div class="view-item-btn">View More</div>
+                <div className="view-item-btn">View More</div>
               </div>
             </div>
-            <div class="item">
-              <div class="item-img">
+            <div className="item">
+              <div className="item-img">
                 <img src={item} />
               </div>
-              <div class="item-content">
-                <div class="item-details">
-                  <span class="price">₱175.00</span>
-                  <span class="title">
+              <div className="item-content">
+                <div className="item-details">
+                  <span className="price">₱175.00</span>
+                  <span className="title">
                     Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
                     2
                   </span>
                 </div>
-                <div class="view-item-btn">View More</div>
+                <div className="view-item-btn">View More</div>
               </div>
             </div>
-            <div class="item">
-              <div class="item-img">
+            <div className="item">
+              <div className="item-img">
                 <img src={item} />
               </div>
-              <div class="item-content">
-                <div class="item-details">
-                  <span class="price">₱175.00</span>
-                  <span class="title">
+              <div className="item-content">
+                <div className="item-details">
+                  <span className="price">₱175.00</span>
+                  <span className="title">
                     Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch
                     2
                   </span>
                 </div>
-                <div class="view-item-btn">View More</div>
+                <div className="view-item-btn">View More</div>
               </div>
             </div>
           </div>
         </div>
         {/* FEATURED SECTION */}
-        <div class="featured-container bg-red">
-          <div class="featuredleft">
-            <div class="sectiontitle">
+        <div className="featured-container bg-red">
+          <div className="featuredleft">
+            <div className="sectiontitle">
               FEATURED NINTENDO<br></br>SWITCH GAMES
             </div>
-            <img class="featuredimage2" src={nswitch}></img>
+            <img className="featuredimage2" src={nswitch}></img>
           </div>
-          <div class="featuredright">
-            <div class="featuredgames">
-              <div class="ftgame">
+          <div className="featuredright">
+            <div className="featuredgames">
+              <div className="ftgame">
                 <img src={pokemonns}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>Pokémon™ Legends: Z-A – Nintendo Switch™ 2 Edition</p>
                   <p>₱3,095.00</p>
                 </div>
               </div>
-              <div class="ftgame">
+              <div className="ftgame">
                 <img src={kirbyns}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>
                     Kirby™ and the Forgotten Land – Nintendo Switch™ 2 Edition +
                     Star-Crossed World
@@ -298,9 +300,9 @@ function Landing() {
                   <p>₱3,395.00</p>
                 </div>
               </div>
-              <div class="ftgame">
+              <div className="ftgame">
                 <img src={littlenightmaresns}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>Little Nightmares III</p>
                   <p>₱2,095.00</p>
                 </div>
@@ -308,32 +310,32 @@ function Landing() {
             </div>
           </div>
         </div>
-        <div class="featured-container bg-blue">
-          <div class="featuredleft">
-            <div class="sectiontitle">
+        <div className="featured-container bg-blue">
+          <div className="featuredleft">
+            <div className="sectiontitle">
               FEATURED PLAYSTATION<br></br>GAMES
             </div>
-            <img class="featuredimage" src={ps4}></img>
+            <img className="featuredimage" src={ps4}></img>
           </div>
-          <div class="featuredright">
-            <div class="featuredgames">
-              <div class="ftgame">
+          <div className="featuredright">
+            <div className="featuredgames">
+              <div className="ftgame">
                 <img src={eriksholmps}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>Eriksholm: The Stolen Dream</p>
                   <p>₱1,795.00</p>
                 </div>
               </div>
-              <div class="ftgame">
+              <div className="ftgame">
                 <img src={pawpatrolps}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>PAW Patrol Rescue Wheels Championship</p>
                   <p>₱1,850.00</p>
                 </div>
               </div>
-              <div class="ftgame">
+              <div className="ftgame">
                 <img src={ddreviveps}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>Double Dragon Revive</p>
                   <p>₱2,095.00</p>
                 </div>
@@ -341,32 +343,32 @@ function Landing() {
             </div>
           </div>
         </div>
-        <div class="featured-container bg-green">
-          <div class="featuredleft">
-            <div class="sectiontitle">
+        <div className="featured-container bg-green">
+          <div className="featuredleft">
+            <div className="sectiontitle">
               FEATURED XBOX<br></br>GAMES
             </div>
-            <img class="featuredimage" src={xbox}></img>
+            <img className="featuredimage" src={xbox}></img>
           </div>
-          <div class="featuredright">
-            <div class="featuredgames">
-              <div class="ftgame">
+          <div className="featuredright">
+            <div className="featuredgames">
+              <div className="ftgame">
                 <img src={nba2k26xb}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>NBA 2K26 Superstar Edition</p>
                   <p>₱4,190.00</p>
                 </div>
               </div>
-              <div class="ftgame">
+              <div className="ftgame">
                 <img src={wuchangxb}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>Wuchang: Fallen Feathers Day One</p>
                   <p>₱3,250.00</p>
                 </div>
               </div>
-              <div class="ftgame">
+              <div className="ftgame">
                 <img src={suicidesquadxb}></img>
-                <div class="ftgame-title">
+                <div className="ftgame-title">
                   <p>Suicide Squad: Kill the Justice League</p>
                   <p>₱1.715.00</p>
                 </div>
@@ -378,7 +380,7 @@ function Landing() {
         <a
           ref={gototopRef}
           id="gotop"
-          class="backtotop"
+          className="backtotop"
           href="javascript:void(0)"
         >
           <img
@@ -388,12 +390,12 @@ function Landing() {
         </a>
       </div>
 
-      <div class="footer">
-        <a href="#" class="logo">
+      <div className="footer">
+        <a href="#" className="logo">
           BLATADITZ
         </a>
-        <p class="copyright">Copyright &copy; 2025</p>
-        <p class="disclaimer">FOR ACADEMIC PURPOSES ONLY</p>
+        <p className="copyright">Copyright &copy; 2025</p>
+        <p className="disclaimer">FOR ACADEMIC PURPOSES ONLY</p>
       </div>
     </>
   );

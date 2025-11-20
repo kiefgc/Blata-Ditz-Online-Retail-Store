@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import "./Product.css";
+import "./Landing.css";
+
 import React from "react";
+
+import item from "../assets/item.png";
 
 function Product() {
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const maxStock = 99;
   useEffect(() => {
     const searchbarScreenResize = () => {
       if (window.innerWidth >= 830) {
@@ -18,16 +24,32 @@ function Product() {
     };
   }, []);
 
+  const decreaseQuantity = () => {
+    setQuantity((prevQuantity) => Math.max(1, prevQuantity - 1));
+  };
+
+  const increaseQuantity = () => {
+    setQuantity((prevQuantity) => Math.min(maxStock, prevQuantity + 1));
+  };
+
+  const handleQuantityChange = (event) => {
+    const value = Math.max(
+      1,
+      Math.min(maxStock, Number(event.target.value) || 1)
+    );
+    setQuantity(value);
+  };
+
   return (
     <>
-      <div class="navbar">
+      <div className="navbar">
         <div>
-          <a href="#" class="logo">
+          <a href="#" className="logo">
             BLATADITZ
           </a>
         </div>
         <div>
-          <div class="search-bar search-close">
+          <div className="search-bar search-close">
             <img
               width="20"
               height="20"
@@ -37,10 +59,10 @@ function Product() {
             <input type="text" placeholder="Search" />
           </div>
         </div>
-        <div class="nav-links">
+        <div className="nav-links">
           <a href="#">
             <img
-              class="search-icon"
+              className="search-icon"
               width="34"
               height="34"
               src="https://img.icons8.com/ios-glyphs/30/FFFFFF/google-web-search.png"
@@ -67,9 +89,11 @@ function Product() {
         </div>
 
         <div
-          class={`small-screen-searchbar ${showSmallSearchbar ? "open" : ""}`}
+          className={`small-screen-searchbar ${
+            showSmallSearchbar ? "open" : ""
+          }`}
         >
-          <div class="small-searchbar">
+          <div className="small-searchbar">
             <img
               width="20"
               height="20"
@@ -88,50 +112,107 @@ function Product() {
           </div>
         </div>
       </div>
-      <div class="page-content">
-        <div class="main-product-container">
-          <div class="main-product-images">
-            <div class="main-product-images-small">
+      <div className="page-content">
+        <div className="categories">
+          <ul>
+            <li>
+              <button>PS5</button>
+            </li>
+            <li>
+              <button>PS4</button>
+            </li>
+            <li>
+              <button>SWITCH</button>
+            </li>
+            <li>
+              <button>XBOX</button>
+            </li>
+            <li>
+              <button>PC/MAC</button>
+            </li>
+            <li>
+              <button>COLLECTIBLES</button>
+            </li>
+            <li>
+              <button>MORE</button>
+            </li>
+            <li>
+              <button>PRE-ORDERS</button>
+            </li>
+          </ul>
+        </div>
+        <div className="main-product-container">
+          <div className="main-product-images">
+            <div className="main-product-images-small">
               <img src="https://picsum.photos/75"></img>
               <img src="https://picsum.photos/75"></img>
               <img src="https://picsum.photos/75"></img>
             </div>
-            <div class="main-product-images-main">
+            <div className="main-product-images-main">
               <img src="https://picsum.photos/200"></img>
             </div>
           </div>
-          <div class="main-product-descriptions">
-            <p class="main-product-name">Some Product Name Here</p>
-            <div class="divider"></div>
-            <p class="main-product-sections">Description</p>
+          <div className="main-product-descriptions">
+            <p className="main-product-name">Some Product Name Here</p>
+            <div className="divider"></div>
+            <p className="main-product-sections">Description</p>
             <br></br>
-            <div class="main-product-textdesc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+            <div className="main-product-textdesc">
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </p>
             </div>
-            <div class="main-product-descriptions-inline">
-              <p class="main-product-sections">Price:</p>
-              <p class="main-product-price">₱16,450.00</p>
+            <div className="main-product-descriptions-inline">
+              <p className="main-product-price">₱16,450.00</p>
             </div>
-            <div class="main-product-descriptions-inline">
-              <p class="main-product-sections">Stock:</p>
-              <p class="main-product-text">4 stocks left</p>
+            <div className="main-product-descriptions-inline">
+              <p className="main-product-sections">Stock:</p>
+              <p className="main-product-text">{maxStock} stocks left</p>
             </div>
-            <div class="main-product-descriptions-inline">
-              <p class="main-product-sections">Quantity:</p>
+            <div className="main-product-descriptions-inline">
+              <p className="main-product-sections">Quantity:</p>
+              <div className="quantity-selector">
+                <button
+                  className="quantity-button"
+                  onClick={decreaseQuantity}
+                  disabled={quantity <= 1}
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  className="quantity-input"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  min={"1"}
+                  max={maxStock.toString()}
+                ></input>
+                <button
+                  className="quantity-button"
+                  onClick={increaseQuantity}
+                  disabled={quantity >= maxStock}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div className="main-product-button-section">
+              <button className="main-product-add2cart">Add to Cart</button>
+              <button className="main-product-buynow">Buy Now</button>
             </div>
           </div>
         </div>
-        <div class="product-specficcations">
-          <p class="product-specfications-header">Product Specifications</p>
-          <div class="product-specfications-inner">
-            <div class="product-specifications-div">
-              <div class="product-specifications-div-left">
+        <div className="product-specficcations">
+          <p className="product-specfications-header">Product Specifications</p>
+          <div className="product-specfications-inner">
+            <div className="product-specifications-div">
+              <div className="product-specifications-div-left">
                 <p>SPECIFICATIONS</p>
               </div>
-              <div class="product-specifications-div-right">
+              <div className="product-specifications-div-right">
                 <p>test</p>
                 <p>test</p>
                 <p>test</p>
@@ -143,8 +224,8 @@ function Product() {
                 <p>test</p>
               </div>
             </div>
-            <div class="product-specifications-div">
-              <div class="product-specifications-div-left">
+            <div className="product-specifications-div">
+              <div className="product-specifications-div-left">
                 <p>REQUIREMENTS</p>
                 <br></br>
                 <br></br>
@@ -153,7 +234,7 @@ function Product() {
                 <br></br>
                 <p>CONNECTIVITY</p>
               </div>
-              <div class="product-specifications-div-right">
+              <div className="product-specifications-div-right">
                 <p>test</p>
                 <p>test</p>
                 <p>test</p>
@@ -167,14 +248,72 @@ function Product() {
             </div>
           </div>
         </div>
-        <p class="recommendations-header">You may also like</p>
+        <p className="recommendations-header">You may also like</p>
+        <div className="products">
+          <div className="item">
+            <div className="item-img">
+              <img src={item} />
+            </div>
+            <div className="item-content">
+              <div className="item-details">
+                <span className="price">₱175.00</span>
+                <span className="title">
+                  Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2
+                </span>
+              </div>
+              <div className="view-item-btn">View More</div>
+            </div>
+          </div>
+          <div className="item">
+            <div className="item-img">
+              <img src={item} />
+            </div>
+            <div className="item-content">
+              <div className="item-details">
+                <span className="price">₱175.00</span>
+                <span className="title">
+                  Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2
+                </span>
+              </div>
+              <div className="view-item-btn">View More</div>
+            </div>
+          </div>
+          <div className="item">
+            <div className="item-img">
+              <img src={item} />
+            </div>
+            <div className="item-content">
+              <div className="item-details">
+                <span className="price">₱175.00</span>
+                <span className="title">
+                  Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2
+                </span>
+              </div>
+              <div className="view-item-btn">View More</div>
+            </div>
+          </div>
+          <div className="item">
+            <div className="item-img">
+              <img src={item} />
+            </div>
+            <div className="item-content">
+              <div className="item-details">
+                <span className="price">₱175.00</span>
+                <span className="title">
+                  Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2
+                </span>
+              </div>
+              <div className="view-item-btn">View More</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="footer">
-        <a href="#" class="logo">
+      <div className="footer">
+        <a href="#" className="logo">
           BLATADITZ
         </a>
-        <p class="copyright">Copyright &copy; 2025</p>
-        <p class="disclaimer">FOR ACADEMIC PURPOSES ONLY</p>
+        <p className="copyright">Copyright &copy; 2025</p>
+        <p className="disclaimer">FOR ACADEMIC PURPOSES ONLY</p>
       </div>
     </>
   );

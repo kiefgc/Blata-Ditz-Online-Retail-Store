@@ -21,14 +21,14 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
   };
 
   return (
-    <div class="pop-up-form" onClick={(e) => e.stopPropagation()}>
-      <button className="close-button" onClick={onClose}>
+    <div className="pop-up-form" onClick={(e) => e.stopPropagation()}>
+      <button classNameName="close-button" onClick={onClose}>
         &times;
       </button>
 
       <h2>{isLogin ? "Log in to your account" : "Create an account"}</h2>
 
-      <p class="form-subheading">
+      <p className="form-subheading">
         {isLogin
           ? "Enter your email address and password"
           : "Enter an email address and password"}
@@ -45,14 +45,14 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
           ></input>
         )}
 
-        <button type="submit" className="submit-button">
+        <button type="submit" classNameName="submit-button">
           {isLogin ? "Log In" : "Sign Up"}
         </button>
       </form>
 
-      <p class="switch-text">
+      <p className="switch-text">
         {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-        <button type="button" className="switch-link" onClick={onSwitch}>
+        <button type="button" classNameName="switch-link" onClick={onSwitch}>
           {isLogin ? "Create an account" : "Sign in here"}
         </button>
       </p>
