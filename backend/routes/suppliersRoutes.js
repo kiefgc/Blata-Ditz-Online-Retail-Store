@@ -7,6 +7,10 @@ import {
 
 const router = express.Router();
 
+// Public Routes
+router.get("/", supplierController.getAllSuppliers);
+router.get("/:id", supplierController.getSupplierById);
+
 // Admin-only Routes
 router.get(
   "/",
