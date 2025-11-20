@@ -7,12 +7,15 @@ export class Order_Details {
   }
 
   static async getByOrderId(order_id) {
-    return await this.collection().find({ order_id: order_id }).toArray();
+    return await this.collection()
+      .find({ order_id: new ObjectId(order_id) })
+      .toArray();
   }
 
   static async create(orderDetailData) {
     const orderDetail = {
       ...orderDetailData,
+      order_id: new ObjectId(orderDetailData.order_id),
       //   created_at: new Date(), since order_date is alr part of Order.js ?
     };
 

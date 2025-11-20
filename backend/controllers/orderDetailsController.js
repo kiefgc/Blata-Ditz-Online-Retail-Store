@@ -1,5 +1,5 @@
-import { Order_Details } from "../models/Order_Details";
-import { Order } from "../models/Order";
+import { Order_Details } from "../models/Order_Details.js";
+import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
 
 export async function getOrderDetailsByOrderId(req, res) {
@@ -14,15 +14,26 @@ export async function getOrderDetailsByOrderId(req, res) {
 
 export async function addOrderDetail(req, res) {
   try {
-    const { order_id, product_id, quantity, unit_price, subtotal } = req.body;
+    const { order_id, product_id, quantity } = req.body;
 
-    if (!order_id || !product_id || !quantity || !unit_price || !subtotal) {
+    if (!order_id || !product_id || !quantity) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    if (quantity <= 0 || unit_price <= 0 || subtotal <= 0) {
-      return res.status(400).json({ message: "Positive numbers only" });
+    if (quantity <= 0) {
+      return res
+        .status(400)
+        .json({ message: "Quantity must be a positive number" });
     }
+
+    //get product from db
+    const product = await Product.findById(product_id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const unit_price = product.unit_price;
+    const subtotal = quantity * unit_price;
 
     await Order_Details.create({
       order_id,
@@ -32,7 +43,17 @@ export async function addOrderDetail(req, res) {
       subtotal,
     });
 
-    res.status(201).json({ message: "Order details added successfully" });
+    const allOrderDetails = await Order_Details.getByOrderId(order_id);
+    const totalAmount = allOrderDetails.reduce(
+      (sum, item) => sum + item.subtotal,
+      0
+    );
+    await Order.update(order_id, { total_amount: totalAmount });
+
+    res.status(201).json({
+      message: "Order details added successfully",
+      totalAmount: totalAmount,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

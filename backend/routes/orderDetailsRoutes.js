@@ -6,11 +6,11 @@ const router = express.Router();
 
 // Used by both admin and customer; requires login
 router.get(
-  "/:id",
+  "/:order_id",
   authenticateToken,
-  orderDetailsController.getOrderDetailById
+  orderDetailsController.getOrderDetailsByOrderId
 );
-router.post("/", authenticateToken, orderDetailsController.createOrderDetail);
+router.post("/", authenticateToken, orderDetailsController.addOrderDetail);
 router.patch(
   "/:id",
   authenticateToken,
@@ -21,3 +21,5 @@ router.delete(
   authenticateToken,
   orderDetailsController.deleteOrderDetail
 );
+
+export default router;

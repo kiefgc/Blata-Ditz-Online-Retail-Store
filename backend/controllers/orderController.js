@@ -9,9 +9,8 @@ export async function getAllOrders(req, res) {
       const orders = await Order.getAll();
       res.status(200).json(orders);
       return;
-
-      //customer sees only their order
     } else {
+      //customer sees only their order
       const customerOrders = await Order.findByCustomerId(req.user.id);
       res.status(200).json(customerOrders);
       return;
@@ -44,7 +43,6 @@ export async function getOrderById(req, res) {
 export async function createOrder(req, res) {
   try {
     const {
-      customer_id,
       order_status, //ENUM('pending', 'processing', 'completed', 'cancelled')
       total_amount,
       payment_status, //ENUM('pending', 'paid', 'failed')
@@ -53,24 +51,23 @@ export async function createOrder(req, res) {
     } = req.body;
 
     if (
-      !customer_id ||
       !order_status ||
-      !total_amount ||
       !payment_status ||
       !payment_method ||
-      !shipping_address
+      !shipping_address ||
+      total_amount !== 0 //covers null since were getting this from orderdetails
     ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    if (total_amount <= 0) {
-      return res
-        .status(400)
-        .json({ message: "Total amount must be a positive number" });
-    }
+    // if (total_amount <= 0) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Total amount must be a positive number" });
+    // }
 
     const newOrder = await Order.create({
-      customer_id,
+      customer_id: req.user.id, //auto set to logged-in user
       order_status, //enum
       total_amount,
       payment_status, //enum

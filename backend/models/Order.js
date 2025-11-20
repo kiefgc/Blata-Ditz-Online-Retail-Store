@@ -14,12 +14,25 @@ export class Order {
     return ids.map((id) => new ObjectId(id));
   }
 
+  static async getAll() {
+    return await this.collection().find().toArray();
+  }
+
+  static async findByOrderId(order_id) {
+    const oid = this.toObjectId(order_id);
+    return await this.collection().findOne({ _id: oid });
+  }
+
+  // to filter orders for specific customer
+  static async findByCustomerId(customer_id) {
+    return await this.collection().find({ customer_id: customer_id }).toArray();
+  }
+
   static async create(orderData) {
     const order = {
       ...orderData,
       order_date: new Date(),
       updated_at: new Date(),
-      //customer_id: orderData.customer_id || null
     };
 
     return await this.collection().insertOne(order);
@@ -34,34 +47,12 @@ export class Order {
       typeof order_id === "string" ? this.toObjectId(order_id) : order_id;
 
     updates.updated_at = new Date();
-    return await this.collection().updateOne(
-      { order_id: oid },
-      { $set: updates }
-    );
+    return await this.collection().updateOne({ _id: oid }, { $set: updates });
   }
 
   static async delete(order_id) {
     const oid =
       typeof order_id === "string" ? this.toObjectId(order_id) : order_id;
     return await this.collection().deleteOne({ order_id: oid });
-  }
-
-  static async getAll() {
-    return await this.collection().find().toArray();
-  }
-
-  static async findByOrderId(order_id) {
-    const oid =
-      typeof order_id === "string" ? this.toObjectId(order_id) : order_id;
-    return await this.collection().findOne({ order_id: oid });
-  }
-
-  // to filter orders for specific customer
-  static async findByCustomerId(customer_id) {
-    const cid =
-      typeof customer_id === "string"
-        ? this.toObjectId(customer_id)
-        : customer_id;
-    return await this.collection().find({ customer_id: cid }).toArray();
   }
 }
