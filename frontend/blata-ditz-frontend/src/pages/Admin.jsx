@@ -23,12 +23,15 @@ function Landing() {
   return (
     <>
       <div className="navbar">
+      <div className="navbar">
         <div>
+          <a href="#" className="logo">
           <a href="#" className="logo">
             BLATADITZ
           </a>
         </div>
         <div>
+          <div className="search-bar search-close">
           <div className="search-bar search-close">
             <img
               width="20"
@@ -40,8 +43,10 @@ function Landing() {
           </div>
         </div>
         <div className="nav-links">
+        <div className="nav-links">
           <a href="#">
             <img
+              className="search-icon"
               className="search-icon"
               width="34"
               height="34"
@@ -70,9 +75,11 @@ function Landing() {
 
         <div
           className={`small-screen-searchbar ${
+          className={`small-screen-searchbar ${
             showSmallSearchbar ? "open" : ""
           }`}
         >
+          <div className="small-searchbar">
           <div className="small-searchbar">
             <img
               width="20"
@@ -94,10 +101,14 @@ function Landing() {
       </div>
       <div className="admin-container">
         <div className="header">
+      <div className="admin-container">
+        <div className="header">
           <h1>
             Welcome, <span style={{ color: "#FFCF33" }}>Admin!</span>
           </h1>
         </div>
+        <div className="dashboard">
+          <div className="sidebar">
         <div className="dashboard">
           <div className="sidebar">
             <ul>
@@ -117,7 +128,7 @@ function Landing() {
                   src="https://img.icons8.com/ios-glyphs/30/FFFFFF/group.png"
                   alt="group"
                 />
-                <span>Users</span>
+                Users
               </li>
               <li
                 onClick={() => setSelectedTab("orders")}
@@ -135,7 +146,7 @@ function Landing() {
                   src="https://img.icons8.com/ios-filled/50/FFFFFF/untested.png"
                   alt="untested"
                 />
-                <span>Orders</span>
+                Orders
               </li>
               <li>
                 <img
@@ -144,7 +155,7 @@ function Landing() {
                   src="https://img.icons8.com/material-rounded/24/FFFFFF/move-by-trolley.png"
                   alt="move-by-trolley"
                 />
-                <span>Inventory</span>
+                Inventory
               </li>
               <li>
                 <img
@@ -153,7 +164,7 @@ function Landing() {
                   src="https://img.icons8.com/material-outlined/24/FFFFFF/categorize.png"
                   alt="categorize"
                 />
-                <span>Categories</span>
+                Categories
               </li>
               <li>
                 <img
@@ -162,7 +173,7 @@ function Landing() {
                   src="https://img.icons8.com/glyph-neue/64/FFFFFF/supplier.png"
                   alt="supplier"
                 />
-                <span>Suppliers</span>
+                Suppliers
               </li>
               <li>
                 <img
@@ -180,10 +191,11 @@ function Landing() {
                   src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/open-pane.png"
                   alt="open-pane"
                 />
-                <span>Log Out</span>
+                Log Out
               </li>
             </ul>
           </div>
+          <div className="main-content">
           <div className="main-content">
             {/* USERS SECTION */}
             {selectedTab === "users" && <div className="users-section">hi</div>}
@@ -296,7 +308,9 @@ function Landing() {
 
             {/* INVENTORY SECTION */}
             <div className="inventory-section"></div>
+            <div className="inventory-section"></div>
             {/* CATEGORIES SECTION */}
+            <div className="categories-section"></div>
             <div className="categories-section"></div>
           </div>
         </div>
