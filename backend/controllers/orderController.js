@@ -1,21 +1,95 @@
 import { Order } from "../models/Order.js";
-import { Product } from "../models/Product.js";
-import { Customer } from "../models/Customer.js";
+import { getDB } from "../config/db.js";
+import { ObjectId } from "mongodb";
+
+const toObjectId = (id) => new ObjectId(id);
+
+export async function createOrder(req, res) {
+  try {
+    const {
+      customer_id,
+      payment_method,
+      shipping_address,
+      items,
+      order_status,
+      payment_status,
+    } = req.body;
+
+    if (req.user.role === "customer") {
+      if (customer_id && customer_id !== req.user.id) {
+        return res
+          .status(403)
+          .json({ message: "Customers cannot assign orders to other users" });
+      }
+    } else if (req.user.role === "admin") {
+      // admin must provide a valid customer_id
+      if (!customer_id)
+        return res.status(400).json({
+          message: "customer_id is required for admin-created orders",
+        });
+    } else {
+      return res.status(403).json({ message: "Unauthorized role" });
+    }
+
+    const finalCustomerId =
+      req.user.role === "customer" ? req.user.id : customer_id;
+
+    // Validate order details
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "Order must include at least one item" });
+    }
+    if (!payment_method || !shipping_address) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const total_amount = items.reduce(
+      (sum, item) => sum + item.quantity * item.unit_price,
+      0
+    );
+
+    const newOrder = await Order.create({
+      customer_id: finalCustomerId,
+      order_status: order_status || "pending",
+      payment_status: payment_status || "pending",
+      payment_method,
+      shipping_address,
+      total_amount,
+    });
+
+    // Insert order details
+    const orderDetails = items.map((item) => ({
+      order_id: newOrder._id,
+      product_id: toObjectId(item.product_id),
+      quantity: item.quantity,
+      unit_price: item.unit_price,
+      subtotal: item.quantity * item.unit_price,
+    }));
+
+    await getDB().collection("order_details").insertMany(orderDetails);
+
+    res
+      .status(201)
+      .json({ message: "Order created successfully", data: newOrder });
+  } catch (error) {
+    console.error("Create order error:", error);
+    res.status(400).json({ message: error.message });
+  }
+}
 
 export async function getAllOrders(req, res) {
   try {
-    //admin sees all orders
+    let orders;
     if (req.user.role === "admin") {
-      const orders = await Order.getAll();
-      res.status(200).json(orders);
-      return;
-
-      //customer sees only their order
+      orders = await Order.getAll();
+    } else if (req.user.role === "customer") {
+      orders = await Order.findByCustomerId(req.user.id);
     } else {
-      const customerOrders = await Order.findByCustomerId(req.user.id);
-      res.status(200).json(customerOrders);
-      return;
+      return res.status(403).json({ message: "Unauthorized role" });
     }
+
+    res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -24,15 +98,14 @@ export async function getAllOrders(req, res) {
 export async function getOrderById(req, res) {
   try {
     const { id } = req.params;
-    const order = await Order.findByOrderId(id);
-
+    const order = await Order.getOrderWithDetails(id);
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    // if not admin; customer only access their own orders
-    if (req.user.role !== "admin") {
-      if (order.customer_id !== req.user.id) {
-        return res.status(403).json({ message: "Access denied to this order" });
-      }
+    if (
+      req.user.role === "customer" &&
+      order.customer_id.toString() !== req.user.id
+    ) {
+      return res.status(403).json({ message: "Access denied to this order" });
     }
 
     res.status(200).json(order);
@@ -41,93 +114,83 @@ export async function getOrderById(req, res) {
   }
 }
 
-export async function createOrder(req, res) {
+export async function updateOrderStatus(req, res) {
   try {
-    const {
-      customer_id,
-      order_status, //ENUM('pending', 'processing', 'completed', 'cancelled')
-      total_amount,
-      payment_status, //ENUM('pending', 'paid', 'failed')
-      payment_method,
-      shipping_address,
-    } = req.body;
-
-    if (
-      !customer_id ||
-      !order_status ||
-      !total_amount ||
-      !payment_status ||
-      !payment_method ||
-      !shipping_address
-    ) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
-
-    if (total_amount <= 0) {
+    if (req.user.role !== "admin") {
       return res
-        .status(400)
-        .json({ message: "Total amount must be a positive number" });
+        .status(403)
+        .json({ message: "Only admins can update order status" });
     }
 
-    const newOrder = await Order.create({
-      customer_id,
-      order_status, //enum
-      total_amount,
-      payment_status, //enum
-      payment_method,
-      shipping_address,
-    });
+    const { id } = req.params;
+    const { order_status } = req.body;
 
-    res
-      .status(201)
-      .json({ message: "Order created successfully", data: newOrder });
+    if (!order_status || !Order.orderStatuses.includes(order_status)) {
+      return res.status(400).json({ message: "Invalid order status" });
+    }
+
+    const result = await Order.update(id, { order_status });
+    if (result.matchedCount === 0)
+      return res.status(404).json({ message: "Order not found" });
+
+    res.status(200).json({ message: "Order status updated successfully" });
   } catch (error) {
-    console.error("Create order error:", error);
     res.status(500).json({ message: error.message });
   }
 }
 
-export async function updateOrder(req, res) {
+export async function updateOrderByCustomer(req, res) {
   try {
+    if (req.user.role !== "customer") {
+      return res
+        .status(403)
+        .json({ message: "Only customers can update their orders" });
+    }
+
     const { id } = req.params;
     const updates = req.body;
 
-    if (!updates || Object.keys(updates).length === 0) {
-      return res.status(400).json({ message: "No data provided for update" });
+    const allowedFields = [
+      "shipping_address",
+      "payment_method",
+      "order_status",
+    ];
+    Object.keys(updates).forEach((key) => {
+      if (!allowedFields.includes(key)) delete updates[key];
+    });
+
+    if (updates.order_status && updates.order_status !== "cancelled") {
+      return res
+        .status(403)
+        .json({ message: "Customers can only cancel orders" });
     }
 
-    delete updates.order_id;
-    delete updates.created_at;
-    delete updates.updated_at;
-
-    // if (
-    //   updates.order_status &&
-    //   !["pending", "processing", "completed", "cancelled"].includes(
-    //     updates.order_status
-    //   )
-    // ) {
-    //   errors.push("Invalid order status");
-    // }
+    const order = await Order.getById(id);
+    if (!order) return res.status(404).json({ message: "Order not found" });
+    if (order.customer_id.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Access denied to this order" });
+    }
 
     const result = await Order.update(id, updates);
-
-    if (result.matchedCount === 0) {
-      return res.status(404).json({ message: "Order not found" });
-    }
     res.status(200).json({ message: "Order updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 }
 
 export async function deleteOrder(req, res) {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Only admins may delete orders" });
+    }
+
     const { id } = req.params;
-    const result = await Order.delete(id);
+    const result = await Order.deleteOrder(id);
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Order not found" });
     }
+
     res.status(200).json({ message: "Order deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
