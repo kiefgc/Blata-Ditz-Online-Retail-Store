@@ -1,10 +1,11 @@
 import { Customer } from "../models/Customer.js";
 import { Admin } from "../models/Admin.js";
+import { redisClient } from "../middleware/redisClient.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import * as validators from "../utils/validators.js";
 
-function generateTokens(user) {
+export async function generateTokens(user) {
   const accessToken = jwt.sign(
     { id: user._id, role: user.role },
     process.env.JWT_SECRET,
@@ -15,6 +16,13 @@ function generateTokens(user) {
     { id: user._id, role: user.role },
     process.env.JWT_REFRESH_SECRET,
     { expiresIn: "7d" }
+  );
+
+  await redisClient.set(
+    user._id.toString(),
+    refreshToken,
+    "EX",
+    7 * 24 * 60 * 60
   );
 
   return { accessToken, refreshToken };
@@ -84,7 +92,7 @@ export async function login(req, res) {
 
     const admin = await Admin.findByEmail(email);
     if (admin && (await bcrypt.compare(password, admin.password))) {
-      const { accessToken, refreshToken } = generateTokens({
+      const { accessToken, refreshToken } = await generateTokens({
         _id: admin._id,
         role: "admin",
       });
@@ -105,7 +113,7 @@ export async function login(req, res) {
 
     const customer = await Customer.findByUsernameOrEmail(email);
     if (customer && (await bcrypt.compare(password, customer.password))) {
-      const { accessToken, refreshToken } = generateTokens({
+      const { accessToken, refreshToken } = await generateTokens({
         _id: customer._id,
         role: "customer",
       });
@@ -140,7 +148,7 @@ export async function getProfile(req, res) {
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const { password, ...userData } = user;
+    const { password, ...userData } = user.toObject();
 
     res.status(200).json(userData);
   } catch (error) {
@@ -155,9 +163,14 @@ export async function refreshToken(req, res) {
     if (!token)
       return res.status(401).json({ message: "Missing refresh token" });
 
-    jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_REFRESH_SECRET, async (err, user) => {
       if (err)
         return res.status(403).json({ message: "Invalid refresh token" });
+
+      const storedToken = await redisClient.get(user.id);
+      if (!storedToken || storedToken !== token) {
+        return res.status(403).json({ message: "Refresh token revoked" });
+      }
 
       const newAccess = jwt.sign(
         { id: user.id, role: user.role },
@@ -168,13 +181,30 @@ export async function refreshToken(req, res) {
       res.status(200).json({ accessToken: newAccess });
     });
   } catch (error) {
+    console.error("Refresh token error:", error);
     res.status(500).json({ message: "Server error" });
   }
 }
 
 export async function logout(req, res) {
-  res.clearCookie("refreshToken", { httpOnly: true, sameSite: "strict" });
-  res.status(200).json({ message: "Logged out successfully" });
+  try {
+    const token = req.cookies.refreshToken;
+
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+      await redisClient.del(decoded.id);
+    }
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 }
 
 export async function updateProfile(req, res) {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "../pages/AuthForm.css";
 
 function AuthForm({ isLogin, onClose, onSwitch }) {
@@ -6,18 +7,38 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
 
-    if (isLogin) {
-      console.log("Logging in as: ", email);
-    } else {
+    try {
+      if (isLogin) {
+        const response = await axios.post(
+          "http://localhost:3000/authentication/login",
+          { email, password }
+        );
+
+        localStorage.setItem("token", response.data.accessToken);
+        alert("Login successful!");
+        onClose();
+        return;
+      }
+
       if (password !== confirmPassword) {
         alert("Passwords do not match");
         return;
       }
+
+      const response = await axios.post(
+        "http://localhost:3000/authentication/register",
+        { email, password }
+      );
+
+      alert("Account created!");
+      onSwitch();
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "Something went wrong");
     }
-    console.log("Signing up with:", email);
   };
 
   return (
@@ -35,14 +56,28 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
       </p>
 
       <form onSubmit={submit}>
-        <input type="email" required placeholder="Email Address"></input>
-        <input type="password" required placeholder="Password"></input>
+        <input
+          type="email"
+          placeholder="Email Address"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {!isLogin && (
           <input
             type="password"
-            required
             placeholder="Confirm Password"
-          ></input>
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
         )}
 
         <button type="submit" className="submit-button">
