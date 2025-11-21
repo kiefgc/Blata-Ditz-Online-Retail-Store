@@ -105,3 +105,5 @@ export class Order {
     return { ...order, order_details: orderDetails };
   }
 }
+
+export default Order;
