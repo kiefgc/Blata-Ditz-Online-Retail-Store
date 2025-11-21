@@ -1,20 +1,35 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminInventory.css";
+import {
+  ProductCreateModal,
+  ProductEditModal,
+} from "./pop-ups/InventoryPopups.jsx";
 
 // test data
 const productsData = [
   {
     brand: "Akko",
-    logo: "D", // Placeholder for Akko logo
+    logo: "D",
     products: [
       {
-        id: "001",
-        image: "https://i.imgur.com/47cdfb.png", // Using a placeholder image
-        name: "Akko MU01 Mountain Seclusion Walnut Wood Case Multi-Mode RGB Hot-Swappable Mechanical Keyboard (Akko Rosewood, Akko V3 Piano Pro)",
+        id: "0013948",
+        image: "https://i.imgur.com/47cdfb.png",
+        name: "Akko MU01 Mountain Seclusion Walnut Wood Case Multi-Mode RGB Hot-Swappable Mechanical Keyboard",
         inStock: 9,
         retailPrice: "₱6,295",
         active: true,
+        supplier: "Akko",
+        category: "Keyboard",
+        specifications: ["Walnut Wood Case", "Multi-Mode", "RGB Hot-Swappable"], // Tags
+        requirements: ["USB-C Port", "Windows 10+"],
+        connectivity: ["Wired", "Bluetooth 5.0"],
+        images: [
+          "https://i.imgur.com/example1.png",
+          "https://i.imgur.com/example2.png",
+          "https://i.imgur.com/example3.png",
+          "https://i.imgur.com/example4.png",
+        ],
       },
       {
         id: "002",
@@ -23,6 +38,12 @@ const productsData = [
         inStock: 2,
         retailPrice: "₱6,295",
         active: true,
+        supplier: "Akko",
+        category: "Keyboard",
+        specifications: ["Akko Rosewood", "V3 Piano Pro"],
+        requirements: ["USB-C Port"],
+        connectivity: ["Wired"],
+        images: [],
       },
     ],
   },
@@ -47,89 +68,9 @@ const productsData = [
   },
 ];
 
-const ProductCreateModal = ({ brandName, onClose }) => {
-  return (
-    <div className="modal-backdrop">
-      <div className="modal-content">
-        {/* The design you provided */}
-        <div className="product-create-form-container">
-          <div className="product-create-header">Add new product</div>
-          <div className="product-create-body">
-            <div className="form-fields">
-              <div className="form-group">
-                <label htmlFor="productName">Product Name</label>
-                <input
-                  type="text"
-                  id="productName"
-                  placeholder="Enter product name"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="productSpecs">Product Specs</label>
-                <div className="input-with-button">
-                  <button className="add-detail-btn">ADD DETAIL</button>
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="requirements">Requirements</label>
-                <div className="input-with-button">
-                  <input
-                    type="text"
-                    id="requirements"
-                    placeholder="Add requirements"
-                  />
-                  <button className="add-detail-btn">ADD DETAIL</button>
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="connectivity">Connectivity</label>
-                <div className="input-with-button">
-                  <input
-                    type="text"
-                    id="connectivity"
-                    placeholder="Add connectivity"
-                  />
-                  <button className="add-detail-btn">ADD DETAIL</button>
-                </div>
-              </div>
-
-              <div className="select-group">
-                <div className="form-group">
-                  <label htmlFor="supplier">Supplier</label>
-                  <select id="supplier">
-                    <option value="">{brandName}</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="category">Category</label>
-                  <select id="category">
-                    <option value="">Select Category</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div className="image-upload-area">
-              <div className="image-placeholder">
-                <div className="image-icon-placeholder"></div>
-                <p>Add product images by selecting or dropping image files</p>
-              </div>
-              <div className="action-buttons">
-                <button className="cancel-btn" onClick={onClose}>
-                  Cancel
-                </button>
-                <button className="add-product-final-btn">Add Product</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ProductRow = ({ product }) => (
-  <>
+const ProductRow = ({ product, onEditClick }) => (
+  <div className="product-row-clickable" onClick={() => onEditClick(product)}>
+    {" "}
     <div className="product-cell">{product.id}</div>
     <div className="product-cell product-cell-image">
       <img src={product.image} alt={product.name} />
@@ -140,10 +81,10 @@ const ProductRow = ({ product }) => (
     <div className="product-cell product-cell-active">
       <input type="checkbox" checked={product.active} readOnly />
     </div>
-  </>
+  </div>
 );
 
-const ProductTable = ({ products }) => (
+const ProductTable = ({ products, onEditClick }) => (
   <div className="product-table-wrapper">
     <div className="product-table-header">
       <div className="table-header-cell">Product ID</div>
@@ -154,10 +95,13 @@ const ProductTable = ({ products }) => (
       <div className="table-header-cell product-cell-active">Active</div>
     </div>
 
-    {/* Product Rows */}
     <div className="product-table-rows">
       {products.map((product) => (
-        <ProductRow key={product.id} product={product} />
+        <ProductRow
+          key={product.id}
+          product={product}
+          onEditClick={onEditClick}
+        />
       ))}
     </div>
   </div>
@@ -171,8 +115,10 @@ function AdminInventory() {
     Redragon: false,
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalBrand, setModalBrand] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createModalBrand, setCreateModalBrand] = useState("");
+
+  const [editingProduct, setEditingProduct] = useState(null);
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -195,15 +141,26 @@ function AdminInventory() {
     }));
   };
 
-  const handleOpenModal = (brandName) => {
-    setModalBrand(brandName);
-    setIsModalOpen(true);
+  // Handler to open the CREATE modal
+  const handleOpenCreateModal = (brandName) => {
+    setCreateModalBrand(brandName);
+    setIsCreateModalOpen(true);
   };
 
-  // New handler to close the modal
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setModalBrand("");
+  // Handler to close the CREATE modal
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+    setCreateModalBrand("");
+  };
+
+  // Handler to open the EDIT modal
+  const handleOpenEditModal = (productData) => {
+    setEditingProduct(productData);
+  };
+
+  // Handler to close the EDIT modal
+  const handleCloseEditModal = () => {
+    setEditingProduct(null);
   };
 
   return (
@@ -342,7 +299,10 @@ function AdminInventory() {
                   </div>
                   {openBrands[brandData.brand] &&
                     brandData.products.length > 0 && (
-                      <ProductTable products={brandData.products} />
+                      <ProductTable
+                        products={brandData.products}
+                        onEditClick={handleOpenEditModal}
+                      />
                     )}
                   {openBrands[brandData.brand] &&
                     brandData.products.length === 0 && (
@@ -352,9 +312,12 @@ function AdminInventory() {
                     )}
                   {openBrands[brandData.brand] && (
                     <div className="add-product-row">
+                      <div className="edit-hint">
+                        Click on product row to edit details
+                      </div>
                       <button
                         className="add-product-btn"
-                        onClick={() => handleOpenModal(brandData.brand)}
+                        onClick={() => handleOpenCreateModal(brandData.brand)}
                       >
                         + Add New Product to {brandData.brand}
                       </button>
@@ -366,8 +329,19 @@ function AdminInventory() {
           </div>
         </div>
       </div>
-      {isModalOpen && (
-        <ProductCreateModal brandName={modalBrand} onClose={handleCloseModal} />
+
+      {isCreateModalOpen && (
+        <ProductCreateModal
+          brandName={createModalBrand}
+          onClose={handleCloseCreateModal}
+        />
+      )}
+
+      {editingProduct && (
+        <ProductEditModal
+          initialProduct={editingProduct}
+          onClose={handleCloseEditModal}
+        />
       )}
     </>
   );
