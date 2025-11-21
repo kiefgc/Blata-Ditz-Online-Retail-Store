@@ -1,34 +1,34 @@
-import "./Landing.css";
-import AuthForm from "./AuthForm.jsx";
+import "../Landing.css";
+import AuthForm from "../../components/AuthForm.jsx";
 
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import banner from "../assets/finalbanner.jpg";
+import banner from "../../assets/finalbanner.jpg";
 
-import item from "../assets/item.png";
+import item from "../../assets/item.png";
 
-import ps4 from "../assets/ps4.png";
-import xbox from "../assets/xbox.png";
-import nswitch from "../assets/switch.png";
+import ps4 from "../../assets/ps4.png";
+import xbox from "../../assets/xbox.png";
+import nswitch from "../../assets/switch.png";
 
-import pokemonns from "../assets/nswitch-pokemon.png";
-import kirbyns from "../assets/nswitch-kirby.png";
-import littlenightmaresns from "../assets/nslittlenightmares.png";
+import pokemonns from "../../assets/nswitch-pokemon.png";
+import kirbyns from "../../assets/nswitch-kirby.png";
+import littlenightmaresns from "../../assets/nslittlenightmares.png";
 
-import eriksholmps from "../assets/ps5eriksholm.png";
-import pawpatrolps from "../assets/ps5pawpatrol.jpg";
-import ddreviveps from "../assets/ps5ddrevive.png";
+import eriksholmps from "../../assets/ps5eriksholm.png";
+import pawpatrolps from "../../assets/ps5pawpatrol.jpg";
+import ddreviveps from "../../assets/ps5ddrevive.png";
 
-import nba2k26xb from "../assets/xboxnba2k26.jpg";
-import wuchangxb from "../assets/xboxwuchang.jpg";
-import suicidesquadxb from "../assets/xboxssktjl.png";
+import nba2k26xb from "../../assets/xboxnba2k26.jpg";
+import wuchangxb from "../../assets/xboxwuchang.jpg";
+import suicidesquadxb from "../../assets/xboxssktjl.png";
 
 const FORM_POSITION_NONE = 0;
 const FORM_POSITION_LOGIN = 1;
 const FORM_POSITION_SIGNUP = 2;
 
-function Landing() {
+function test() {
   const navigate = useNavigate();
 
   const [isSignedIn, setIsSignedIn] =
@@ -668,4 +668,4 @@ function Landing() {
   );
 }
 
-export default Landing;
+export default test;

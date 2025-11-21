@@ -2,7 +2,9 @@ import "../index.css";
 import "./Landing.css";
 import "./AdminOrders.css";
 
-import AuthForm from "./AuthForm.jsx";
+import item from "../assets/item.png";
+
+import AuthForm from "../components/AuthForm.jsx";
 
 import { Link } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
@@ -431,18 +433,41 @@ function AdminOrders() {
                         <span>Amount</span>
                       </div>
                       <div className="order-details-list">
-                        <span>001</span>
-                        <span>x2</span>
-                        <span>
-                          <div className="order-details-img">
-                            <img />
-                          </div>
-                        </span>
-                        <span>Name</span>
-                        <span>₱16,450.00</span>
+                        <div className="order-entry">
+                          <span>001</span>
+                          <span>x2</span>
+                          <span>
+                            <div className="order-details-img">
+                              <img
+                                className="order-details-item-img"
+                                src={item}
+                              />
+                            </div>
+                          </span>
+                          <span className="order-details-name">
+                            Transnovo 24-in-1 Game Card Storage Case for
+                            Nintendo Switch 2
+                          </span>
+                          <span>₱16,450.00</span>
+                        </div>
+                      </div>
+                      <div className="order-details-amountbreakdown">
+                        <div className="order-amountbreakdown-details">
+                          <span>Subtotal</span>
+                          <span>₱16,450.00</span>
+                        </div>
+                        <div className="order-amountbreakdown-details">
+                          <span>Shipping</span>
+                          <span>FREE</span>
+                        </div>
+                        <div className="order-amountbreakdown-details">
+                          <span>Total</span>
+                          <span className="amountbreakdown-details-total">
+                            ₱16,450.00
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <div className="order-details"></div>
                   </div>
                 </div>
               </div>
