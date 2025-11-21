@@ -87,27 +87,6 @@ li {
   width: 100%;
 }
 
-.orders-filter {
-  display: flex;
-  flex-direction: row;
-  gap: 1.3rem;
-  align-items: center;
-}
-.orders-filter label {
-  font-size: 1.6rem;
-}
-
-.orders-filter select {
-  background-color: #131416;
-  border: none;
-  border-radius: 5px;
-  height: 30px;
-  width: 120px;
-  font-weight: 400;
-  padding: 5px 10px;
-  border-right: 10px solid transparent;
-}
-
 .admin-orders-tab {
   background-color: #010101;
   border-radius: 5px;
@@ -115,6 +94,7 @@ li {
   width: auto;
   padding: 1rem 2rem;
   overflow: hidden;
+  margin-bottom: 13px;
 }
 
 .admin-orders-tab ul {
@@ -137,6 +117,7 @@ li {
   justify-content: center;
   padding-left: 5vw;
   gap: 1rem;
+  align-items: center;
 }
 
 .admin-orders-list {
@@ -145,8 +126,9 @@ li {
   padding-top: 3rem;
   padding-bottom: 3rem;
   border-radius: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .admin-orders-list:hover {
@@ -184,6 +166,7 @@ li {
   height: 60%;
   flex-direction: column;
   overflow: hidden;
+  overflow-y: auto;
 }
 .admin-orders-popup-close {
   padding: 1.5rem 2rem 0.5rem 1.5rem;
@@ -207,16 +190,22 @@ li {
   font-size: 2.4rem;
 }
 
-.first-column {
-  width: 45%;
+.order-columns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.first-column,
+.second-column {
+  width: 49%;
 }
 
 .order-details {
   display: flex;
   flex-direction: column;
   font-weight: 300;
-  background-color: #010101;
-  margin-bottom: 7px;
+  background-color: #131416;
+  margin-bottom: 10px;
   border: 0.5px solid #878787;
   border-radius: 10px;
   padding: 1rem;
@@ -225,8 +214,50 @@ li {
 
 .order-detail-title {
   font-size: 1.2rem;
+  color: #ffcf33;
 }
 
 .order-detail-value {
   font-size: 1.6rem;
+}
+
+.order-details-status {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+.details-status-payment,
+.details-status-order {
+  display: flex;
+  flex-direction: column;
+}
+
+.details-status-payment-table select {
+  padding: 1.2rem 0.5rem !important;
+  width: 12rem !important;
+}
+.details-status-payment select,
+.details-status-order select {
+  background-color: black;
+  padding: 8px;
+  border: 1px solid #878787;
+  font-weight: 300;
+  font-size: 1.2rem;
+  text-transform: capitalize;
+  border-radius: 50px;
+  text-align: center;
+  appearance: none;
+  width: 14rem;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.order-details-columnHeader {
+  display: grid;
+  grid-template-columns: 1fr 0.3fr 1fr 3fr 1fr;
+}
+
+.order-details-list {
+  display: grid;
+  grid-template-columns: 1fr 0.3fr 1fr 3fr 1fr;
 }
