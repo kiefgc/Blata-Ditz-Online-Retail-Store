@@ -47,7 +47,87 @@ const productsData = [
   },
 ];
 
-// --- ProductRow Component ---
+const ProductCreateModal = ({ brandName, onClose }) => {
+  return (
+    <div className="modal-backdrop">
+      <div className="modal-content">
+        {/* The design you provided */}
+        <div className="product-create-form-container">
+          <div className="product-create-header">Add new product</div>
+          <div className="product-create-body">
+            <div className="form-fields">
+              <div className="form-group">
+                <label htmlFor="productName">Product Name</label>
+                <input
+                  type="text"
+                  id="productName"
+                  placeholder="Enter product name"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="productSpecs">Product Specs</label>
+                <div className="input-with-button">
+                  <button className="add-detail-btn">ADD DETAIL</button>
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="requirements">Requirements</label>
+                <div className="input-with-button">
+                  <input
+                    type="text"
+                    id="requirements"
+                    placeholder="Add requirements"
+                  />
+                  <button className="add-detail-btn">ADD DETAIL</button>
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="connectivity">Connectivity</label>
+                <div className="input-with-button">
+                  <input
+                    type="text"
+                    id="connectivity"
+                    placeholder="Add connectivity"
+                  />
+                  <button className="add-detail-btn">ADD DETAIL</button>
+                </div>
+              </div>
+
+              <div className="select-group">
+                <div className="form-group">
+                  <label htmlFor="supplier">Supplier</label>
+                  <select id="supplier">
+                    <option value="">{brandName}</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="category">Category</label>
+                  <select id="category">
+                    <option value="">Select Category</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="image-upload-area">
+              <div className="image-placeholder">
+                <div className="image-icon-placeholder"></div>
+                <p>Add product images by selecting or dropping image files</p>
+              </div>
+              <div className="action-buttons">
+                <button className="cancel-btn" onClick={onClose}>
+                  Cancel
+                </button>
+                <button className="add-product-final-btn">Add Product</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProductRow = ({ product }) => (
   <>
     <div className="product-cell">{product.id}</div>
@@ -63,10 +143,8 @@ const ProductRow = ({ product }) => (
   </>
 );
 
-// --- ProductTable Component ---
 const ProductTable = ({ products }) => (
   <div className="product-table-wrapper">
-    {/* Table Header Row */}
     <div className="product-table-header">
       <div className="table-header-cell">Product ID</div>
       <div className="table-header-cell">Image</div>
@@ -88,10 +166,13 @@ const ProductTable = ({ products }) => (
 function AdminInventory() {
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
   const [openBrands, setOpenBrands] = useState({
-    Akko: true,
+    Akko: false,
     Corsair: false,
     Redragon: false,
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalBrand, setModalBrand] = useState("");
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -112,6 +193,17 @@ function AdminInventory() {
       ...prev,
       [brandName]: !prev[brandName],
     }));
+  };
+
+  const handleOpenModal = (brandName) => {
+    setModalBrand(brandName);
+    setIsModalOpen(true);
+  };
+
+  // New handler to close the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setModalBrand("");
   };
 
   return (
@@ -330,7 +422,10 @@ function AdminInventory() {
                     )}
                   {openBrands[brandData.brand] && (
                     <div className="add-product-row">
-                      <button className="add-product-btn">
+                      <button
+                        className="add-product-btn"
+                        onClick={() => handleOpenModal(brandData.brand)}
+                      >
                         + Add New Product to {brandData.brand}
                       </button>
                     </div>
@@ -341,6 +436,9 @@ function AdminInventory() {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <ProductCreateModal brandName={modalBrand} onClose={handleCloseModal} />
+      )}
     </>
   );
 }

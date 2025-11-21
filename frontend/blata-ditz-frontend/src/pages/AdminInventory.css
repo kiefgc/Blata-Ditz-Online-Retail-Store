@@ -249,3 +249,237 @@ input[type="checkbox"] {
     font-size: 0.85rem;
   }
 }
+
+/*add product*/
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.7);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #131416;
+  padding: 0;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* --- Product Create Form Styles (Matching your image) --- */
+
+.product-create-form-container {
+  background-color: #1a1a1c; /* Main background for the form area */
+  border-radius: 10px;
+}
+
+.product-create-header {
+  font-size: 1.8rem;
+  padding: 1.5rem 2rem;
+  color: #f0f0f0;
+  border-bottom: 1px solid #333; /* Visual separation from the body */
+}
+
+.product-create-body {
+  display: flex;
+  gap: 20px;
+}
+
+.form-fields {
+  flex: 2;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-right: 1px solid #333; /* Vertical line separator */
+}
+
+.image-upload-area {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #a0a0a0;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #070709;
+  border: 1px solid #333;
+  border-radius: 5px;
+  color: #f0f0f0;
+  font-size: 1rem;
+}
+
+.input-with-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-with-button input {
+  flex-grow: 1;
+}
+
+.brand-logo-text-placeholder {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  background-color: #ffcf33;
+  color: #1a1a1c;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.add-detail-btn {
+  background-color: transparent;
+  border: 1px solid #ffcf33;
+  color: #ffcf33;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.select-group {
+  display: flex;
+  gap: 20px;
+}
+
+.select-group .form-group {
+  flex: 1;
+}
+
+/* Image Placeholder */
+.image-placeholder {
+  background-color: #333333;
+  border-radius: 5px;
+  height: 100%;
+  min-height: 200px; /* Adjust as needed */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ccc;
+  padding: 20px;
+}
+
+.image-icon-placeholder {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23AAAAAA' d='M8 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5m10.5-5H22v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3.5l1-1h7l1 1H20a2 2 0 0 1 2 2m-2 10V8h-3l-1-1h-5l-1 1h-3v9l1.41-1.41a2 2 0 0 1 2.82 0l.77.77a2 2 0 0 0 2.82 0l3.75-3.75z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: invert(1);
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.cancel-btn,
+.add-product-final-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  width: 48%; /* To make them side-by-side */
+}
+
+.cancel-btn {
+  background-color: #070709;
+  color: #f0f0f0;
+  border: 1px solid #333;
+}
+
+.add-product-final-btn {
+  background-color: #ffcf33;
+  color: #1a1a1c;
+}
+
+/* --- Responsive Adjustments for Modal --- */
+@media (max-width: 768px) {
+  .product-create-body {
+    flex-direction: column;
+  }
+  .form-fields {
+    border-right: none;
+    border-bottom: 1px solid #333;
+    padding-bottom: 1.5rem;
+  }
+  .image-upload-area {
+    min-height: auto;
+  }
+  .select-group {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* Add these to your existing CSS too, for the inventory list */
+.brand-logo-text {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  background-color: #ffcf33;
+  color: #1a1a1c;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.add-product-row {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.add-product-btn {
+  background-color: #070709;
+  color: #ffcf33;
+  border: 1px solid #ffcf33;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.add-product-btn:hover {
+  background-color: rgba(255, 207, 51, 0.1); /* Light yellow overlay on hover */
+}
