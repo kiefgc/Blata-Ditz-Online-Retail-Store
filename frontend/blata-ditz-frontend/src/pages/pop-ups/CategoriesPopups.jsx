@@ -55,7 +55,6 @@ export const CategoryCreateModal = ({ onClose, onCreate }) => {
   );
 };
 
-// --- Category Edit/View Modal ---
 export const CategoryEditModal = ({
   category,
   onClose,
@@ -83,9 +82,6 @@ export const CategoryEditModal = ({
       <div className="category-modal-content">
         <div className="category-edit-modal-content">
           <h3>View/Edit Category</h3>
-          <button className="close-modal-btn" onClick={onClose}>
-            &times;
-          </button>
           <div className="form-group">
             <label htmlFor="categoryName">Category Name</label>
             <div className="input-with-edit-icon">
@@ -94,11 +90,6 @@ export const CategoryEditModal = ({
                 id="categoryName"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-              />
-              <img
-                src="https://img.icons8.com/material-outlined/24/FFFFFF/pencil--v1.png"
-                alt="edit"
-                className="edit-icon"
               />
             </div>
           </div>
@@ -118,14 +109,13 @@ export const CategoryEditModal = ({
             >
               Delete
             </button>
-            <div className="right-actions">
-              <button className="cancel-btn" onClick={onClose}>
-                Cancel
-              </button>
-              <button className="update-details-btn" onClick={handleUpdate}>
-                Update Details
-              </button>
-            </div>
+
+            <button className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button className="update-details-btn" onClick={handleUpdate}>
+              Update Details
+            </button>
           </div>
         </div>
       </div>
@@ -137,10 +127,8 @@ export const CategoryDeleteModal = ({ category, onClose, onDeleteConfirm }) => {
   return (
     <div className="modal-backdrop">
       <div className="category-modal-content category-delete-modal">
-        <h3>Category - Delete</h3>
-        <p>
-          Are you sure you want to delete the category: **{category.name}**?
-        </p>
+        <h3>Delete Category</h3>
+        <p>Are you sure you want to delete the category: {category.name}?</p>
         <div className="modal-actions-delete-confirm">
           <button
             className="update-details-btn"

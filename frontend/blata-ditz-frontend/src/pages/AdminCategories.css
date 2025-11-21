@@ -70,6 +70,8 @@ li {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+
+  margin-bottom: 5vh;
 }
 
 @media (max-width: 960px) {
@@ -234,9 +236,6 @@ li {
 }
 
 .close-modal-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
   background: none;
   border: none;
   font-size: 2rem;
@@ -247,7 +246,8 @@ li {
 
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
+  margin: 0 auto;
+  justify-content: center;
   gap: 10px;
   margin-top: 30px;
 }
@@ -257,36 +257,43 @@ li {
   flex-direction: row;
   align-items: center;
   margin-top: 30px;
+  gap: 1rem;
 }
 
-.modal-actions-delete .right-actions {
-  display: flex;
-  gap: 10px;
+.cancel-btn,
+.update-details-btn,
+.delete-category-btn {
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 .cancel-btn {
   background-color: #333;
   color: white;
-  padding: 10px 20px;
+  padding: 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: 10vw;
 }
 
 .update-details-btn {
   background-color: #ffcf33;
   color: #1a1a1c;
   font-weight: bold;
-  padding: 10px 20px;
+  padding: 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: 10vw;
 }
 
 .delete-category-btn {
   background-color: #880000;
   color: white;
-  padding: 10px 20px;
+  padding: 10px;
+  width: 10vw;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -303,7 +310,7 @@ li {
 }
 
 .category-delete-modal p {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   margin-bottom: 25px;
   color: #e6b800; /* Use a warning color */
 }
