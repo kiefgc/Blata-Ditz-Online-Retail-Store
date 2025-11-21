@@ -1,4 +1,5 @@
 import { Order } from "../models/Order.js";
+import { Product } from "../models/Product.js";
 import { getDB } from "../config/db.js";
 import { ObjectId } from "mongodb";
 
@@ -6,27 +7,21 @@ const toObjectId = (id) => new ObjectId(id);
 
 export async function createOrder(req, res) {
   try {
-    const {
-      customer_id,
-      payment_method,
-      shipping_address,
-      items,
-      order_status,
-      payment_status,
-    } = req.body;
+    const { customer_id, payment_method, shipping_address, items } = req.body;
 
+    // Authorisation Logic
     if (req.user.role === "customer") {
       if (customer_id && customer_id !== req.user.id) {
-        return res
-          .status(403)
-          .json({ message: "Customers cannot assign orders to other users" });
+        return res.status(403).json({
+          message: "Customers cannot assign orders to other users",
+        });
       }
     } else if (req.user.role === "admin") {
-      // admin must provide a valid customer_id
-      if (!customer_id)
+      if (!customer_id) {
         return res.status(400).json({
           message: "customer_id is required for admin-created orders",
         });
+      }
     } else {
       return res.status(403).json({ message: "Unauthorized role" });
     }
@@ -34,47 +29,84 @@ export async function createOrder(req, res) {
     const finalCustomerId =
       req.user.role === "customer" ? req.user.id : customer_id;
 
-    // Validate order details
+    // Basic Validation
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res
         .status(400)
         .json({ message: "Order must include at least one item" });
     }
+
     if (!payment_method || !shipping_address) {
-      return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({
+        message: "Missing required fields",
+      });
     }
 
-    const total_amount = items.reduce(
-      (sum, item) => sum + item.quantity * item.unit_price,
-      0
-    );
+    // Fetch product prices from DB and compute
+    const productsCollection = getDB().collection("products");
+    let total_amount = 0;
 
+    const orderDetails = [];
+
+    for (const item of items) {
+      // Ensure quantity is valid
+      if (!item.product_id || !item.quantity || item.quantity <= 0) {
+        return res.status(400).json({
+          message: "Each item must include valid product_id and quantity",
+        });
+      }
+
+      const product = await productsCollection.findOne({
+        _id: new ObjectId(item.product_id),
+      });
+
+      if (!product) {
+        return res
+          .status(404)
+          .json({ message: `Product not found: ${item.product_id}` });
+      }
+
+      const unit_price = product.unit_price;
+      const subtotal = unit_price * item.quantity;
+
+      total_amount += subtotal;
+
+      orderDetails.push({
+        product_id: product._id,
+        quantity: item.quantity,
+        unit_price,
+        subtotal,
+      });
+    }
+
+    // Create Order
     const newOrder = await Order.create({
       customer_id: finalCustomerId,
-      order_status: order_status || "pending",
-      payment_status: payment_status || "pending",
+      order_status: "pending",
+      payment_status: "pending",
       payment_method,
       shipping_address,
       total_amount,
     });
 
-    // Insert order details
-    const orderDetails = items.map((item) => ({
+    // Insert Order Details with the Order ID
+    const orderDetailsWithId = orderDetails.map((d) => ({
       order_id: newOrder._id,
-      product_id: toObjectId(item.product_id),
-      quantity: item.quantity,
-      unit_price: item.unit_price,
-      subtotal: item.quantity * item.unit_price,
+      ...d,
     }));
 
-    await getDB().collection("order_details").insertMany(orderDetails);
+    await getDB().collection("order_details").insertMany(orderDetailsWithId);
 
-    res
-      .status(201)
-      .json({ message: "Order created successfully", data: newOrder });
+    res.status(201).json({
+      message: "Order created successfully",
+      data: {
+        order: newOrder,
+        order_details: orderDetailsWithId,
+      },
+    });
   } catch (error) {
     console.error("Create order error:", error);
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 }
 
