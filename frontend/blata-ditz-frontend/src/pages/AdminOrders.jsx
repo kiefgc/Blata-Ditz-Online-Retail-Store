@@ -4,7 +4,7 @@ import "./AdminOrders.css";
 
 import item from "../assets/item.png";
 
-import AuthForm from "./AuthForm.jsx";
+import AuthForm from "../components/AuthForm.jsx";
 
 import { Link } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AuthForm.css";
+import "../pages/AuthForm.css";
 
 function AuthForm({ isLogin, onClose, onSwitch }) {
   const [email, setEmail] = useState("");
