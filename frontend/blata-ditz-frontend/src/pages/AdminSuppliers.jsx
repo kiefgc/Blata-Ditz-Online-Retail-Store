@@ -176,7 +176,7 @@ function AdminSuppliers() {
                   src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
                   alt="search--v1"
                 />
-                <input type="text" placeholder="Search orders" />
+                <input type="text" placeholder="Search supplier" />
               </div>
               <button
                 type="button"
