@@ -5,8 +5,8 @@ import "../pages/AuthForm.css";
 function AuthForm({ isLogin, onClose, onSwitch }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState(""); // renamed from number
   const [password, setPassword] = useState("");
-  const [number, setNumber] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const submit = async (e) => {
@@ -16,9 +16,11 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
       if (isLogin) {
         const response = await axios.post(
           "http://localhost:3000/authentication/login",
-          { email, password }
+          {
+            email,
+            password,
+          }
         );
-
         localStorage.setItem("token", response.data.accessToken);
         alert("Login successful!");
         onClose();
@@ -32,7 +34,12 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
 
       const response = await axios.post(
         "http://localhost:3000/authentication/register",
-        { email, password }
+        {
+          email,
+          username,
+          phone,
+          password,
+        }
       );
 
       alert("Account created!");
@@ -50,11 +57,10 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
       </button>
 
       <h2>{isLogin ? "Log in to your account" : "Create an account"}</h2>
-
       <p className="form-subheading">
         {isLogin
           ? "Enter your email address and password"
-          : "Enter an email address and password"}
+          : "Enter an email address, username, phone, and password"}
       </p>
 
       <form onSubmit={submit}>
@@ -66,22 +72,22 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
           onChange={(e) => setEmail(e.target.value)}
         />
         {!isLogin && (
-          <input
-            type="text"
-            placeholder="Username"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        )}
-        {!isLogin && (
-          <input
-            type="tel"
-            placeholder="Phone Number"
-            required
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-          />
+          <>
+            <input
+              type="text"
+              placeholder="Username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              required
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </>
         )}
         <input
           type="password"

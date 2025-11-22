@@ -30,6 +30,13 @@ function Navbar() {
     };
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsSignedIn(true);
+    }
+  }, []);
+
   const clickLogin = (e) => {
     e.stopPropagation();
     if (activeFormPosition === FORM_POSITION_LOGIN) {
@@ -132,6 +139,7 @@ function Navbar() {
                     isLogin={true}
                     onClose={closeForm}
                     onSwitch={switchForm}
+                    onLoginSuccess={() => setIsSignedIn(true)}
                   />
                 )}
               </div>

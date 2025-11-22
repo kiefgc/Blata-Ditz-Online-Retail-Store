@@ -1,4 +1,6 @@
 import { getDB } from "../config/db.js";
+import fs from "fs";
+import path from "path";
 
 export class Product {
   static collection() {
@@ -44,6 +46,21 @@ export class Product {
     updates.updated_at = new Date();
 
     return await this.collection().updateOne({ _id }, { $set: updates });
+  }
+
+  static async delete(id) {
+    const _id = await this.toObjectId(id);
+
+    const product = await this.collection().findOne({ _id });
+    if (!product) return null;
+
+    if (product.image) {
+      const imagePath = path.join(process.cwd(), product.image);
+      fs.unlink(imagePath, (err) => {
+        if (err) console.error("Failed to delete image: ", err);
+      });
+    }
+    return await this.collection().deleteOne({ _id });
   }
 
   static async findById(id) {

@@ -30,17 +30,21 @@ export async function generateTokens(user) {
 
 export async function register(req, res) {
   try {
-    const { username, email, password, first_name, last_name, phone, address } =
-      req.body;
+    const {
+      username,
+      email,
+      password,
+      /*first_name, last_name,*/ phone /*address*/,
+    } = req.body;
 
     if (
       !username ||
       !email ||
       !password ||
-      !first_name ||
-      !last_name ||
-      !phone ||
-      !address
+      //!first_name || Not needed in front end
+      //!last_name ||
+      !phone //||
+      //!address
     ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -71,10 +75,10 @@ export async function register(req, res) {
       username,
       email,
       password,
-      first_name,
-      last_name,
+      //first_name,
+      //last_name,
       phone,
-      address,
+      //address,
     });
 
     res.status(201).json({ message: "Customer created successfully" });
