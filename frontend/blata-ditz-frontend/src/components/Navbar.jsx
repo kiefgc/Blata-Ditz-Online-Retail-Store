@@ -129,7 +129,7 @@ function Navbar() {
                 </button>
                 {activeFormPosition === FORM_POSITION_LOGIN && (
                   <AuthForm
-                    isLogin={isLogin}
+                    isLogin={true}
                     onClose={closeForm}
                     onSwitch={switchForm}
                   />
@@ -141,7 +141,7 @@ function Navbar() {
                 </button>
                 {activeFormPosition === FORM_POSITION_SIGNUP && (
                   <AuthForm
-                    isLogin={isLogin}
+                    isLogin={false}
                     onClose={closeForm}
                     onSwitch={switchForm}
                   />
