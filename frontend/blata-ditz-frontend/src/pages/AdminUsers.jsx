@@ -2,6 +2,70 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminUsers.css";
 
+/* Users mockup data */
+const usersData = [
+  {
+    id: "0001",
+    first_name: "Kieffy",
+    last_name: "Chuchu",
+    email: "kichu@mmaikl.com",
+    username: "ilovegachagirls",
+    created_at: "01-15-25",
+    phone_number: "+63 976 364 2832",
+    address: "Quezon Quezon Bahay ni Kief Quezon City",
+  },
+  {
+    id: "0001",
+    first_name: "Kieffy",
+    last_name: "Chuchu",
+    email: "kichu@mmaikl.com",
+    username: "ilovegachagirls",
+    created_at: "01-15-25",
+    phone_number: "+63 976 364 2832",
+    address: "Quezon Quezon Bahay ni Kief Quezon City",
+  },
+  {
+    id: "0001",
+    first_name: "Kieffy",
+    last_name: "Chuchu",
+    email: "kichu@mmaikl.com",
+    username: "ilovegachagirls",
+    created_at: "01-15-25",
+    phone_number: "+63 976 364 2832",
+    address: "Quezon Quezon Bahay ni Kief Quezon City",
+  },
+  {
+    id: "0001",
+    first_name: "Kieffy",
+    last_name: "Chuchu",
+    email: "kichu@mmaikl.com",
+    username: "ilovegachagirls",
+    created_at: "01-15-25",
+    phone_number: "+63 976 364 2832",
+    address: "Quezon Quezon Bahay ni Kief Quezon City",
+  },
+  {
+    id: "0001",
+    first_name: "Kieffy",
+    last_name: "Chuchu",
+    email: "kichu@mmaikl.com",
+    username: "ilovegachagirls",
+    created_at: "01-15-25",
+    phone_number: "+63 976 364 2832",
+    address: "Quezon Quezon Bahay ni Kief Quezon City",
+  },
+  {
+    id: "0001",
+    first_name: "Kieffy",
+    last_name: "Chuchu",
+    email: "kichu@mmaikl.com",
+    username: "ilovegachagirls",
+    created_at: "01-15-25",
+    phone_number: "+63 976 364 2832",
+    address: "Quezon Quezon Bahay ni Kief Quezon City",
+  },
+];
+
 function AdminUsers() {
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
   useEffect(() => {
@@ -128,7 +192,31 @@ function AdminUsers() {
                 />
                 <input type="text" placeholder="Search by Customer ID" />
               </div>
-              <button type="button">Add Supplier</button>
+              <button type="button">Enter</button>
+            </div>
+            <div className="admin-users-table">
+              <div className="users-columnHeader">
+                <span>ID</span>
+                <span>Full Name</span>
+                <span>Email</span>
+                <span>Username</span>
+                <span>Created At</span>
+                <span>Phone Number</span>
+              </div>
+              <div className="users-list">
+                {usersData.map((s) => (
+                  <div className="user-entry">
+                    <span>{s.id}</span>
+                    <span>
+                      {s.first_name} {s.last_name}
+                    </span>
+                    <span>{s.email}</span>
+                    <span>{s.username}</span>
+                    <span>{s.created_at}</span>
+                    <span>{s.phone_number}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
