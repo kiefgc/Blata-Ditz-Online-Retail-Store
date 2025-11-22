@@ -75,47 +75,101 @@ function AdminOrders() {
       </div>
 
       <div className="dashboard">
-        {/* SIDEBAR */}
         <div className="sidebar">
           <ul>
             <li>
-              <Link to="/admin/users" className="unselectedtab">
-                Users
-              </Link>
+              <img
+                width="24"
+                height="24"
+                src="https://img.icons8.com/ios-filled/50/FFFFFF/conference-call.png"
+                alt="conference-call"
+              />
+              <span>
+                <Link to="/admin/users" className="unselectedtab">
+                  Users
+                </Link>
+              </span>
             </li>
-
             <li className="selectedli">
-              <Link to="/admin/orders" className="selectedtab">
-                Orders
-              </Link>
+              <img
+                width="22"
+                height="22"
+                src="https://img.icons8.com/ios-filled/50/FFCF33/untested.png"
+                alt="untested"
+              />
+              <span>
+                <Link to="/admin/orders" className="selectedtab">
+                  Orders
+                </Link>
+              </span>
             </li>
-
             <li>
-              <Link to="/admin/inventory" className="unselectedtab">
-                Inventory
-              </Link>
+              <img
+                width="24"
+                height="24"
+                src="https://img.icons8.com/material-rounded/24/FFFFFF/move-by-trolley.png"
+                alt="move-by-trolley"
+              />
+              <span>
+                <Link to="/admin/inventory" className="unselectedtab">
+                  Inventory
+                </Link>
+              </span>
             </li>
-
             <li>
-              <Link to="/admin/categories" className="unselectedtab">
-                Categories
-              </Link>
+              <img
+                width="24"
+                height="24"
+                src="https://img.icons8.com/material-outlined/24/FFFFFF/categorize.png"
+                alt="categorize"
+              />
+              <span>
+                <Link to="/admin/categories" className="unselectedtab">
+                  Categories
+                </Link>
+              </span>
             </li>
-
             <li>
-              <Link to="/admin/suppliers" className="unselectedtab">
-                Suppliers
-              </Link>
+              <img
+                width="24"
+                height="24"
+                src="https://img.icons8.com/glyph-neue/64/FFFFFF/supplier.png"
+                alt="supplier"
+              />
+              <span>
+                <Link to="/admin/suppliers" className="unselectedtab">
+                  Suppliers
+                </Link>
+              </span>
             </li>
-
-            <li>Log Out</li>
+            <li>
+              <img
+                width="24"
+                height="24"
+                src="https://img.icons8.com/forma-regular-filled/24/FFFFFF/combo-chart.png"
+                alt="combo-chart"
+              />
+              <span>
+                <Link to="/admin/reports" className="unselectedtab">
+                  Reports
+                </Link>
+              </span>
+            </li>
+            <li>
+              <img
+                width="21"
+                height="21"
+                src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/open-pane.png"
+                alt="open-pane"
+              />
+              <span>Log Out</span>
+            </li>
           </ul>
         </div>
 
         {/* MAIN CONTENT */}
         <div className="main-content">
           <div className="admin-orders-section">
-            {/* SEARCH BAR */}
             <div className="search-bar">
               <img
                 width="20"
