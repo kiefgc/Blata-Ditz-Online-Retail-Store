@@ -206,6 +206,7 @@ li {
 }
 
 .category-modal-content input[type="text"],
+.category-modal-content input[type="url"],
 .category-modal-content textarea {
   width: 100%;
   padding: 10px;
