@@ -45,6 +45,33 @@ const ProductSalesData = [
   },
 ];
 
+const LowStockData = [
+  {
+    id: "301",
+    image: "https://via.placeholder.com/80x50/007bff/FFFFFF?text=Keychron",
+    name: "Keychron K2 Wireless Mechanical Keyboard (Low Stock)",
+    currentStock: 3,
+    threshold: 5,
+    supplier: "Keychron",
+  },
+  {
+    id: "405",
+    image: "https://via.placeholder.com/80x50/ff4500/FFFFFF?text=Razer",
+    name: "Razer DeathAdder V2 Gaming Mouse (Critical Stock)",
+    currentStock: 1,
+    threshold: 5,
+    supplier: "Razer",
+  },
+  {
+    id: "510",
+    image: "https://via.placeholder.com/80x50/008000/FFFFFF?text=Logitech",
+    name: "Logitech G Pro X Superlight Wireless Gaming Mouse (Low Stock)",
+    currentStock: 4,
+    threshold: 5,
+    supplier: "Logitech",
+  },
+];
+
 const ProductSalesRow = ({ product, onClickView }) => (
   <div
     className="productsales-row clickable-sales-row"
@@ -99,10 +126,53 @@ const ProductSalesView = ({ productData, onClose }) => {
   );
 };
 
+const LowStockAlertRow = ({ product, onClickAlert }) => {
+  const isCritical = product.currentStock <= 1;
+  const rowClassName = isCritical
+    ? "lowstock-row critical-stock"
+    : "lowstock-row";
+
+  return (
+    <div className={rowClassName} onClick={() => onClickAlert(product)}>
+      <div className="lowstock-cell">{product.id}</div>
+      <div className="lowstock-cell product-cell-image">
+        <img src={product.image} alt={product.name} />
+      </div>
+      <div className="lowstock-cell-name">{product.name}</div>
+      <div className="lowstock-cell lowstock-count">
+        <span className="stock-qty-pill">{product.currentStock}</span>
+      </div>
+      <div className="lowstock-cell lowstock-supplier">{product.supplier}</div>
+    </div>
+  );
+};
+
+const LowStockAlertTable = ({ products, onClickAlert }) => (
+  <div className="lowstock-table-wrapper">
+    <div className="lowstock-table-header">
+      <div className="lowstock-table-header-cell">Product ID</div>
+      <div className="lowstock-table-header-cell">Image</div>
+      <div className="lowstock-table-header-cell">Product Name</div>
+      <div className="lowstock-table-header-cell">Stock</div>
+      <div className="lowstock-table-header-cell">Supplier</div>
+    </div>
+    <div className="lowstock-table-rows">
+      {products.map((product) => (
+        <LowStockAlertRow
+          key={product.id}
+          product={product}
+          onClickAlert={onClickAlert}
+        />
+      ))}
+    </div>
+  </div>
+);
+
 function AdminReports() {
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
   const [isViewProdOpen, setIsViewProdOpen] = useState(false);
+  const [isViewLowStockOpen, setIsViewLowStockOpen] = useState(null);
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -124,6 +194,10 @@ function AdminReports() {
 
   const handleCloseViewSales = () => {
     setIsViewProdOpen(null);
+  };
+
+  const handleLowStockAlert = (productData) => {
+    console.log("Low Stock Alert Clicked:", productData.name);
   };
 
   return (
@@ -251,9 +325,22 @@ function AdminReports() {
                 )}
               </div>
             </div>
+
             <div className="stocks-alert-section">
               <div className="stocks-alert-section-header">
-                <h3>Stocks Alert</h3>
+                <h3>Low Stock Products</h3>
+              </div>
+              <div className="lowstock-alert-table-container">
+                {LowStockData.length > 0 ? (
+                  <LowStockAlertTable
+                    products={LowStockData}
+                    onClickAlert={handleLowStockAlert}
+                  />
+                ) : (
+                  <p className="no-low-stock-message">
+                    All products are adequately stocked.
+                  </p>
+                )}
               </div>
             </div>
           </div>
