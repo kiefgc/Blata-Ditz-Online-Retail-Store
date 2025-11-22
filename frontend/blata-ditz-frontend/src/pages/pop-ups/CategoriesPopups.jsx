@@ -1,8 +1,9 @@
-// CategoryModals.jsx
-
 import React, { useState } from "react";
 
-// --- Category Creation Modal ---
+const getFileUrl = (file) => {
+  return file instanceof File ? URL.createObjectURL(file) : file;
+};
+
 export const CategoryCreateModal = ({ onClose, onCreate }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -20,7 +21,7 @@ export const CategoryCreateModal = ({ onClose, onCreate }) => {
     <div className="modal-backdrop">
       <div className="category-modal-content">
         <div className="category-create-modal-content">
-          <h3>Add new category</h3>
+          <h3>Add New Category</h3>
           <div className="form-group">
             <label htmlFor="categoryName">Category Name</label>
             <input
