@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Browse({ browseRef }) {
+function Browse({ browseRef, searchQuery }) {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
@@ -12,9 +12,9 @@ function Browse({ browseRef }) {
   useEffect(() => {
     fetch("http://localhost:3000/categories")
       .then((res) => res.json())
-      .then((data) => {
-        setCategories([{ _id: null, category_name: "All" }, ...data]);
-      })
+      .then((data) =>
+        setCategories([{ _id: null, category_name: "All" }, ...data])
+      )
       .catch(console.error);
   }, []);
 
@@ -22,15 +22,19 @@ function Browse({ browseRef }) {
   useEffect(() => {
     fetch("http://localhost:3000/products")
       .then((res) => res.json())
-      .then((data) => setProducts(data))
+      .then(setProducts)
       .catch(console.error);
   }, []);
 
-  // Filter products by selected category
-  const filteredProducts =
-    selectedCategory === null
-      ? products
-      : products.filter((p) => p.category_ids.includes(selectedCategory));
+  // Filter products by selected category AND search query
+  const filteredProducts = products.filter((p) => {
+    const matchesCategory =
+      selectedCategory === null || p.category_ids.includes(selectedCategory);
+    const matchesSearch =
+      !searchQuery ||
+      p.product_name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="product-container" ref={browseRef}>

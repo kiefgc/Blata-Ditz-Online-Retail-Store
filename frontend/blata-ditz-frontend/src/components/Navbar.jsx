@@ -7,7 +7,7 @@ const FORM_POSITION_NONE = 0;
 const FORM_POSITION_LOGIN = 1;
 const FORM_POSITION_SIGNUP = 2;
 
-function Navbar() {
+function Navbar({ searchQuery, setSearchQuery }) {
   const [isSignedIn, setIsSignedIn] =
     useState(false); /* For changing navbar icons when user logged in */
 
@@ -123,7 +123,18 @@ function Navbar() {
                 src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
                 alt="search--v1"
               />
-              <input type="text" placeholder="Search" />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const browse = document.querySelector(".product-container");
+                    if (browse) browse.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+              />
             </div>
           </a>
         </div>
@@ -223,7 +234,18 @@ function Navbar() {
               src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
               alt="search--v1"
             />
-            <input type="text" placeholder="Search" />
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const browse = document.querySelector(".product-container");
+                  if (browse) browse.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            />
 
             <img
               width="15"
