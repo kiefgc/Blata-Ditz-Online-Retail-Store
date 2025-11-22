@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
 import ScrollPosition from "./pages/ScrollPosition";
 
@@ -14,14 +15,17 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <Router>
       <ScrollPosition />
-      <Navbar />
+      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Landing searchQuery={searchQuery} />} />
         <Route path="/product" element={<Product />} />
 
+        {/* Admin routes */}
         <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/admin/inventory" element={<AdminInventory />} />

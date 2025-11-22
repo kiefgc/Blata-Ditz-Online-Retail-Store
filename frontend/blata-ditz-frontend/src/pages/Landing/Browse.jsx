@@ -1,279 +1,85 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import item from "../../assets/item.png";
+function Browse({ browseRef, searchQuery }) {
+  const navigate = useNavigate();
 
-function Browse({ browseRef }) {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null); // null = All
+
+  // Fetch categories
+  useEffect(() => {
+    fetch("http://localhost:3000/categories")
+      .then((res) => res.json())
+      .then((data) =>
+        setCategories([{ _id: null, category_name: "All" }, ...data])
+      )
+      .catch(console.error);
+  }, []);
+
+  // Fetch products
+  useEffect(() => {
+    fetch("http://localhost:3000/products")
+      .then((res) => res.json())
+      .then(setProducts)
+      .catch(console.error);
+  }, []);
+
+  // Filter products by selected category AND search query
+  const filteredProducts = products.filter((p) => {
+    const matchesCategory =
+      selectedCategory === null || p.category_ids.includes(selectedCategory);
+    const matchesSearch =
+      !searchQuery ||
+      p.product_name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   return (
     <div className="product-container" ref={browseRef}>
+      {/* Categories */}
       <div className="categories">
         <ul>
-          <li>
-            <button onClick={() => setSelectedCategory("all")}>ALL</button>
-          </li>
-          <li>
-            <button onClick={() => setSelectedCategory("ps5")}>PS5</button>
-          </li>
-          <li>
-            <button onClick={() => setSelectedCategory("ps4")}>PS4</button>
-          </li>
-          <li>
-            <button onClick={() => setSelectedCategory("switch")}>
-              SWITCH
-            </button>
-          </li>
-          <li>
-            <button onClick={() => setSelectedCategory("xbox")}>XBOX</button>
-          </li>
-          <li>
-            <button onClick={() => setSelectedCategory("pc/mac")}>
-              PC/MAC
-            </button>
-          </li>
-          <li>
-            <button onClick={() => setSelectedCategory("collectibles")}>
-              COLLECTIBLES
-            </button>
-          </li>
-          <li>
-            <button onClick={() => setSelectedCategory("more")}>MORE</button>
-          </li>
-          <li>
-            <button onClick={() => setSelectedCategory("pre-orders")}>
-              PRE-ORDERS
-            </button>
-          </li>
+          {categories.map((cat) => (
+            <li key={cat._id || "all"}>
+              <button onClick={() => setSelectedCategory(cat._id)}>
+                {cat.category_name.toUpperCase()}
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
 
-      {selectedCategory === "all" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">all all all</span>
+      {/* Products */}
+      <div className="products">
+        {filteredProducts.length === 0 ? (
+          <p>No products found.</p>
+        ) : (
+          filteredProducts.map((product) => (
+            <div className="item" key={product._id}>
+              <div className="item-img">
+                <img
+                  src={`http://localhost:3000${product.image}`}
+                  alt={product.product_name}
+                />
               </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">all all all</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
+              <div className="item-content">
+                <div className="item-details">
+                  <span className="price">₱{product.unit_price}</span>
+                  <span className="title">{product.product_name}</span>
+                </div>
+                <div
+                  className="view-item-btn"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                >
+                  View More
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">all all all</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {selectedCategory === "ps5" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">
-                  Transnovo 24-in-1 Game Card Storage Case for Nintendo
-                </span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {selectedCategory === "ps4" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">ps4ps4ps4</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {selectedCategory === "switch" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">switch switch switch</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {selectedCategory === "xbox" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">xboxxx</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {selectedCategory === "pc/mac" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">pc/macccc</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {selectedCategory === "collectibles" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">collectiblessss</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {selectedCategory === "more" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">more</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {selectedCategory === "pre-orders" && (
-        <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">pre-orders</span>
-              </div>
-              <div
-                className="view-item-btn"
-                onClick={() => navigate("/product")}
-              >
-                View More
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 }

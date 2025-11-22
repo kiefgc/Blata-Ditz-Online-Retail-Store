@@ -7,9 +7,7 @@ import Banner from "./Banner";
 import Browse from "./Browse";
 import FeaturedSection from "./FeaturedSection";
 
-function Landing() {
-  const navigate = useNavigate();
-
+function Landing({ searchQuery }) {
   const browseRef = useRef(null);
   const gototopRef = useRef(null);
 
@@ -17,7 +15,7 @@ function Landing() {
     <>
       <div className="page-content">
         <Banner browseRef={browseRef} />
-        <Browse browseRef={browseRef} />
+        <Browse browseRef={browseRef} searchQuery={searchQuery} />
         <FeaturedSection gototopRef={gototopRef} />
       </div>
     </>
