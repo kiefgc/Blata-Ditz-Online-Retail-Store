@@ -880,3 +880,70 @@ input[type="checkbox"] {
   padding-top: 1rem;
   border-top: 1px solid #333;
 }
+
+.confirmation-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75); /* Dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above the edit modal */
+}
+
+.confirmation-modal {
+  background-color: #1a1a1c;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 30vw;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.confirmation-modal h3 {
+  font-size: 1.75rem;
+  color: #ffcf33; /* Red color for warning */
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.confirmation-modal p {
+  font-size: 1.25rem;
+  color: #cccccc;
+  margin-bottom: 25px;
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: space-around;
+  gap: 15px;
+}
+
+.delete-product-final-btn {
+  background-color: #ffcf33; /* Red color for final delete button */
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  flex: 1;
+}
+
+.delete-product-final-btn:hover {
+  background-color: #fff;
+}
+
+.confirmation-actions .cancel-btn {
+  background-color: #333;
+  color: white;
+  border: 1px solid #444;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+}

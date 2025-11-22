@@ -305,6 +305,8 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
   const [images, setImages] = useState(initialProduct?.images || []);
   const fileInputRef = useRef(null);
 
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
   useEffect(() => {
     return () => {
       images.forEach((image) => {
@@ -382,12 +384,18 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
   };
 
   const handleDelete = () => {
-    if (
-      window.confirm(`Are you sure you want to delete product ${product.name}?`)
-    ) {
-      console.log("Deleting product:", product.id);
-      onClose();
-    }
+    setShowDeleteConfirmation(true);
+  };
+
+  // NEW HANDLERS
+  const confirmDelete = () => {
+    console.log("Deleting product:", product.id);
+    setShowDeleteConfirmation(false);
+    onClose();
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirmation(false);
   };
 
   return (
@@ -571,6 +579,29 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
           </div>
         </div>
       </div>
+      {/* --- Confirmation Modal JSX --- */}
+      {showDeleteConfirmation && (
+        <div className="confirmation-backdrop">
+          <div className="confirmation-modal">
+            <h3>Delete Product?</h3>
+            <p>
+              Are you sure you want to permanently delete the product -
+              {product.name}?<br></br>This action cannot be undone.
+            </p>
+            <div className="confirmation-actions">
+              <button className="cancel-btn" onClick={cancelDelete}>
+                Cancel
+              </button>
+              <button
+                className="delete-product-final-btn"
+                onClick={confirmDelete}
+              >
+                Confirm Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
