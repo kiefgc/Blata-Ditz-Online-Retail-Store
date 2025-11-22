@@ -26,9 +26,9 @@ function FeaturedSection({ gototopRef }) {
     const threshold = window.innerHeight * 0.3;
 
     if (scroll > threshold) {
-      gototop.classNameList.add("active");
+      gototop.classList.add("active");
     } else {
-      gototop.classNameList.remove("active");
+      gototop.classList.remove("active");
     }
   };
 

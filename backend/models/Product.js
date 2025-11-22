@@ -68,6 +68,11 @@ export class Product {
     return await this.collection().findOne({ _id });
   }
 
+  static async findByCategoryId(categoryId) {
+    const objectId = new ObjectId(categoryId);
+    return this.collection().find({ category_ids: objectId }).toarray();
+  }
+
   static async getAll(filters = {}) {
     return await this.collection().find(filters).toArray();
   }
