@@ -6,11 +6,16 @@ const getFileUrl = (file) => {
 
 export const CategoryCreateModal = ({ onClose, onCreate }) => {
   const [name, setName] = useState("");
+  const [icon, setIcon] = useState("");
   const [description, setDescription] = useState("");
 
   const handleSubmit = () => {
     if (name.trim()) {
-      onCreate({ name: name.trim(), description: description.trim() });
+      onCreate({
+        name: name.trim(),
+        icon: icon.trim(),
+        description: description.trim(),
+      });
       onClose();
     } else {
       alert("Category Name is required.");
@@ -30,6 +35,18 @@ export const CategoryCreateModal = ({ onClose, onCreate }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter category name"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="categoryName">Category Icon</label>
+            <input
+              type="url"
+              id="categoryIcon"
+              value={icon}
+              onChange={(e) => setIcon(e.target.value)}
+              placeholder="Enter category icon url"
+              required
             />
           </div>
           <div className="form-group">
@@ -64,12 +81,14 @@ export const CategoryEditModal = ({
 }) => {
   const [name, setName] = useState(category.name || "");
   const [description, setDescription] = useState(category.description || "");
+  const [icon, setIcon] = useState(category.icon || "");
 
   const handleUpdate = () => {
     if (name.trim()) {
       onUpdate({
         ...category,
         name: name.trim(),
+        icon: icon.trim(),
         description: description.trim(),
       });
       onClose();
@@ -93,6 +112,17 @@ export const CategoryEditModal = ({
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="categoryName">Category Icon</label>
+            <input
+              type="url"
+              id="categoryIcon"
+              value={icon}
+              onChange={(e) => setIcon(e.target.value)}
+              placeholder="Enter category icon url"
+              required
+            />
           </div>
           <div className="form-group">
             <label htmlFor="categoryDescription">Category Description</label>
