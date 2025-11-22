@@ -4,7 +4,9 @@ import "../pages/AuthForm.css";
 
 function AuthForm({ isLogin, onClose, onSwitch }) {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [number, setNumber] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const submit = async (e) => {
@@ -63,6 +65,24 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        {!isLogin && (
+          <input
+            type="text"
+            placeholder="Username"
+            required
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        )}
+        {!isLogin && (
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            required
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+          />
+        )}
         <input
           type="password"
           placeholder="Password"
