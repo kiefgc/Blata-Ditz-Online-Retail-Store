@@ -49,7 +49,7 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
       email,
       phone,
       address,
-      start_date: date,
+      start_date,
       status,
     };
 
@@ -67,34 +67,18 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
 
   const cancelDelete = () => setShowDeleteConfirmation(false);
 
-  const [newProduct, setNewProduct] = useState({
+  const [newSupplier, setNewSupplier] = useState({
     name: "",
-    specifications: [],
-    requirements: [],
-    connectivity: [],
-    supplier_id: "",
-    category: "",
+    email: "",
+    phone: "",
+    address: "",
+    start_date: "",
+    status: "",
   });
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setNewProduct((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const handleAddTag = (category, newTag) => {
-    if (!newTag.trim()) return;
-
-    setNewProduct((prev) => ({
-      ...prev,
-      [category]: [...prev[category], newTag],
-    }));
-  };
-
-  const handleRemoveTag = (category, tagToRemove) => {
-    setNewProduct((prev) => ({
-      ...prev,
-      [category]: prev[category].filter((tag) => tag !== tagToRemove),
-    }));
+    setNewSupplier((prev) => ({ ...prev, [id]: value }));
   };
 
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -141,12 +125,17 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
   };
 
   const handleSubmitProduct = () => {
-    if (!newProduct.name || !newProduct.category) {
-      alert("Please fill in Product Name and Category.");
+    if (
+      !newSupplier.name ||
+      !newSupplier.email ||
+      !newSupplier.phone ||
+      !newSupplier.address
+    ) {
+      alert("Please fill in the required fields");
       return;
     }
 
-    console.log("New Product:", newProduct);
+    console.log("New Supplier:", newSupplier);
     console.log("Uploaded Images:", selectedFiles);
 
     onClose();
@@ -252,7 +241,7 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
                 Cancel
               </button>
               <button
-                className="delete-product-final-btn"
+                className="delete-supplier-final-btn"
                 onClick={confirmDelete}
               >
                 Confirm Delete
@@ -262,59 +251,86 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
         </div>
       )}
 
-      {/* ADD PRODUCT  */}
+      {/* ADD SUPPLIER  */}
       {type === "add" && (
         <div className="modal-backdrop">
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="product-create-form-container">
-              <div className="product-create-header">Add New Product</div>
+            <div className="supplier-create-form-container">
+              <div className="supplier-edit-header">
+                <h3>Add New Supplier</h3>
+                <button className="close-edit-modal-btn" onClick={onClose}>
+                  x
+                </button>
+              </div>
 
-              <div className="product-create-body">
+              <div className="supplier-create-body">
                 <div className="form-fields">
-                  {/* Product Name */}
-                  <div className="form-group">
-                    <label htmlFor="name">Product Name</label>
+                  {/* Supplier Name */}
+                  <div className="supplier-form-group">
+                    <label htmlFor="name">Supplier Name</label>
                     <input
                       id="name"
-                      value={newProduct.name}
+                      value={newSupplier.name}
                       onChange={handleChange}
-                      placeholder="Enter product name"
+                      placeholder="Enter supplier name"
                       required
                     />
                   </div>
-
-                  {/* Supplier & Category */}
-                  <div className="select-group">
-                    <div className="form-group">
-                      <label htmlFor="supplier_id">Supplier</label>
-                      <select
-                        id="supplier_id"
-                        value={newProduct.supplier_id}
+                  {/* Supplier Email and Phone */}
+                  <div className="input-email-phone">
+                    <div className="supplier-form-group">
+                      <label htmlFor="email">Email</label>
+                      <input
+                        id="email"
+                        value={newSupplier.email}
                         onChange={handleChange}
-                      >
-                        <option value=""></option>
-                      </select>
+                        placeholder="Enter email"
+                        required
+                      />
                     </div>
-
-                    <div className="form-group">
-                      <label htmlFor="category">Category</label>
-                      <select
-                        id="category"
-                        value={newProduct.category}
+                    <div className="supplier-form-group">
+                      <label htmlFor="phone">Phone Number</label>
+                      <input
+                        id="phone"
+                        value={newSupplier.phone}
                         onChange={handleChange}
-                      >
-                        <option value="" disabled hidden>
-                          Select Category
-                        </option>
-                        <option value="PS5">PS5</option>
-                        <option value="PS4">PS4</option>
-                        <option value="switch">Switch</option>
-                        <option value="xbox">Xbox</option>
-                        <option value="pc-mac">PC/MAC</option>
-                        <option value="collectibles">Collectibles</option>
-                        <option value="pre-orders">Pre-Orders</option>
-                        <option value="other">Other</option>
-                      </select>
+                        placeholder="Enter phone number"
+                        required
+                      />
+                    </div>
+                  </div>
+                  {/* Supplier address */}
+                  <div className="supplier-form-group">
+                    <label htmlFor="address"> Address</label>
+                    <input
+                      id="address"
+                      value={newSupplier.address}
+                      onChange={handleChange}
+                      placeholder="Enter address"
+                      required
+                    />
+                  </div>
+                  {/* Supplier date and status */}
+                  <div className="input-email-phone">
+                    <div className="supplier-form-group">
+                      <label htmlFor="date">Start Date</label>
+                      <input
+                        id="date"
+                        value={newSupplier.date}
+                        onChange={handleChange}
+                        placeholder="Enter start date"
+                        required
+                      />
+                    </div>
+                    <div className="supplier-form-group">
+                      <label htmlFor="status">Status</label>
+                      <input
+                        id="status"
+                        value={newSupplier.status}
+                        onChange={handleChange}
+                        placeholder="Enter status"
+                        required
+                      />
                     </div>
                   </div>
                 </div>
@@ -376,14 +392,14 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
                   </div>
 
                   <div className="action-buttons">
-                    <button className="cancel-btn" onClick={onClose}>
+                    <button className="supplier-cancel-btn" onClick={onClose}>
                       Cancel
                     </button>
                     <button
-                      className="add-product-final-btn"
+                      className="add-supplier-final-btn"
                       onClick={handleSubmitProduct}
                     >
-                      Add Product
+                      Add supplier
                     </button>
                   </div>
                 </div>
