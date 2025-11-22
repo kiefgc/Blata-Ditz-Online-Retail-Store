@@ -10,7 +10,12 @@ const FORM_POSITION_SIGNUP = 2;
 function Navbar() {
   const [isSignedIn, setIsSignedIn] =
     useState(false); /* For changing navbar icons when user logged in */
+
+  const [showDropdown, setShowDropdown] = useState(false);
+  const userIconRef = useRef(null);
+
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+
   const [showForm, setShowForm] = useState(false);
   const [activeFormPosition, setActiveFormPosition] =
     useState(FORM_POSITION_NONE);
@@ -66,6 +71,41 @@ function Navbar() {
     setActiveFormPosition(isLogin ? FORM_POSITION_SIGNUP : FORM_POSITION_LOGIN);
   };
 
+  const clickUserIcon = (e) => {
+    e.stopPropagation();
+    setShowDropdown((prev) => !prev);
+  };
+
+  const handleLogout = (e) => {
+    e.stopPropagation();
+
+    console.log("User logged out!");
+    setIsSignedIn(false);
+    setShowDropdown(false);
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (activeFormPosition !== FORM_POSITION_NONE) {
+        closeForm();
+      }
+
+      if (
+        showDropdown &&
+        userIconRef.current &&
+        !userIconRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [activeFormPosition, showDropdown]);
+
   return (
     <>
       <div className="navbar">
@@ -90,7 +130,6 @@ function Navbar() {
         <div className="nav-links">
           {isSignedIn ? (
             <>
-              {" "}
               <a href="#">
                 <img
                   className="search-icon"
@@ -109,14 +148,27 @@ function Navbar() {
                   alt="shopping-cart"
                 />
               </a>
-              <a href="#">
+              <div
+                className="pop-up-parent-container"
+                ref={userIconRef}
+                onClick={clickUserIcon}
+              >
                 <img
                   width="30"
                   height="30"
                   src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/user.png"
                   alt="user"
                 />
-              </a>
+                {showDropdown && (
+                  <div className="user-dropdown">
+                    <a href="#">Profile</a>
+                    <a href="#">Orders</a>
+                    <a href="#" onClick={handleLogout} className="logout-link">
+                      Logout
+                    </a>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>

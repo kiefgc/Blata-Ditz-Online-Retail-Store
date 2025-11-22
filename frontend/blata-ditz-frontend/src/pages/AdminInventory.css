@@ -308,13 +308,6 @@ input[type="checkbox"] {
   border-radius: 10px;
 }
 
-.product-create-header {
-  font-size: 1.8rem;
-  padding: 1.5rem 2rem;
-  color: #f0f0f0;
-  border-bottom: 1px solid #333;
-}
-
 .product-create-body {
   display: flex;
   gap: 20px;
@@ -506,15 +499,14 @@ input[type="checkbox"] {
 
 .action-buttons {
   display: flex;
-  justify-content: space-between;
+  gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
-.cancel-btn,
+.cancel-btn-inventory,
 .add-product-final-btn,
 .delete-product-btn,
-.update-details-btn {
-  padding: 0.75rem 1.5rem;
+.update-details-btn-inventory {
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -522,16 +514,17 @@ input[type="checkbox"] {
   text-transform: uppercase;
   font-weight: bold;
   width: 48%;
+  padding: 8px;
 }
 
-.cancel-btn {
+.cancel-btn-inventory-final {
   background-color: #070709;
   color: #f0f0f0;
   border: 1px solid #333;
 }
 
 .add-product-final-btn,
-.update-details-btn {
+.update-details-btn-inventory {
   background-color: #ffcf33;
   color: #1a1a1c;
 }
@@ -875,7 +868,9 @@ input[type="checkbox"] {
 .edit-action-buttons {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  width: 100%;
+
+  gap: 1.5rem;
 
   padding-top: 1rem;
   border-top: 1px solid #333;
@@ -932,13 +927,14 @@ input[type="checkbox"] {
   cursor: pointer;
   font-weight: bold;
   flex: 1;
+  text-transform: uppercase;
 }
 
 .delete-product-final-btn:hover {
   background-color: #fff;
 }
 
-.confirmation-actions .cancel-btn {
+.confirmation-actions .cancel-btn-final {
   background-color: #333;
   color: white;
   border: 1px solid #444;
@@ -946,4 +942,6 @@ input[type="checkbox"] {
   border-radius: 4px;
   cursor: pointer;
   flex: 1;
+
+  text-transform: uppercase;
 }

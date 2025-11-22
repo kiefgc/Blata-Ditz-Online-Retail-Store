@@ -149,7 +149,12 @@ export const ProductCreateModal = ({ brandName, onClose }) => {
     <div className="modal-backdrop">
       <div className="modal-content">
         <div className="product-create-form-container">
-          <div className="product-create-header">Add new product</div>
+          <div className="product-edit-header">
+            <h3>Add New Product</h3>
+            <button className="close-edit-modal-btn" onClick={onClose}>
+              x
+            </button>
+          </div>
           <div className="product-create-body">
             <div className="form-fields">
               <div className="form-group">
@@ -282,7 +287,7 @@ export const ProductCreateModal = ({ brandName, onClose }) => {
                 )}
               </div>
               <div className="action-buttons">
-                <button className="cancel-btn" onClick={onClose}>
+                <button className="cancel-btn-inventory" onClick={onClose}>
                   Cancel
                 </button>
                 <button
@@ -387,7 +392,6 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
     setShowDeleteConfirmation(true);
   };
 
-  // NEW HANDLERS
   const confirmDelete = () => {
     console.log("Deleting product:", product.id);
     setShowDeleteConfirmation(false);
@@ -403,7 +407,7 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
       <div className="modal-content-edit">
         <div className="product-edit-form-container">
           <div className="product-edit-header">
-            <h3>Edit product</h3>
+            <h3>Edit Product</h3>
             <button className="close-edit-modal-btn" onClick={onClose}>
               &times;
             </button>
@@ -589,7 +593,7 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
               {product.name}?<br></br>This action cannot be undone.
             </p>
             <div className="confirmation-actions">
-              <button className="cancel-btn" onClick={cancelDelete}>
+              <button className="cancel-btn-final" onClick={cancelDelete}>
                 Cancel
               </button>
               <button
