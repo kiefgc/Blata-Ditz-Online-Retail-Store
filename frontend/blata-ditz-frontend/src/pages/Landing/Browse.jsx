@@ -83,6 +83,24 @@ function Browse({ browseRef }) {
               </div>
             </div>
           </div>
+
+          <div className="item">
+            <div className="item-img">
+              <img src={item} />
+            </div>
+            <div className="item-content">
+              <div className="item-details">
+                <span className="price">₱175.00</span>
+                <span className="title">all all all</span>
+              </div>
+              <div
+                className="view-item-btn"
+                onClick={() => navigate("/product")}
+              >
+                View More
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

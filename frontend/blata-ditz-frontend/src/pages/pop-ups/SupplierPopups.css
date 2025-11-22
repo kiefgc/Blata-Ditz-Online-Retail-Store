@@ -1,0 +1,254 @@
+.admin-supplier-popup-overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 998;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.admin-supplier-popup {
+  display: flex;
+  z-index: 999;
+  background-color: #131416;
+  border-radius: 15px;
+  border: 0.5px solid #878787;
+  width: 50%;
+  height: 60%;
+  flex-direction: column;
+  overflow: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
+.supplier-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #333;
+  margin-bottom: 10px;
+}
+
+.supplier-edit-header h3 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.close-edit-modal-btn {
+  background: #000;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1.8rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  padding-bottom: 3px;
+  transition: background-color 0.2s;
+}
+
+.close-edit-modal-btn:hover {
+  background-color: #ff3333;
+}
+
+.supplier-popup-content {
+  color: white;
+  padding: 0 2rem 2rem 2rem;
+  position: relative;
+  height: 100%;
+}
+
+.supplier-id {
+  margin-bottom: 20px;
+}
+.supplier-id-title {
+  font-size: 1.6rem;
+}
+.supplier-id-no {
+  font-size: 2.4rem;
+}
+
+.supplier-details {
+  font-weight: 300;
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.supplier-details > div {
+  flex: 1;
+}
+.supplier-details-value {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 0.2rem;
+}
+
+.s-detail-heading {
+  font-size: 1.2rem;
+}
+.s-detail {
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.s-detail span {
+  width: 100%;
+
+  text-decoration: none;
+  line-height: 1;
+  padding: 1px;
+  margin: 0;
+  display: inline-block;
+}
+
+.supplier-details-value hr {
+  width: 100%;
+  height: 0.1px;
+}
+
+.address {
+  width: 100% !important;
+}
+
+.details-date-status {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+.supplier-details-value select {
+  background-color: black;
+  padding: 7px;
+  border: 1px solid #878787;
+  font-weight: 300;
+  font-size: 1.2rem;
+  text-transform: capitalize;
+  border-radius: 50px;
+  text-align: center;
+  appearance: none;
+  width: auto;
+
+  cursor: pointer;
+}
+
+.supplier-editpopup-buttons {
+  display: flex;
+  flex-direction: row;
+
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  right: 0;
+  padding: 0 2rem 2rem 2rem;
+  margin: 0;
+}
+.supplier-delete-btn,
+.supplier-update-btn,
+.supplier-cancel-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  width: 49%;
+}
+
+.supplier-cancel-btn {
+  background-color: #070709;
+  color: #f0f0f0;
+  border: 1px solid #333;
+}
+
+.supplier-update-btn {
+  background-color: #ffcf33;
+  color: #1a1a1c;
+}
+
+.confirmation-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75); /* Dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above the edit modal */
+}
+
+.confirmation-modal {
+  background-color: #1a1a1c;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 30vw;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.confirmation-modal h3 {
+  font-size: 1.75rem;
+  color: #ffcf33; /* Red color for warning */
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.confirmation-modal p {
+  font-size: 1.25rem;
+  color: #cccccc;
+  margin-bottom: 25px;
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: space-around;
+  gap: 15px;
+}
+
+.delete-product-final-btn {
+  background-color: #ffcf33; /* Red color for final delete button */
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  flex: 1;
+}
+
+.delete-product-final-btn:hover {
+  background-color: #fff;
+}
+
+.confirmation-actions .supplier-cancel-btn {
+  background-color: #333;
+  color: white;
+  border: 1px solid #444;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+}
