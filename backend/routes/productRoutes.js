@@ -6,6 +6,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductsByCategory,
 } from "../controllers/productController.js";
 import {
   authenticateToken,
@@ -16,6 +17,7 @@ const router = express.Router();
 
 // Public Routes
 router.get("/", getAllProducts);
+router.get("/category/:id", getProductsByCategory);
 router.get("/:id", getProductById);
 
 // Admin-only Routes

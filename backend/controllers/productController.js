@@ -30,6 +30,20 @@ export async function getProductById(req, res) {
   }
 }
 
+export async function getProductsByCategory(req, res) {
+  try {
+    const { id } = req.params;
+    if (!id)
+      return res.status(400).json({ message: "Category ID is required" });
+
+    const products = await Product.findByCategoryId(id);
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export async function createProduct(req, res) {
   try {
     const {
