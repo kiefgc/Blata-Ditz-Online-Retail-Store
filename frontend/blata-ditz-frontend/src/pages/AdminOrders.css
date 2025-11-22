@@ -25,6 +25,42 @@ li {
   gap: clamp(2rem, 4vw, 5rem);
 }
 
+.admin-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #333;
+  margin-bottom: 10px;
+}
+
+.admin-edit-header h3 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.close-edit-modal-btn {
+  background: #000;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1.8rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  padding-bottom: 3px;
+  transition: background-color 0.2s;
+}
+
+.close-edit-modal-btn:hover {
+  background-color: #ff3333;
+}
+
 .sidebar {
   width: 20%;
   min-width: 160px;
@@ -168,16 +204,9 @@ li {
   overflow: hidden;
   overflow-y: auto;
 }
-.admin-orders-popup-close {
-  padding: 1.5rem 2rem 0.5rem 1.5rem;
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: row;
-  width: 100%;
-  cursor: pointer;
-}
+
 .admin-orders-popup-content {
-  padding: 0 5rem 5rem 5rem;
+  padding: 0 2rem 2rem 2rem;
 }
 
 .orders-id {

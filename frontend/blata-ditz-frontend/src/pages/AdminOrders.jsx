@@ -1,411 +1,195 @@
 import "../index.css";
-import "./Landing.css";
 import "./AdminOrders.css";
+import "./Landing.css";
 
-import item from "../assets/item.png";
-
-import AuthForm from "../components/AuthForm.jsx";
-
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const FORM_POSITION_NONE = 0;
-const FORM_POSITION_LOGIN = 1;
-const FORM_POSITION_SIGNUP = 2;
+import OrderPopup from "./pop-ups/OrdersPopup.jsx";
+
+const ordersMock = [
+  {
+    id: "001",
+    date: "06-11-2025",
+    amount: "₱16,450.00",
+    paymentStatus: "PENDING",
+    orderStatus: "PENDING",
+    customer: {
+      email: "dana.alania@fmail.com",
+      contact: "+63 976 348 5930",
+      address: "578 Eymard Sweets, 1354, Quezon City, Metro Manila",
+    },
+    details: [
+      {
+        itemId: "001",
+        qty: 2,
+        name: "Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2",
+        price: "₱16,450.00",
+        image: "/assets/item.png",
+      },
+    ],
+  },
+
+  {
+    id: "002",
+    date: "06-12-2025",
+    amount: "₱5,999.00",
+    paymentStatus: "PAID",
+    orderStatus: "TO SHIP",
+    customer: {
+      email: "sample@user.com",
+      contact: "+63 912 123 4567",
+      address: "Pasig City, Metro Manila",
+    },
+    details: [
+      {
+        itemId: "002",
+        qty: 1,
+        name: "Gaming Mouse RGB Pro",
+        price: "₱5,999.00",
+        image: "/assets/item.png",
+      },
+    ],
+  },
+];
 
 function AdminOrders() {
-  const [showOrdersPopup, setShowOrdersPopup] = useState(false);
-
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+
   useEffect(() => {
-    const searchbarScreenResize = () => {
-      if (window.innerWidth >= 830) {
-        setShowSmallSearchbar(false);
-      }
+    const resizeHandler = () => {
+      if (window.innerWidth >= 830) setShowSmallSearchbar(false);
     };
-    window.addEventListener("resize", searchbarScreenResize);
-
-    searchbarScreenResize();
-    return () => {
-      window.removeEventListener("resize", searchbarScreenResize);
-    };
+    window.addEventListener("resize", resizeHandler);
+    resizeHandler();
+    return () => window.removeEventListener("resize", resizeHandler);
   }, []);
+
   return (
-    <>
-      <div className="admin-container">
-        <div className="header">
-          <h1>
-            Welcome, <span style={{ color: "#FFCF33" }}>Admin!</span>
-          </h1>
+    <div className="admin-container">
+      <div className="header">
+        <h1>
+          Welcome, <span style={{ color: "#FFCF33" }}>Admin!</span>
+        </h1>
+      </div>
+
+      <div className="dashboard">
+        {/* SIDEBAR */}
+        <div className="sidebar">
+          <ul>
+            <li>
+              <Link to="/admin/users" className="unselectedtab">
+                Users
+              </Link>
+            </li>
+
+            <li className="selectedli">
+              <Link to="/admin/orders" className="selectedtab">
+                Orders
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/admin/inventory" className="unselectedtab">
+                Inventory
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/admin/categories" className="unselectedtab">
+                Categories
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/admin/suppliers" className="unselectedtab">
+                Suppliers
+              </Link>
+            </li>
+
+            <li>Log Out</li>
+          </ul>
         </div>
-        <div className="dashboard">
-          <div className="sidebar">
-            <ul>
-              <li>
-                <img
-                  width="24"
-                  height="24"
-                  src="https://img.icons8.com/ios-filled/50/FFFFFF/conference-call.png"
-                  alt="conference-call"
-                />
-                <span>
-                  <Link to="/admin/users" className="unselectedtab">
-                    Users
-                  </Link>
-                </span>
-              </li>
-              <li className="selectedli">
-                <img
-                  width="22"
-                  height="22"
-                  src="https://img.icons8.com/ios-filled/50/FFCF33/untested.png"
-                  alt="untested"
-                />
-                <span>
-                  <Link to="/admin/orders" className="selectedtab">
-                    Orders
-                  </Link>
-                </span>
-              </li>
-              <li>
-                <img
-                  width="24"
-                  height="24"
-                  src="https://img.icons8.com/material-rounded/24/FFFFFF/move-by-trolley.png"
-                  alt="move-by-trolley"
-                />
-                <span>
-                  <Link to="/admin/inventory" className="unselectedtab">
-                    Inventory
-                  </Link>
-                </span>
-              </li>
-              <li>
-                <img
-                  width="24"
-                  height="24"
-                  src="https://img.icons8.com/material-outlined/24/FFFFFF/categorize.png"
-                  alt="categorize"
-                />
-                <span>
-                  <Link to="/admin/categories" className="unselectedtab">
-                    Categories
-                  </Link>
-                </span>
-              </li>
-              <li>
-                <img
-                  width="24"
-                  height="24"
-                  src="https://img.icons8.com/glyph-neue/64/FFFFFF/supplier.png"
-                  alt="supplier"
-                />
-                <span>
-                  <Link to="/admin/suppliers" className="unselectedtab">
-                    Suppliers
-                  </Link>
-                </span>
-              </li>
-              <li>
-                <img
-                  width="24"
-                  height="24"
-                  src="https://img.icons8.com/forma-regular-filled/24/FFFFFF/combo-chart.png"
-                  alt="combo-chart"
-                />
-                <span>
-                  <Link to="/admin/reports" className="unselectedtab">
-                    Reports
-                  </Link>
-                </span>
-              </li>
-              <li>
-                <img
-                  width="21"
-                  height="21"
-                  src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/open-pane.png"
-                  alt="open-pane"
-                />
-                <span>Log Out</span>
-              </li>
-            </ul>
-          </div>
-          <div className="main-content">
-            {/* ORDERS SECTION */}
 
-            <div className="admin-orders-section">
-              <div className="search-bar">
-                <img
-                  width="20"
-                  height="20"
-                  src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
-                  alt="search--v1"
-                />
-                <input type="text" placeholder="Search orders" />
-              </div>
-              <div className="admin-orders-tab">
-                <ul>
-                  <li>All</li>
-                  <li>To Pay</li>
-                  <li>To Ship</li>
-                  <li>To Receive</li>
-                  <li>Completed</li>
-                  <li>Cancelled</li>
-                </ul>
-              </div>
-
-              <div className="admin-orders-columnHeader">
-                <span>Order ID</span>
-                <span>Date</span>
-                <span>Total Amount</span>
-                <span>Payment Status</span>
-                <span>Order Status</span>
-              </div>
-              <div
-                className="admin-orders-list"
-                onClick={() => setShowOrdersPopup(true)}
-              >
-                <span>001</span>
-
-                <span>₱16,450.00</span>
-                <span>06-11-2025</span>
-                <span>
-                  <div className=" details-status-payment details-status-payment-table">
-                    <select
-                      name="details-status-payment"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <option value="" disabled hidden></option>
-                      <option value="payment-pending">PENDING</option>
-                      <option value="paid">PAID</option>
-                      <option value="failed">FAILED</option>
-                    </select>
-                  </div>
-                </span>
-                <span>
-                  <div className=" details-status-payment details-status-payment-table">
-                    <select
-                      name="details-status-payment"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <option value="" disabled hidden></option>
-                      <option value="payment-pending">PENDING</option>
-                      <option value="paid">PAID</option>
-                      <option value="failed">FAILED</option>
-                    </select>
-                  </div>
-                </span>
-              </div>
-              <div className="admin-orders-list">
-                <span>001</span>
-
-                <span>₱16,450.00</span>
-                <span>06-11-2025</span>
-                <span>
-                  <div className=" details-status-payment details-status-payment-table">
-                    <select
-                      name="details-status-payment"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <option value="" disabled hidden></option>
-                      <option value="payment-pending">PENDING</option>
-                      <option value="paid">PAID</option>
-                      <option value="failed">FAILED</option>
-                    </select>
-                  </div>
-                </span>
-                <span>
-                  <div className=" details-status-payment details-status-payment-table">
-                    <select
-                      name="details-status-payment"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <option value="" disabled hidden></option>
-                      <option value="payment-pending">PENDING</option>
-                      <option value="paid">PAID</option>
-                      <option value="failed">FAILED</option>
-                    </select>
-                  </div>
-                </span>
-              </div>
-              <div className="admin-orders-list">
-                <span>001</span>
-
-                <span>₱16,450.00</span>
-                <span>06-11-2025</span>
-                <span>
-                  <div className=" details-status-payment details-status-payment-table">
-                    <select
-                      name="details-status-payment"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <option value="" disabled hidden></option>
-                      <option value="payment-pending">PENDING</option>
-                      <option value="paid">PAID</option>
-                      <option value="failed">FAILED</option>
-                    </select>
-                  </div>
-                </span>
-                <span>
-                  <div className=" details-status-payment details-status-payment-table">
-                    <select
-                      name="details-status-payment"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      <option value="" disabled hidden></option>
-                      <option value="payment-pending">PENDING</option>
-                      <option value="paid">PAID</option>
-                      <option value="failed">FAILED</option>
-                    </select>
-                  </div>
-                </span>
-              </div>
+        {/* MAIN CONTENT */}
+        <div className="main-content">
+          <div className="admin-orders-section">
+            {/* SEARCH BAR */}
+            <div className="search-bar">
+              <img
+                width="20"
+                height="20"
+                src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+                alt="search--v1"
+              />
+              <input type="text" placeholder="Search orders" />
             </div>
 
-            {/* Orders Popup */}
-            {showOrdersPopup && (
-              <div className="admin-orders-popup-overlay">
-                <div className="admin-orders-popup">
-                  <div
-                    className="admin-orders-popup-close"
-                    onClick={() => setShowOrdersPopup(false)}
-                  >
-                    CLOSE
-                  </div>
-                  <div className="admin-orders-popup-content">
-                    <div className="orders-id">
-                      <span className="order-id-title">ID No. </span>
-                      <span className="order-id-no">001</span>
-                    </div>
-                    <div className="order-columns">
-                      <div className="first-column">
-                        <div className="order-details">
-                          <span className="order-detail-title">Date</span>
-                          <span className="order-detail-value">09-23-25</span>
-                        </div>
-                        <div className="order-details">
-                          <span className="order-detail-title">
-                            Customer Contact
-                          </span>
-                          <span className="order-detail-value">
-                            <span>dana.alania@fmail.com</span>
-                            <br />
-                            <span>+63 976 348 5930</span>
-                          </span>
-                        </div>
-                        <div className="order-details">
-                          <span className="order-detail-title">
-                            Shipping Address
-                          </span>
-                          <span className="order-detail-value">
-                            578 Eymard Sweets, 1354, Quezon City, Metro Manila
-                          </span>
-                        </div>
-                      </div>
-                      <div className="second-column">
-                        <div className="order-details">
-                          <span className="order-detail-title">
-                            Payment Method
-                          </span>
-                          <span className="order-detail-value">GCash</span>
-                        </div>
-                        <div className="order-details">
-                          <div className="order-details-status">
-                            <div className=" details-status-payment">
-                              <span className="order-detail-title">
-                                Payment Status
-                              </span>
-                              <select name="details-status-payment">
-                                <option value="" disabled hidden></option>
-                                <option value="payment-pending">PENDING</option>
-                                <option value="paid">PAID</option>
-                                <option value="failed">FAILED</option>
-                              </select>
-                            </div>
+            {/* hEADER */}
+            <div className="admin-orders-tab">
+              {" "}
+              <ul>
+                {" "}
+                <li>All</li> <li>To Pay</li> <li>To Ship</li>{" "}
+                <li>To Receive</li> <li>Completed</li> <li>Cancelled</li>{" "}
+              </ul>{" "}
+            </div>
+            <div className="admin-orders-columnHeader">
+              <span>Order ID</span>
+              <span>Total Amount</span>
+              <span>Date</span>
+              <span>Payment</span>
+              <span>Status</span>
+            </div>
 
-                            <div className=" details-status-order">
-                              <span className="order-detail-title">
-                                Order Status
-                              </span>
-                              <select name="details-status-order">
-                                <option value="" disabled hidden></option>
-                                <option value="order-pending">PENDING</option>
-                                <option value="processing">PROCESSING</option>
-                                <option value="completed">COMPLETED</option>
-                                <option value="cancelled">CANCELLED</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="order-details">
-                      <span className="order-detail-title">Order Details</span>
+            {/* LIST */}
+            {ordersMock.map((order) => (
+              <div
+                key={order.id}
+                className="admin-orders-list"
+                onClick={() => setSelectedOrder(order)}
+              >
+                <span>{order.id}</span>
+                <span>{order.amount}</span>
+                <span>{order.date}</span>
 
-                      <div className="order-details-columnHeader">
-                        <span>ID</span>
-                        <span></span>
-                        <span>Name</span>
-                        <span></span>
-                        <span>Amount</span>
-                      </div>
-                      <div className="order-details-list">
-                        <div className="order-entry">
-                          <span>001</span>
-                          <span>x2</span>
-                          <span>
-                            <div className="order-details-img">
-                              <img
-                                className="order-details-item-img"
-                                src={item}
-                              />
-                            </div>
-                          </span>
-                          <span className="order-details-name">
-                            Transnovo 24-in-1 Game Card Storage Case for
-                            Nintendo Switch 2
-                          </span>
-                          <span>₱16,450.00</span>
-                        </div>
-                      </div>
-                      <div className="order-details-amountbreakdown">
-                        <div className="order-amountbreakdown-details">
-                          <span>Subtotal</span>
-                          <span>₱16,450.00</span>
-                        </div>
-                        <div className="order-amountbreakdown-details">
-                          <span>Shipping</span>
-                          <span>FREE</span>
-                        </div>
-                        <div className="order-amountbreakdown-details">
-                          <span>Total</span>
-                          <span className="amountbreakdown-details-total">
-                            ₱16,450.00
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                <span>
+                  <div className=" details-status-payment details-status-payment-table">
+                    <select onClick={(e) => e.stopPropagation()}>
+                      <option value=""></option>
+                      <option value="PENDING">PENDING</option>
+                      <option value="PAID">PAID</option>
+                      <option value="FAILED">FAILED</option>
+                    </select>
                   </div>
-                </div>
+                </span>
+
+                <span>
+                  <div className=" details-status-payment details-status-payment-table">
+                    <select onClick={(e) => e.stopPropagation()}>
+                      <option value=""></option>
+                      <option value="PENDING">PENDING</option>
+                      <option value="PROCESSING">PROCESSING</option>
+                      <option value="COMPLETED">COMPLETED</option>
+                      <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                  </div>
+                </span>
               </div>
-            )}
+            ))}
           </div>
+
+          {/* POPUP */}
+          {selectedOrder && (
+            <OrderPopup
+              order={selectedOrder}
+              onClose={() => setSelectedOrder(null)}
+            />
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
