@@ -157,10 +157,22 @@ export async function deleteProduct(req, res) {
     const { id } = req.params;
     const result = await Product.delete(id);
 
-    if (result.deletedCount === 0)
+    if (!result || result.status === "not_found") {
       return res.status(404).json({ message: "Product not found" });
+    }
 
-    res.status(200).json({ message: "Product deleted successfully" });
+    if (result.status === "has_active_orders") {
+      return res.status(409).json({
+        message:
+          "Cannot delete product as it is referenced in active orders (pending/processing)",
+      });
+    }
+
+    if (result.status === "deleted") {
+      return res.status(200).json({ message: "Product deleted successfully" });
+    }
+
+    res.status(500).json({ message: "Unexpected delete result" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

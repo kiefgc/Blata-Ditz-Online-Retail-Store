@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../pages/AuthForm.css";
 
-function AuthForm({ isLogin, onClose, onSwitch }) {
+function AuthForm({ isLogin, onClose, onSwitch, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState(""); // renamed from number
@@ -22,6 +22,9 @@ function AuthForm({ isLogin, onClose, onSwitch }) {
           }
         );
         localStorage.setItem("token", response.data.accessToken);
+
+        if (onLoginSuccess) onLoginSuccess();
+
         alert("Login successful!");
         onClose();
         return;
