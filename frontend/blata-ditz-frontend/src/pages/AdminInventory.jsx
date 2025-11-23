@@ -70,7 +70,6 @@ const productsData = [
 
 const ProductRow = ({ product, onEditClick }) => (
   <div className="product-row-clickable" onClick={() => onEditClick(product)}>
-    {" "}
     <div className="product-cell">{product.id}</div>
     <div className="product-cell product-cell-image">
       <img src={product.image} alt={product.name} />
