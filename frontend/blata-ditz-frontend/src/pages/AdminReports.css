@@ -103,6 +103,7 @@ li {
   gap: 15px;
   padding: 5px 10px;
   align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .prodsales-table-rows {
@@ -242,6 +243,9 @@ li {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding-top: 20px; 
+
+  margin-bottom: 4vh;
 }
 
 .stocks-alert-section-header {
@@ -252,4 +256,110 @@ li {
 
 .stocks-alert-section h3 {
   font-size: 1.75rem;
+}
+
+.lowstock-alert-table-container {
+  width: 100%;
+}
+
+.lowstock-table-header,
+.lowstock-table-rows {
+  display: grid;
+  grid-template-columns: 100px 210px 3fr 90px 1.5fr;
+  gap: 15px;
+  padding: 5px 10px;
+  align-items: center;
+}
+
+.lowstock-table-header {
+  font-weight: normal;
+  font-size: 1.15rem;
+  color: #ffcf33;
+  margin-bottom: 10px;
+  padding-top: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lowstock-row {
+  display: contents;
+  cursor: pointer;
+  border-bottom: 1px solid #222;
+  transition: background-color 0.2s ease;
+}
+
+.lowstock-row:hover .lowstock-cell,
+.lowstock-row:hover .lowstock-cell-name {
+  background-color: #1a1a1a;
+}
+
+.lowstock-cell,
+.lowstock-table-header-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 50px;
+  padding: 5px 0;
+  font-size: 1.5rem;
+}
+
+.lowstock-cell-name {
+  display: block;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  padding-right: 10px;
+  word-break: break-word;
+}
+
+.lowstock-count {
+  justify-content: center;
+}
+
+.stock-qty-pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  background-color: #663e00; 
+  color: #ffcf33;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.critical-stock .stock-qty-pill {
+  background-color: #8b0000;
+  color: #ffcccc; 
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); 
+
+.critical-stock .lowstock-cell,
+.critical-stock .lowstock-cell-name {
+  color: #ffcccc; 
+}
+
+.no-low-stock-message {
+  padding: 20px;
+  color: #008000;
+  text-align: center;
+  font-size: 1.25rem;
+  font-style: italic;
+  border: 1px dashed #004d00;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .lowstock-table-header,
+  .lowstock-table-rows {
+    grid-template-columns: 50px 70px 1fr 60px 80px;
+    gap: 8px;
+  }
+  .lowstock-cell,
+  .lowstock-cell-name {
+    font-size: 0.9rem;
+  }
+  .stock-qty-pill {
+    padding: 3px 8px;
+    font-size: 0.8rem;
+  }
+  .lowstock-table-header-cell {
+    font-size: 0.85rem;
+  }
 }
