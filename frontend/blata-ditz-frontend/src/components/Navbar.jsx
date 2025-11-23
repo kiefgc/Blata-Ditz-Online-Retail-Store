@@ -76,12 +76,27 @@ function Navbar({ searchQuery, setSearchQuery }) {
     setShowDropdown((prev) => !prev);
   };
 
-  const handleLogout = (e) => {
-    e.stopPropagation();
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "http://localhost:3000/authentication/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
-    console.log("User logged out!");
-    setIsSignedIn(false);
-    setShowDropdown(false);
+      if (response.ok) {
+        localStorage.removeItem("token");
+
+        window.location.href = "/";
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   useEffect(() => {

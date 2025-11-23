@@ -48,19 +48,64 @@ export class Product {
     return await this.collection().updateOne({ _id }, { $set: updates });
   }
 
+  // static async delete(id) {
+  //   const _id = await this.toObjectId(id);
+
+  //   const product = await this.collection().findOne({ _id });
+  //   if (!product) return null;
+
+  //   if (product.image) {
+  //     const imagePath = path.join(process.cwd(), product.image);
+  //     fs.unlink(imagePath, (err) => {
+  //       if (err) console.error("Failed to delete image: ", err);
+  //     });
+  //   }
+  //   return await this.collection().deleteOne({ _id });
+  // }
+
   static async delete(id) {
     const _id = await this.toObjectId(id);
+    const db = getDB();
 
+    // Find the product
     const product = await this.collection().findOne({ _id });
-    if (!product) return null;
+    if (!product) return { status: "not_found" };
 
-    if (product.image) {
-      const imagePath = path.join(process.cwd(), product.image);
-      fs.unlink(imagePath, (err) => {
-        if (err) console.error("Failed to delete image: ", err);
+    // Step 1: Check order_details for this product
+    const orderDetail = await db
+      .collection("order_details")
+      .findOne({ product_id: _id });
+
+    if (orderDetail) {
+      // Step 2: Check if the linked order is active (pending/processing)
+      const activeStatuses = ["pending", "processing"];
+      const order = await db.collection("orders").findOne({
+        _id: orderDetail.order_id,
+        order_status: { $in: activeStatuses },
       });
+
+      if (order) {
+        return { status: "has_active_orders" };
+      }
     }
-    return await this.collection().deleteOne({ _id });
+
+    // Delete associated image if it exists
+    if (product.image) {
+      try {
+        const imagePath = path.join(process.cwd(), product.image);
+        await fs.promises.unlink(imagePath);
+      } catch (err) {
+        console.error("Failed to delete image: ", err);
+      }
+    }
+
+    // Delete associated inventory records
+    await db.collection("inventory").deleteMany({ product_id: _id });
+
+    // Delete the product itself
+    const result = await this.collection().deleteOne({ _id });
+
+    return { status: "deleted", result };
   }
 
   static async findById(id) {
@@ -70,7 +115,7 @@ export class Product {
 
   static async findByCategoryId(categoryId) {
     const objectId = new ObjectId(categoryId);
-    return this.collection().find({ category_ids: objectId }).toarray();
+    return this.collection().find({ category_ids: objectId }).toArray();
   }
 
   static async getAll(filters = {}) {
