@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "./Product.css";
 import "./Landing.css";
-
 import React from "react";
-
 import item from "../assets/item.png";
 
 function Product() {
+  const { id } = useParams();
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [product, setProduct] = useState(null);
+  const navigate = useNavigate();
   const maxStock = 99;
+  const [categories, setCategories] = useState([]);
+  const [recommended, setRecommended] = useState([]);
+
+  // Handle screen resize
   useEffect(() => {
     const searchbarScreenResize = () => {
       if (window.innerWidth >= 830) {
@@ -17,90 +23,121 @@ function Product() {
       }
     };
     window.addEventListener("resize", searchbarScreenResize);
-
     searchbarScreenResize();
-    return () => {
-      window.removeEventListener("resize", searchbarScreenResize);
-    };
+    return () => window.removeEventListener("resize", searchbarScreenResize);
   }, []);
 
+  // Fetch product details
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/products/${id}`);
+        if (!res.ok) throw new Error("Product not found");
+        const data = await res.json();
+        setProduct(data);
+      } catch (err) {
+        console.error("Failed to load product", err);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data))
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!product || !product.category_ids) return;
+
+    fetch("http://localhost:5000/products")
+      .then((res) => res.json())
+      .then((allProducts) => {
+        const related = allProducts.filter(
+          (p) =>
+            p._id !== product._id && p.category_ids === product.category_ids
+        );
+        setRecommended(related.slice(0, 4));
+      })
+      .catch(console.error);
+  }, [product]);
+
   const decreaseQuantity = () => {
-    setQuantity((prevQuantity) => Math.max(1, prevQuantity - 1));
+    setQuantity((prev) => Math.max(1, prev - 1));
   };
 
   const increaseQuantity = () => {
-    setQuantity((prevQuantity) => Math.min(maxStock, prevQuantity + 1));
+    const max = product?.in_stock ? maxStock : 1;
+    setQuantity((prev) => Math.min(max, prev + 1));
   };
 
   const handleQuantityChange = (event) => {
-    const value = Math.max(
-      1,
-      Math.min(maxStock, Number(event.target.value) || 1)
-    );
+    const max = product?.in_stock ? maxStock : 1;
+    const value = Math.max(1, Math.min(max, Number(event.target.value) || 1));
     setQuantity(value);
   };
+
+  if (!product) return <p>Loading product...</p>;
+
+  // Generate brief description
+  const briefDescription = product.description
+    ? product.description.slice(0, 30) +
+      (product.description.length > 30 ? "..." : "")
+    : "";
 
   return (
     <>
       <div className="page-content">
         <div className="categories">
           <ul>
-            <li>
-              <button>PS5</button>
-            </li>
-            <li>
-              <button>PS4</button>
-            </li>
-            <li>
-              <button>SWITCH</button>
-            </li>
-            <li>
-              <button>XBOX</button>
-            </li>
-            <li>
-              <button>PC/MAC</button>
-            </li>
-            <li>
-              <button>COLLECTIBLES</button>
-            </li>
-            <li>
-              <button>MORE</button>
-            </li>
-            <li>
-              <button>PRE-ORDERS</button>
-            </li>
+            {categories.map((cat) => (
+              <li key={cat._id || "all"}>
+                <button
+                  onClick={() => {
+                    // Redirect to landing page with category query
+                    navigate("/", {
+                      state: { selectedCategory: cat._id },
+                    });
+                  }}
+                >
+                  {cat.category_name.toUpperCase()}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
+
         <div className="main-product-container">
           <div className="main-product-images">
-            <div className="main-product-images-small">
-              <img src="https://picsum.photos/75"></img>
-              <img src="https://picsum.photos/75"></img>
-              <img src="https://picsum.photos/75"></img>
-            </div>
             <div className="main-product-images-main">
-              <img src="https://picsum.photos/200"></img>
+              <img
+                src={`http://localhost:5000${product.image}`}
+                alt={product.product_name}
+              />
             </div>
           </div>
+
           <div className="main-product-descriptions">
-            <p className="main-product-name">Some Product Name Here</p>
+            <p className="main-product-name">{product.product_name}</p>
             <div className="divider"></div>
+
+            {/* Brief description */}
             <p className="main-product-sections">Description</p>
-            <br></br>
+            <br />
             <div className="main-product-textdesc">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </p>
+              <p>{briefDescription}</p>
             </div>
+
             <div className="main-product-descriptions-inline">
-              <p className="main-product-price">₱16,450.00</p>
+              <p className="main-product-price">₱{product.unit_price}</p>
             </div>
             <div className="main-product-descriptions-inline">
               <p className="main-product-sections">Stock:</p>
-              <p className="main-product-text">{maxStock} stocks left</p>
+              <p className="main-product-text">
+                {product.in_stock ? "In stock" : "Out of stock"}
+              </p>
             </div>
             <div className="main-product-descriptions-inline">
               <p className="main-product-sections">Quantity:</p>
@@ -117,13 +154,13 @@ function Product() {
                   className="quantity-input"
                   value={quantity}
                   onChange={handleQuantityChange}
-                  min={"1"}
-                  max={maxStock.toString()}
-                ></input>
+                  min={1}
+                  max={product.in_stock ? maxStock : 1}
+                />
                 <button
                   className="quantity-button"
                   onClick={increaseQuantity}
-                  disabled={quantity >= maxStock}
+                  disabled={quantity >= (product.in_stock ? maxStock : 1)}
                 >
                   +
                 </button>
@@ -135,115 +172,53 @@ function Product() {
             </div>
           </div>
         </div>
+
+        {/* Full description in place of previous hardcoded specs */}
         <div className="product-specficcations">
-          <p className="product-specfications-header">Product Specifications</p>
+          <p className="product-specfications-header">Product Details</p>
           <div className="product-specfications-inner">
             <div className="product-specifications-div">
               <div className="product-specifications-div-left">
-                <p>SPECIFICATIONS</p>
+                <p>Full Description</p>
               </div>
               <div className="product-specifications-div-right">
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-              </div>
-            </div>
-            <div className="product-specifications-div">
-              <div className="product-specifications-div-left">
-                <p>REQUIREMENTS</p>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <p>CONNECTIVITY</p>
-              </div>
-              <div className="product-specifications-div-right">
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
+                <p>{product.description}</p>
               </div>
             </div>
           </div>
         </div>
+
         <p className="recommendations-header">You may also like</p>
         <div className="products">
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">
-                  Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2
-                </span>
+          {recommended.length === 0 ? (
+            <p>No related products available.</p>
+          ) : (
+            recommended.map((item) => (
+              <div className="item" key={item._id}>
+                <div className="item-img">
+                  <img
+                    src={`http://localhost:5000${item.image}`}
+                    alt={item.product_name}
+                  />
+                </div>
+
+                <div className="item-content">
+                  <div className="item-details">
+                    <span className="price">₱{item.unit_price}</span>
+                    <span className="title">{item.product_name}</span>
+                  </div>
+
+                  <div
+                    className="view-item-btn"
+                    onClick={() => navigate(`/product/${item._id}`)}
+                  >
+                    View More
+                  </div>
+                </div>
               </div>
-              <div className="view-item-btn">View More</div>
-            </div>
-          </div>
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">
-                  Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2
-                </span>
-              </div>
-              <div className="view-item-btn">View More</div>
-            </div>
-          </div>
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">
-                  Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2
-                </span>
-              </div>
-              <div className="view-item-btn">View More</div>
-            </div>
-          </div>
-          <div className="item">
-            <div className="item-img">
-              <img src={item} />
-            </div>
-            <div className="item-content">
-              <div className="item-details">
-                <span className="price">₱175.00</span>
-                <span className="title">
-                  Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2
-                </span>
-              </div>
-              <div className="view-item-btn">View More</div>
-            </div>
-          </div>
+            ))
+          )}
         </div>
-      </div>
-      <div className="footer">
-        <a href="#" className="logo">
-          BLATADITZ
-        </a>
-        <p className="copyright">Copyright &copy; 2025</p>
-        <p className="disclaimer">FOR ACADEMIC PURPOSES ONLY</p>
       </div>
     </>
   );

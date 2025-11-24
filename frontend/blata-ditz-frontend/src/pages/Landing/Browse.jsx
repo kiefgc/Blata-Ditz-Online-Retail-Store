@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Browse({ browseRef, searchQuery }) {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null); // null = All
+  const location = useLocation();
+  const initialCategory = location.state?.selectedCategory || null;
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory); // which is null, unless..
 
   // Fetch categories
   useEffect(() => {
-    fetch("http://localhost:3000/categories")
+    fetch("http://localhost:5000/categories")
       .then((res) => res.json())
       .then((data) =>
         setCategories([{ _id: null, category_name: "All" }, ...data])
@@ -20,7 +22,7 @@ function Browse({ browseRef, searchQuery }) {
 
   // Fetch products
   useEffect(() => {
-    fetch("http://localhost:3000/products")
+    fetch("http://localhost:5000/products")
       .then((res) => res.json())
       .then(setProducts)
       .catch(console.error);
@@ -60,7 +62,7 @@ function Browse({ browseRef, searchQuery }) {
             <div className="item" key={product._id}>
               <div className="item-img">
                 <img
-                  src={`http://localhost:3000${product.image}`}
+                  src={`http://localhost:5000${product.image}`}
                   alt={product.product_name}
                 />
               </div>

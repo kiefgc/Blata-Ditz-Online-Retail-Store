@@ -8,7 +8,7 @@ function FeaturedSection({ gototopRef }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/products")
+    fetch("http://localhost:5000/products")
       .then((res) => res.json())
       .then((data) => {
         // Only active products
@@ -96,7 +96,7 @@ function FeaturedSection({ gototopRef }) {
                   newestProducts.map((product) => (
                     <div className="ftgame" key={product._id}>
                       <img
-                        src={`http://localhost:3000${product.image}`}
+                        src={`http://localhost:5000${product.image}`}
                         alt={product.product_name}
                       />
                       <div className="ftgame-title">

@@ -22,6 +22,7 @@ export class Product {
       ...data,
       created_at: new Date(),
       updated_at: new Date(),
+      in_stock: false,
       supplier_id: data.supplier_id || null,
     };
 
