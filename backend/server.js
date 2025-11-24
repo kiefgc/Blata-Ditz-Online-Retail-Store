@@ -5,7 +5,7 @@ import { connectDB } from "./config/db.js";
 import app from "./app.js";
 import { seedFirstAdmin } from "./controllers/adminController.js";
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 async function startServer() {
   try {

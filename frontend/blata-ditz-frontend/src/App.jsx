@@ -21,9 +21,10 @@ function App() {
     <Router>
       <ScrollPosition />
       <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
       <Routes>
         <Route path="/" element={<Landing searchQuery={searchQuery} />} />
-        <Route path="/product" element={<Product />} />
+        <Route path="/product/:id" element={<Product />} />
 
         {/* Admin routes */}
         <Route path="/admin/users" element={<AdminUsers />} />
@@ -33,6 +34,7 @@ function App() {
         <Route path="/admin/suppliers" element={<AdminSuppliers />} />
         <Route path="/admin/reports" element={<AdminReports />} />
       </Routes>
+
       <Footer />
     </Router>
   );

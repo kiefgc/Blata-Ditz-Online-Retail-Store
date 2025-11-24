@@ -80,7 +80,7 @@ function Navbar({ searchQuery, setSearchQuery }) {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:3000/authentication/logout",
+        "http://localhost:5000/authentication/logout",
         {
           method: "POST",
           credentials: "include",

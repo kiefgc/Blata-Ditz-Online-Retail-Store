@@ -5,7 +5,7 @@ import "../pages/AuthForm.css";
 function AuthForm({ isLogin, onClose, onSwitch, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [phone, setPhone] = useState(""); // renamed from number
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -15,7 +15,7 @@ function AuthForm({ isLogin, onClose, onSwitch, onLoginSuccess }) {
     try {
       if (isLogin) {
         const response = await axios.post(
-          "http://localhost:3000/authentication/login",
+          "http://localhost:5000/authentication/login",
           {
             email,
             password,
@@ -36,7 +36,7 @@ function AuthForm({ isLogin, onClose, onSwitch, onLoginSuccess }) {
       }
 
       const response = await axios.post(
-        "http://localhost:3000/authentication/register",
+        "http://localhost:5000/authentication/register",
         {
           email,
           username,
