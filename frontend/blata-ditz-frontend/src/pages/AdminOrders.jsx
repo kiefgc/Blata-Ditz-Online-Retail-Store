@@ -155,15 +155,6 @@ function AdminOrders() {
                 </Link>
               </span>
             </li>
-            <li>
-              <img
-                width="21"
-                height="21"
-                src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/open-pane.png"
-                alt="open-pane"
-              />
-              <span>Log Out</span>
-            </li>
           </ul>
         </div>
 

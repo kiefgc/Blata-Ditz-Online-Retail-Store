@@ -78,7 +78,6 @@ function AdminSuppliers() {
               <li>
                 <Link to="/admin/reports">Reports</Link>
               </li>
-              <li>Log Out</li>
             </ul>
           </div>
 
