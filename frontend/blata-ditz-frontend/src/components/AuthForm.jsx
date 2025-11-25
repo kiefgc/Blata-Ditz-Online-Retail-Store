@@ -16,15 +16,30 @@ function AuthForm({ isLogin, onClose, onSwitch, onLoginSuccess }) {
       if (isLogin) {
         const response = await axios.post(
           "http://localhost:5000/authentication/login",
-          {
-            email,
-            password,
-          }
+          { email, password }
         );
+
         localStorage.setItem("token", response.data.accessToken);
 
-        if (onLoginSuccess) onLoginSuccess();
+        const userRole = response.data.role;
+        localStorage.setItem("role", userRole);
 
+        if (!userRole) {
+          console.error(
+            "Unable to determine user role from response",
+            response.data
+          );
+          alert("Login failed: could not determine role");
+          return;
+        }
+
+        if (userRole === "admin") {
+          window.location.href = "/admin/users"; // redirect to admin dashboard page
+        } else {
+          window.location.href = "/"; // regular customer
+        }
+
+        if (onLoginSuccess) onLoginSuccess();
         alert("Login successful!");
         onClose();
         return;
@@ -45,10 +60,11 @@ function AuthForm({ isLogin, onClose, onSwitch, onLoginSuccess }) {
         }
       );
 
+      console.log("Registration response:", response.data);
       alert("Account created!");
       onSwitch();
     } catch (error) {
-      console.error(error);
+      console.error("Auth error:", error.response?.data || error);
       alert(error.response?.data?.message || "Something went wrong");
     }
   };

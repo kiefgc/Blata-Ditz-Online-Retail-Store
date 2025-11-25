@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import api from "../../api/api";
 import "../Landing.css";
 
 import Banner from "./Banner";

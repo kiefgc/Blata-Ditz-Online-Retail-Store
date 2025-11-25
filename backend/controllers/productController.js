@@ -28,7 +28,6 @@ export async function getProductById(req, res) {
     const inventoryItem = await Inventory.findByProductId(id);
     const inStock = inventoryItem?.stock_quantity > 0;
 
-    // Convert product to a plain JS object safely
     const plainProduct = JSON.parse(JSON.stringify(product));
 
     const productWithStock = {
