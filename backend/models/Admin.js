@@ -11,7 +11,7 @@ export class Admin {
   }
 
   static async create(data) {
-    const hashedPassword = await hashPassword(data.password);
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const adminData = {
       username: data.username,
