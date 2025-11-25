@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import api from "../../api/api";
 import "./SupplierPopups.css";
 
 export const ViewEditPopup = ({ type, supplier, onClose }) => {
@@ -68,17 +69,19 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
   const cancelDelete = () => setShowDeleteConfirmation(false);
 
   const [newSupplier, setNewSupplier] = useState({
-    name: "",
+    supplier_name: "",
+    contact_person: "",
     email: "",
     phone: "",
     address: "",
-    start_date: "",
-    status: "",
   });
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setNewSupplier((prev) => ({ ...prev, [id]: value }));
+    setNewSupplier((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
   };
 
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -124,21 +127,25 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
     if (droppedFiles.length > 0) handleFileChange(droppedFiles);
   };
 
-  const handleSubmitProduct = () => {
-    if (
-      !newSupplier.name ||
-      !newSupplier.email ||
-      !newSupplier.phone ||
-      !newSupplier.address
-    ) {
-      alert("Please fill in the required fields");
+  const handleSubmitProduct = async () => {
+    const { supplier_name, contact_person, email, phone, address, is_active } =
+      newSupplier;
+
+    if (!supplier_name || !contact_person || !email || !phone || !address) {
+      alert("Please fill all required fields");
       return;
     }
 
-    console.log("New Supplier:", newSupplier);
-    console.log("Uploaded Images:", selectedFiles);
-
-    onClose();
+    try {
+      const response = await api.post("/suppliers", newSupplier);
+      alert("Supplier added successfully");
+      onClose();
+    } catch (err) {
+      console.error("Error adding supplier:", err);
+      alert(
+        "Error adding supplier: " + (err.response?.data?.message || err.message)
+      );
+    }
   };
 
   return (
@@ -267,41 +274,55 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
                 <div className="form-fields">
                   {/* Supplier Name */}
                   <div className="supplier-form-group">
-                    <label htmlFor="name">Supplier Name</label>
+                    <label htmlFor="supplier_name">Supplier Name</label>
                     <input
-                      id="name"
-                      value={newSupplier.name}
+                      id="supplier_name"
+                      value={newSupplier.supplier_name}
                       onChange={handleChange}
                       placeholder="Enter supplier name"
                       required
                     />
                   </div>
-                  {/* Supplier Email and Phone */}
-                  <div className="input-email-phone">
-                    <div className="supplier-form-group">
-                      <label htmlFor="email">Email</label>
-                      <input
-                        id="email"
-                        value={newSupplier.email}
-                        onChange={handleChange}
-                        placeholder="Enter email"
-                        required
-                      />
-                    </div>
-                    <div className="supplier-form-group">
-                      <label htmlFor="phone">Phone Number</label>
-                      <input
-                        id="phone"
-                        value={newSupplier.phone}
-                        onChange={handleChange}
-                        placeholder="Enter phone number"
-                        required
-                      />
-                    </div>
-                  </div>
-                  {/* Supplier address */}
+
+                  {/* Contact Person */}
                   <div className="supplier-form-group">
-                    <label htmlFor="address"> Address</label>
+                    <label htmlFor="contact_person">Contact Person</label>
+                    <input
+                      id="contact_person"
+                      value={newSupplier.contact_person}
+                      onChange={handleChange}
+                      placeholder="Enter contact person"
+                      required
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div className="supplier-form-group">
+                    <label htmlFor="email">Email</label>
+                    <input
+                      id="email"
+                      value={newSupplier.email}
+                      onChange={handleChange}
+                      placeholder="Enter email"
+                      required
+                    />
+                  </div>
+
+                  {/* Phone */}
+                  <div className="supplier-form-group">
+                    <label htmlFor="phone">Phone Number</label>
+                    <input
+                      id="phone"
+                      value={newSupplier.phone}
+                      onChange={handleChange}
+                      placeholder="Enter phone number"
+                      required
+                    />
+                  </div>
+
+                  {/* Address */}
+                  <div className="supplier-form-group">
+                    <label htmlFor="address">Address</label>
                     <input
                       id="address"
                       value={newSupplier.address}
@@ -310,98 +331,31 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
                       required
                     />
                   </div>
-                  {/* Supplier date and status */}
-                  <div className="input-email-phone">
-                    <div className="supplier-form-group">
-                      <label htmlFor="date">Start Date</label>
-                      <input
-                        id="date"
-                        value={newSupplier.date}
-                        onChange={handleChange}
-                        placeholder="Enter start date"
-                        required
-                      />
-                    </div>
-                    <div className="supplier-form-group">
-                      <label htmlFor="status">Status</label>
-                      <input
-                        id="status"
-                        value={newSupplier.status}
-                        onChange={handleChange}
-                        placeholder="Enter status"
-                        required
-                      />
-                    </div>
+
+                  {/* Is Active */}
+                  <div className="supplier-form-group">
+                    <label htmlFor="is_active">Active</label>
+                    <select
+                      id="is_active"
+                      value={newSupplier.is_active}
+                      onChange={handleChange}
+                    >
+                      <option value={true}>Yes</option>
+                      <option value={false}>No</option>
+                    </select>
                   </div>
                 </div>
 
-                {/* IMAGE UPLOAD */}
-                <div className="image-upload-area">
-                  <div className="image-preview-wrapper">
-                    {selectedFiles.length > 0 && (
-                      <div className="image-previews-container">
-                        {selectedFiles.map((file, index) => (
-                          <div key={index} className="image-preview-item">
-                            <img src={getFileUrl(file)} alt="" />
-
-                            <button
-                              className="remove-image-btn"
-                              onClick={() => handleRemoveImage(index)}
-                            >
-                              &times;
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={(e) => handleFileChange(e.target.files)}
-                    style={{ display: "none" }}
-                  />
-
-                  <div
-                    className="image-input-drop-zone"
-                    onClick={handleImageAreaClick}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
+                <div className="action-buttons">
+                  <button className="supplier-cancel-btn" onClick={onClose}>
+                    Cancel
+                  </button>
+                  <button
+                    className="add-supplier-final-btn"
+                    onClick={handleSubmitProduct}
                   >
-                    {selectedFiles.length === 0 ? (
-                      <>
-                        <div className="image-icon-placeholder"></div>
-                        <p>Select or drop images to upload</p>
-                      </>
-                    ) : (
-                      <>
-                        <img
-                          width="24"
-                          height="24"
-                          src="https://img.icons8.com/ios-filled/50/CCCCCC/plus-math.png"
-                          alt="plus"
-                          className="plus-icon-small"
-                        />
-                        <p>Click or drag to add more images</p>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="action-buttons">
-                    <button className="supplier-cancel-btn" onClick={onClose}>
-                      Cancel
-                    </button>
-                    <button
-                      className="add-supplier-final-btn"
-                      onClick={handleSubmitProduct}
-                    >
-                      Add supplier
-                    </button>
-                  </div>
+                    Add Supplier
+                  </button>
                 </div>
               </div>
             </div>

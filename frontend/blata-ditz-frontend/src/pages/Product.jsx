@@ -15,7 +15,6 @@ function Product() {
   const [categories, setCategories] = useState([]);
   const [recommended, setRecommended] = useState([]);
 
-  // Handle screen resize
   useEffect(() => {
     const searchbarScreenResize = () => {
       if (window.innerWidth >= 830) {
@@ -27,7 +26,6 @@ function Product() {
     return () => window.removeEventListener("resize", searchbarScreenResize);
   }, []);
 
-  // Fetch product details
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -81,7 +79,6 @@ function Product() {
 
   if (!product) return <p>Loading product...</p>;
 
-  // Generate brief description
   const briefDescription = product.description
     ? product.description.slice(0, 30) +
       (product.description.length > 30 ? "..." : "")
@@ -96,7 +93,6 @@ function Product() {
               <li key={cat._id || "all"}>
                 <button
                   onClick={() => {
-                    // Redirect to landing page with category query
                     navigate("/", {
                       state: { selectedCategory: cat._id },
                     });
