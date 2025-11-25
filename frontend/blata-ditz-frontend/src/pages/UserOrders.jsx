@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import "./UserDashboard.css";
+import "./UserOrders.css";
 import "./Landing.css";
-import "./UserOrders.jsx";
 import OrderPopup from "./pop-ups/UserOrderPopup.jsx";
 
 const ordersMock = [
@@ -26,6 +25,29 @@ const ordersMock = [
         qty: 2,
         name: "Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2",
         price: "₱16,450.00",
+        image: "/assets/item.png",
+      },
+    ],
+  },
+
+  {
+    id: "002",
+    productName: "Gaming Mouse RGB Pro",
+    date: "06-12-2025",
+    amount: "₱5,999.00",
+    paymentStatus: "PAID",
+    orderStatus: "COMPLETED",
+    customer: {
+      email: "dana.alania@fmail.com",
+      contact: "+63 976 348 5930",
+      address: "578 Eymard Sweets, 1354, Quezon City, Metro Manila",
+    },
+    details: [
+      {
+        itemId: "002",
+        qty: 1,
+        name: "Gaming Mouse RGB Pro",
+        price: "₱5,999.00",
         image: "/assets/item.png",
       },
     ],
@@ -71,7 +93,7 @@ function UserDashboard() {
                   alt="home--v1"
                 />
                 <span>
-                  <a href="/dashboard" className="selectedtab">
+                  <a href="/dashboard" className="unselectedtab">
                     Home
                   </a>
                 </span>
@@ -84,7 +106,7 @@ function UserDashboard() {
                   alt="purchase-order--v1"
                 />
                 <span>
-                  <a href="/dashboard/orders" className="unselectedtab">
+                  <a href="/dashboard/orders" className="selectedtab">
                     Orders
                   </a>
                 </span>
@@ -117,10 +139,26 @@ function UserDashboard() {
           {/*MAIN CONTENT*/}
           <div className="main-content">
             <div className="user-orders-section">
-              <div className="header">
-                <h1>
-                  <span style={{ color: "#FFCF33" }}>Current Orders</span>
-                </h1>
+              <div className="search-bar">
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+                  alt="search--v1"
+                />
+                <input
+                  type="text"
+                  placeholder="Search order by ID or product name"
+                />
+              </div>
+
+              <div className="user-orders-tab">
+                {" "}
+                <ul>
+                  {" "}
+                  <li>All</li> <li>To Pay</li> <li>To Ship</li>{" "}
+                  <li>To Receive</li> <li>Completed</li> <li>Cancelled</li>{" "}
+                </ul>{" "}
               </div>
 
               <div className="user-orders-columnHeader">

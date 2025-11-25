@@ -5,6 +5,9 @@ import ScrollPosition from "./pages/ScrollPosition";
 
 import Landing from "./pages/Landing/Landing";
 import Product from "./pages/Product";
+import UserDashboard from "./pages/UserDashboard";
+import UserOrders from "./pages/UserOrders";
+
 import AdminUsers from "./pages/AdminUsers";
 import AdminOrders from "./pages/AdminOrders";
 import AdminInventory from "./pages/AdminInventory";
@@ -25,6 +28,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing searchQuery={searchQuery} />} />
         <Route path="/product/:id" element={<Product />} />
+        <Route path="/dashboard" element={<UserDashboard />} />
+        <Route path="/dashboard/orders" element={<UserOrders />} />
 
         {/* Admin routes */}
         <Route path="/admin/users" element={<AdminUsers />} />
