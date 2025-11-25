@@ -26,10 +26,19 @@ export async function getSupplierById(req, res) {
 
 export async function addSupplier(req, res) {
   try {
-    const { supplier_name, contact_person, email, phone, address } = req.body;
+    const { supplier_name, contact_person, email, phone, address, is_active } =
+      req.body;
 
-    if (!supplier_name || !contact_person || !email || !phone || !address)
+    if (
+      !supplier_name ||
+      !contact_person ||
+      !email ||
+      !phone ||
+      !address ||
+      is_active === undefined
+    ) {
       return res.status(400).json({ message: "Missing required fields" });
+    }
 
     const errors = [];
     if (email && !validators.isValidEmail(email)) {
@@ -43,10 +52,13 @@ export async function addSupplier(req, res) {
     }
 
     const existingSupplier = await Supplier.findByEmail(email);
-    if (existingSupplier)
+    if (existingSupplier) {
       return res
         .status(400)
         .json({ message: "Supplier with this email already exists" });
+    }
+
+    const active = is_active === true || is_active === "true";
 
     await Supplier.create({
       supplier_name,
@@ -54,7 +66,7 @@ export async function addSupplier(req, res) {
       email,
       phone,
       address,
-      is_active: true,
+      is_active: active,
     });
 
     res.status(201).json({ message: "Supplier added successfully" });
