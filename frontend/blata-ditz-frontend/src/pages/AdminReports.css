@@ -88,12 +88,26 @@ li {
 }
 
 .product-sales-section-header {
+  width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items:  center;
 }
 
 .product-sales-section-header h2 {
   font-size: 1.75rem;
+}
+
+.custom-select-reports {
+  margin-right: 0;
+  select {
+    background-color: #1a1a1a;
+    color: #d5d6d9;
+    font-weight: 300;
+
+    padding: 5px 20px;
+  }
 }
 
 .prodsales-table-header,
@@ -250,8 +264,11 @@ li {
 
 .stocks-alert-section-header {
   width: 100%;
+  width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items:  center;
 }
 
 .stocks-alert-section h3 {
