@@ -271,7 +271,7 @@ input[type="checkbox"] {
   z-index: 1000;
 }
 
-.modal-content {
+.modal-content-inventory {
   background-color: #131416;
 
   padding: 0;

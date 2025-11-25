@@ -147,7 +147,7 @@ export const ProductCreateModal = ({ brandName, onClose }) => {
   };
   return (
     <div className="modal-backdrop">
-      <div className="modal-content">
+      <div className="modal-content-inventory">
         <div className="product-create-form-container">
           <div className="product-edit-header">
             <h3>Add New Product</h3>
