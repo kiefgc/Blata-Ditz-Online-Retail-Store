@@ -284,9 +284,6 @@ function AdminInventory() {
                     }`}
                     onClick={() => toggleBrand(brandData.brand)}
                   >
-                    <div className="brand-logo-container">
-                      <span className="brand-logo-text">{brandData.logo}</span>
-                    </div>
                     <span className="brand-name">{brandData.brand}</span>
                     <img
                       width="20"
