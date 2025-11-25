@@ -3,12 +3,18 @@ import api from "../../api/api";
 import "./SupplierPopups.css";
 
 export const ViewEditPopup = ({ type, supplier, onClose }) => {
-  const [name, setName] = useState(supplier?.name || "");
+  const [supplierName, setSupplierName] = useState(
+    supplier?.supplier_name || ""
+  );
+  const [contactPerson, setContactPerson] = useState(
+    supplier?.contact_person || ""
+  );
   const [email, setEmail] = useState(supplier?.email || "");
-  const [phone, setPhone] = useState(supplier?.phone_number || "");
+  const [phone, setPhone] = useState(supplier?.phone || "");
   const [address, setAddress] = useState(supplier?.address || "");
-  const [date, setDate] = useState(supplier?.start_date || "");
-  const [status, setStatus] = useState(supplier?.status || "active");
+  const [isActive, setIsActive] = useState(
+    supplier?.is_active ? "active" : "inactive"
+  );
 
   const [fieldBeingEdit, setFieldBeingEdit] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -43,27 +49,40 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
     );
   };
 
-  const handleUpdate = () => {
-    const updatedSupplier = {
-      id: supplier.id,
-      name,
-      email,
-      phone,
-      address,
-      start_date,
-      status,
-    };
+  const handleUpdate = async () => {
+    try {
+      const payload = {
+        supplier_name: supplierName,
+        contact_person: contactPerson,
+        email,
+        phone,
+        address,
+        is_active: isActive === "active",
+      };
 
-    console.log("Updated Supplier:", updatedSupplier);
-    onClose();
+      const res = await api.patch(`/suppliers/${supplier._id}`, payload);
+
+      console.log("Updated!", res.data);
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
   };
 
   const handleDelete = () => setShowDeleteConfirmation(true);
 
-  const confirmDelete = () => {
-    console.log("Deleted Supplier:", supplier?.name);
-    setShowDeleteConfirmation(false);
-    onClose();
+  const confirmDelete = async () => {
+    try {
+      await api.delete(`/suppliers/${supplier._id}`);
+      alert("Supplier deleted successfully!");
+      setShowDeleteConfirmation(false);
+      onClose();
+    } catch (err) {
+      console.error("Error deleting supplier:", err);
+      alert(
+        "Error deleting supplier: " +
+          (err.response?.data?.message || err.message)
+      );
+    }
   };
 
   const cancelDelete = () => setShowDeleteConfirmation(false);
@@ -78,9 +97,10 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
+
     setNewSupplier((prev) => ({
       ...prev,
-      [id]: value,
+      [id]: id === "is_active" ? value === "true" : value, // convert select to boolean
     }));
   };
 
@@ -128,7 +148,7 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
   };
 
   const handleSubmitProduct = async () => {
-    const { supplier_name, contact_person, email, phone, address, is_active } =
+    const { supplier_name, contact_person, email, phone, address } =
       newSupplier;
 
     if (!supplier_name || !contact_person || !email || !phone || !address) {
@@ -137,7 +157,7 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
     }
 
     try {
-      const response = await api.post("/suppliers", newSupplier);
+      await api.post("/suppliers", newSupplier); // is_active already boolean
       alert("Supplier added successfully");
       onClose();
     } catch (err) {
@@ -172,8 +192,14 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
             <div className="supplier-details">
               <div className="supplier-details-column1">
                 <div className="supplier-details-value">
-                  <span className="s-detail-heading">Name</span>
-                  {editField("name", name, setName)}
+                  <span className="s-detail-heading">Supplier Name</span>
+                  {editField("supplier_name", supplierName, setSupplierName)}
+                  <hr />
+                </div>
+
+                <div className="supplier-details-value">
+                  <span className="s-detail-heading">Contact Person</span>
+                  {editField("contact_person", contactPerson, setContactPerson)}
                   <hr />
                 </div>
 
@@ -188,33 +214,23 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
                   {editField("phone", phone, setPhone)}
                   <hr />
                 </div>
-              </div>
 
-              <div>
                 <div className="supplier-details-value address">
                   <span className="s-detail-heading">Address</span>
                   {editField("address", address, setAddress)}
                   <hr />
                 </div>
 
-                <div className="details-date-status">
-                  <div className="supplier-details-value">
-                    <span className="s-detail-heading">Start Date</span>
-                    {editField("date", date, setDate)}
-                    <hr />
-                  </div>
-
-                  <div className="supplier-details-value">
-                    <span className="s-detail-heading">Status</span>
-                    <select
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                      className="status-dropdown"
-                    >
-                      <option value="active">ACTIVE</option>
-                      <option value="inactive">INACTIVE</option>
-                    </select>
-                  </div>
+                <div className="supplier-details-value">
+                  <span className="s-detail-heading">Status</span>
+                  <select
+                    value={isActive}
+                    onChange={(e) => setIsActive(e.target.value)}
+                    className="status-dropdown"
+                  >
+                    <option value="active">ACTIVE</option>
+                    <option value="inactive">INACTIVE</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -238,7 +254,7 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
             <h3>Delete Supplier?</h3>
             <p>
               Are you sure you want to permanently delete{" "}
-              <strong>{supplier?.name}</strong>?
+              <strong>{supplier?.supplier_name}</strong>?
               <br />
               This action cannot be undone.
             </p>
@@ -337,11 +353,11 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
                     <label htmlFor="is_active">Active</label>
                     <select
                       id="is_active"
-                      value={newSupplier.is_active}
+                      value={newSupplier.is_active ? "true" : "false"} // always string for select
                       onChange={handleChange}
                     >
-                      <option value={true}>Yes</option>
-                      <option value={false}>No</option>
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
                     </select>
                   </div>
                 </div>
