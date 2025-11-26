@@ -54,6 +54,25 @@ const ordersMock = [
 ];
 
 function AdminOrders() {
+  const [selectedTab, setSelectedTab] = useState("All");
+
+  const filteredOrders = ordersMock.filter((order) => {
+    switch (selectedTab) {
+      case "To Pay":
+        return order.paymentStatus === "PENDING";
+      case "To Ship":
+        return order.orderStatus === "TO SHIP";
+      case "To Receive":
+        return order.orderStatus === "TO RECEIVE";
+      case "Completed":
+        return order.orderStatus === "COMPLETED";
+      case "Cancelled":
+        return order.orderStatus === "CANCELLED";
+      default:
+        return true;
+    }
+  });
+
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
@@ -175,10 +194,23 @@ function AdminOrders() {
             <div className="admin-orders-tab">
               {" "}
               <ul>
-                {" "}
-                <li>All</li> <li>To Pay</li> <li>To Ship</li>{" "}
-                <li>To Receive</li> <li>Completed</li> <li>Cancelled</li>{" "}
-              </ul>{" "}
+                {[
+                  "All",
+                  "To Pay",
+                  "To Ship",
+                  "To Receive",
+                  "Completed",
+                  "Cancelled",
+                ].map((tab) => (
+                  <li
+                    key={tab}
+                    className={selectedTab === tab ? "selected-order-tab" : ""}
+                    onClick={() => setSelectedTab(tab)}
+                  >
+                    {tab}
+                  </li>
+                ))}
+              </ul>
             </div>
             <div className="admin-orders-columnHeader">
               <span>Order ID</span>
@@ -189,7 +221,7 @@ function AdminOrders() {
             </div>
 
             {/* LIST */}
-            {ordersMock.map((order) => (
+            {filteredOrders.map((order) => (
               <div
                 key={order.id}
                 className="admin-orders-list"
@@ -200,7 +232,7 @@ function AdminOrders() {
                 <span>{order.date}</span>
 
                 <span>
-                  <div className=" details-status-payment details-status-payment-table">
+                  <div className="details-status-payment details-status-payment-table">
                     <select onClick={(e) => e.stopPropagation()}>
                       <option value=""></option>
                       <option value="PENDING">PENDING</option>
@@ -211,7 +243,7 @@ function AdminOrders() {
                 </span>
 
                 <span>
-                  <div className=" details-status-payment details-status-payment-table">
+                  <div className="details-status-payment details-status-payment-table">
                     <select onClick={(e) => e.stopPropagation()}>
                       <option value=""></option>
                       <option value="PENDING">PENDING</option>

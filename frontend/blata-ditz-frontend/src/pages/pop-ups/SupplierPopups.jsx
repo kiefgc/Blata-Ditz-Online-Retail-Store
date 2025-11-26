@@ -277,7 +277,10 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
       {/* ADD SUPPLIER  */}
       {type === "add" && (
         <div className="modal-backdrop">
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modal-content-suppliers"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="supplier-create-form-container">
               <div className="supplier-edit-header">
                 <h3>Add New Supplier</h3>
@@ -287,7 +290,7 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
               </div>
 
               <div className="supplier-create-body">
-                <div className="form-fields">
+                <div className="form-fields-supppliers">
                   {/* Supplier Name */}
                   <div className="supplier-form-group">
                     <label htmlFor="supplier_name">Supplier Name</label>
