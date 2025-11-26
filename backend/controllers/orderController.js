@@ -155,17 +155,38 @@ export async function updateOrderStatus(req, res) {
     }
 
     const { id } = req.params;
-    const { order_status } = req.body;
+    const { order_status, payment_status } = req.body;
 
-    if (!order_status || !Order.orderStatuses.includes(order_status)) {
-      return res.status(400).json({ message: "Invalid order status" });
+    // Build allowed fields dynamically
+    const updates = {};
+
+    // Validate order_status if provided
+    if (order_status !== undefined) {
+      if (!Order.orderStatuses.includes(order_status)) {
+        return res.status(400).json({ message: "Invalid order status" });
+      }
+      updates.order_status = order_status;
     }
 
-    const result = await Order.update(id, { order_status });
-    if (result.matchedCount === 0)
-      return res.status(404).json({ message: "Order not found" });
+    // Validate payment_status if provided
+    if (payment_status !== undefined) {
+      if (!Order.paymentStatuses.includes(payment_status)) {
+        return res.status(400).json({ message: "Invalid payment status" });
+      }
+      updates.payment_status = payment_status;
+    }
 
-    res.status(200).json({ message: "Order status updated successfully" });
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: "No valid fields to update" });
+    }
+
+    const result = await Order.update(id, updates);
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Order updated successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

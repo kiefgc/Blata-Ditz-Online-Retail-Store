@@ -16,7 +16,6 @@ const processQueue = (error, token = null) => {
       prom.resolve(token);
     }
   });
-
   failedQueue = [];
 };
 
@@ -34,7 +33,7 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 403 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -50,11 +49,11 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.get(
+        // <-- Updated to your backend route
+        const res = await axios.post(
           "http://localhost:5000/authentication/refresh",
-          {
-            withCredentials: true,
-          }
+          {},
+          { withCredentials: true }
         );
 
         const newAccessToken = res.data.accessToken;
@@ -69,7 +68,7 @@ api.interceptors.response.use(
         processQueue(err, null);
         localStorage.removeItem("token");
         localStorage.removeItem("role");
-        window.location.href = "/login";
+        window.location.href = "/";
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

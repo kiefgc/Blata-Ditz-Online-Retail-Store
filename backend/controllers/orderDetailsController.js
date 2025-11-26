@@ -96,9 +96,21 @@ export async function updateOrderDetail(req, res) {
       return res.status(404).json({ message: "Order detail not found" });
     }
 
+    const order = await Order.getById(existing.order_id);
+    if (!order) {
+      return res.status(404).json({ message: "Parent order not found" });
+    }
+
+    if (req.user.role === "customer") {
+      if (order.customer_id.toString() !== req.user.id.toString()) {
+        return res
+          .status(403)
+          .json({ message: "Forbidden: cannot update others' orders" });
+      }
+    }
+
     const qty = updates.quantity || existing.quantity;
     const price = updates.unit_price || existing.unit_price;
-
     updates.subtotal = qty * price;
 
     await OrderDetails.update(id, updates);
