@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AuthForm from "../components/AuthForm.jsx";
+import Cart from "../components/Cart.jsx";
 
 const FORM_POSITION_NONE = 0;
 const FORM_POSITION_LOGIN = 1;
@@ -12,7 +13,10 @@ function Navbar({ searchQuery, setSearchQuery }) {
     useState(false); /* For changing navbar icons when user logged in */
 
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showCartPopup, setShowCartPopup] = useState(false);
+
   const userIconRef = useRef(null);
+  const cartIconRef = useRef(null);
 
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
@@ -74,6 +78,14 @@ function Navbar({ searchQuery, setSearchQuery }) {
   const clickUserIcon = (e) => {
     e.stopPropagation();
     setShowDropdown((prev) => !prev);
+    setShowCartPopup(false);
+  };
+
+  const clickCartIcon = (e) => {
+    e.stopPropagation();
+    setShowCartPopup((prev) => !prev);
+    setShowDropdown(false);
+    closeForm();
   };
 
   const handleLogout = async (e) => {
@@ -112,6 +124,14 @@ function Navbar({ searchQuery, setSearchQuery }) {
       ) {
         setShowDropdown(false);
       }
+
+      if (
+        showCartPopup &&
+        cartIconRef.current &&
+        !cartIconRef.current.contains(event.target)
+      ) {
+        setShowCartPopup(false);
+      }
     };
 
     document.addEventListener("click", handleOutsideClick);
@@ -119,7 +139,7 @@ function Navbar({ searchQuery, setSearchQuery }) {
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
-  }, [activeFormPosition, showDropdown]);
+  }, [activeFormPosition, showDropdown, showCartPopup]);
 
   return (
     <>
@@ -166,14 +186,21 @@ function Navbar({ searchQuery, setSearchQuery }) {
                   onClick={() => setShowSmallSearchbar(!showSmallSearchbar)}
                 />
               </a>
-              <a href="#">
+              <div
+                className="pop-up-parent-container"
+                ref={cartIconRef}
+                onClick={clickCartIcon}
+              >
                 <img
                   width="30"
                   height="30"
                   src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/shopping-cart.png"
                   alt="shopping-cart"
                 />
-              </a>
+                {showCartPopup && (
+                  <Cart onClose={() => setShowCartPopup(false)} />
+                )}
+              </div>
               <div
                 className="pop-up-parent-container"
                 ref={userIconRef}
