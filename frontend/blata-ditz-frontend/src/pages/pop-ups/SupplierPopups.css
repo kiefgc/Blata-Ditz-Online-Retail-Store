@@ -272,7 +272,8 @@
   z-index: 1000;
 }
 
-.modal-content {
+.modal-content,
+.modal-content-suppliers {
   background-color: #131416;
 
   padding: 0;
@@ -293,16 +294,17 @@
 
 .supplier-create-body {
   display: flex;
+  flex-direction: column;
   gap: 20px;
+  padding: 2rem;
 }
 
-.form-fields {
+.form-fields-suppliers {
   flex: 2;
-  padding: 2rem;
+
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  border-right: 1px solid #333;
 }
 
 .image-preview-wrapper {
@@ -424,6 +426,7 @@
   color: #f0f0f0;
   font-size: 1.25rem;
   font-weight: 400;
+  margin-bottom: 15px;
 }
 /**/
 
@@ -461,16 +464,6 @@
 
 .select-group .supplier-form-group {
   flex: 1;
-}
-
-.image-icon-placeholder {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 10px;
-  background-image: url("https://img.icons8.com/ios/50/000000/image.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  filter: invert(1);
 }
 
 .action-buttons {
