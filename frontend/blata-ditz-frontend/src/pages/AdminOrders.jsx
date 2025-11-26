@@ -1,61 +1,55 @@
 import "../index.css";
 import "./AdminOrders.css";
 import "./Landing.css";
+import api from "../api/api";
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import OrderPopup from "./pop-ups/OrdersPopup.jsx";
 
-const ordersMock = [
-  {
-    id: "001",
-    date: "06-11-2025",
-    amount: "₱16,450.00",
-    paymentStatus: "PENDING",
-    orderStatus: "PENDING",
-    customer: {
-      email: "dana.alania@fmail.com",
-      contact: "+63 976 348 5930",
-      address: "578 Eymard Sweets, 1354, Quezon City, Metro Manila",
-    },
-    details: [
-      {
-        itemId: "001",
-        qty: 2,
-        name: "Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2",
-        price: "₱16,450.00",
-        image: "/assets/item.png",
-      },
-    ],
-  },
-
-  {
-    id: "002",
-    date: "06-12-2025",
-    amount: "₱5,999.00",
-    paymentStatus: "PAID",
-    orderStatus: "TO SHIP",
-    customer: {
-      email: "sample@user.com",
-      contact: "+63 912 123 4567",
-      address: "Pasig City, Metro Manila",
-    },
-    details: [
-      {
-        itemId: "002",
-        qty: 1,
-        name: "Gaming Mouse RGB Pro",
-        price: "₱5,999.00",
-        image: "/assets/item.png",
-      },
-    ],
-  },
-];
-
 function AdminOrders() {
+  const [selectedTab, setSelectedTab] = useState("All");
+  const [orders, setOrders] = useState([]);
+  const filteredOrders = orders.filter((order) => {
+    switch (selectedTab) {
+      case "To Pay":
+        return order.payment_status === "pending";
+      case "To Ship":
+        return order.order_status === "processing";
+      case "To Receive":
+        return order.order_status === "completed";
+      case "Completed":
+        return order.order_status === "completed";
+      case "Cancelled":
+        return order.order_status === "cancelled";
+      default:
+        return true;
+    }
+  });
+
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await api.get("/orders/");
+        const data = response.data;
+
+        if (Array.isArray(data)) {
+          setOrders(data);
+        } else {
+          console.error("Expected array, got:", data);
+          setOrders([]);
+        }
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   useEffect(() => {
     const resizeHandler = () => {
@@ -175,10 +169,23 @@ function AdminOrders() {
             <div className="admin-orders-tab">
               {" "}
               <ul>
-                {" "}
-                <li>All</li> <li>To Pay</li> <li>To Ship</li>{" "}
-                <li>To Receive</li> <li>Completed</li> <li>Cancelled</li>{" "}
-              </ul>{" "}
+                {[
+                  "All",
+                  "To Pay",
+                  "To Ship",
+                  "To Receive",
+                  "Completed",
+                  "Cancelled",
+                ].map((tab) => (
+                  <li
+                    key={tab}
+                    className={selectedTab === tab ? "selected-order-tab" : ""}
+                    onClick={() => setSelectedTab(tab)}
+                  >
+                    {tab}
+                  </li>
+                ))}
+              </ul>
             </div>
             <div className="admin-orders-columnHeader">
               <span>Order ID</span>
@@ -189,37 +196,29 @@ function AdminOrders() {
             </div>
 
             {/* LIST */}
-            {ordersMock.map((order) => (
+            {filteredOrders.map((order) => (
               <div
-                key={order.id}
+                key={order._id}
                 className="admin-orders-list"
-                onClick={() => setSelectedOrder(order)}
+                onClick={() => setSelectedOrder(order)} // <-- THIS opens the popup
               >
-                <span>{order.id}</span>
-                <span>{order.amount}</span>
-                <span>{order.date}</span>
+                <span>{order._id}</span>
 
                 <span>
-                  <div className=" details-status-payment details-status-payment-table">
-                    <select onClick={(e) => e.stopPropagation()}>
-                      <option value=""></option>
-                      <option value="PENDING">PENDING</option>
-                      <option value="PAID">PAID</option>
-                      <option value="FAILED">FAILED</option>
-                    </select>
-                  </div>
+                  ₱
+                  {order.total_amount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}
                 </span>
 
-                <span>
-                  <div className=" details-status-payment details-status-payment-table">
-                    <select onClick={(e) => e.stopPropagation()}>
-                      <option value=""></option>
-                      <option value="PENDING">PENDING</option>
-                      <option value="PROCESSING">PROCESSING</option>
-                      <option value="COMPLETED">COMPLETED</option>
-                      <option value="CANCELLED">CANCELLED</option>
-                    </select>
-                  </div>
+                <span>{new Date(order.order_date).toLocaleDateString()}</span>
+
+                <span className="payment-status">
+                  {order.payment_status.toUpperCase()}
+                </span>
+
+                <span className="order-status">
+                  {order.order_status.toUpperCase()}
                 </span>
               </div>
             ))}

@@ -142,6 +142,11 @@ li {
   text-transform: uppercase;
   color: #ffcf33;
   flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.selected-order-tab {
+  color: #d5d6d9;
 }
 
 .admin-orders-columnHeader,
@@ -158,18 +163,18 @@ li {
 
 .admin-orders-list {
   color: white;
-  background-image: linear-gradient(to top, #131416, #070709);
+  background-image: linear-gradient(to top, #101011, #070709);
   padding-top: 3rem;
   padding-bottom: 3rem;
   border-radius: 15px;
-  margin-bottom: 5px;
+  transition: 0.3s ease;
   overflow: hidden;
   cursor: pointer;
 }
 
 .admin-orders-list:hover {
   background-image: none;
-  background-color: #131416;
+  background-color: #00000080;
 }
 
 .admin-orders-list span,

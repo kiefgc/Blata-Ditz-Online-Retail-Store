@@ -1,9 +1,9 @@
 import { getDB } from "../config/db.js";
 import { ObjectId } from "mongodb";
 
-export class Order {
+export class OrderDetails {
   static collection() {
-    return getDB().collection("orders");
+    return getDB().collection("order_details");
   }
 
   static toObjectId(id) {
@@ -22,6 +22,12 @@ export class Order {
 
   static async getById(id) {
     return await this.collection().findOne({ _id: this.toObjectId(id) });
+  }
+
+  static async getByOrderId(order_id) {
+    return await this.collection()
+      .find({ order_id: this.toObjectId(order_id) })
+      .toArray();
   }
 
   static async update(id, updates) {
@@ -46,3 +52,5 @@ export class Order {
       .toArray();
   }
 }
+
+export default OrderDetails;
