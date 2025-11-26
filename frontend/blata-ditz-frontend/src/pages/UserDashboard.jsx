@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import "./UserDashboard.css";
 import "./Landing.css";
-import "./UserOrders.jsx";
 import OrderPopup from "./pop-ups/UserOrderPopup.jsx";
 
 const ordersMock = [
@@ -97,7 +96,7 @@ function UserDashboard() {
                   alt="user--v1"
                 />
                 <span>
-                  <a href="/dashboard/orders" className="unselectedtab">
+                  <a href="/dashboard/profile" className="unselectedtab">
                     Profile
                   </a>
                 </span>
@@ -122,7 +121,6 @@ function UserDashboard() {
                   <span style={{ color: "#FFCF33" }}>Current Orders</span>
                 </h1>
               </div>
-
               <div className="user-orders-columnHeader">
                 <span>Order ID</span>
                 <span>Product Name</span>
@@ -135,7 +133,7 @@ function UserDashboard() {
               {ordersMock.map((order) => (
                 <div
                   key={order.id}
-                  className="admin-orders-list"
+                  className="user-orders-list"
                   onClick={() => setSelectedOrder(order)}
                 >
                   <span>{order.id}</span>

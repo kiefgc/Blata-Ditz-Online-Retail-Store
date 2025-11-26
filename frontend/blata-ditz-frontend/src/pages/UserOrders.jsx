@@ -119,7 +119,7 @@ function UserDashboard() {
                   alt="user--v1"
                 />
                 <span>
-                  <a href="/dashboard/orders" className="unselectedtab">
+                  <a href="/dashboard/profile" className="unselectedtab">
                     Profile
                   </a>
                 </span>
@@ -173,7 +173,7 @@ function UserDashboard() {
               {ordersMock.map((order) => (
                 <div
                   key={order.id}
-                  className="admin-orders-list"
+                  className="user-orders-list"
                   onClick={() => setSelectedOrder(order)}
                 >
                   <span>{order.id}</span>

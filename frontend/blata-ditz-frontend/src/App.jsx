@@ -7,6 +7,7 @@ import Landing from "./pages/Landing/Landing";
 import Product from "./pages/Product";
 import UserDashboard from "./pages/UserDashboard";
 import UserOrders from "./pages/UserOrders";
+import UserProfile from "./pages/UserProfile";
 
 import AdminUsers from "./pages/AdminUsers";
 import AdminOrders from "./pages/AdminOrders";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/product/:id" element={<Product />} />
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/dashboard/orders" element={<UserOrders />} />
+        <Route path="/dashboard/profile" element={<UserProfile />} />
 
         {/* Admin routes */}
         <Route path="/admin/users" element={<AdminUsers />} />
