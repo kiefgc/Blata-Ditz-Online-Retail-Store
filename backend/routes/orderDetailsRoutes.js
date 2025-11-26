@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Customer Routes
 router.get(
-  "/order/:order_id",
+  "/:order_id",
   authenticateToken,
   orderDetailsController.getOrderDetailsByOrderId
 );

@@ -10,20 +10,25 @@ const router = express.Router();
 // Customer Routes
 
 router.post("/", authenticateToken, orderController.createOrder);
-router.get("/", authenticateToken, orderController.getAllOrders);
 router.get("/:id", authenticateToken, orderController.getOrderById);
 router.patch("/:id", authenticateToken, orderController.updateOrderByCustomer);
 
 // Admin Routes
-
+router.get("/", authenticateToken, orderController.getAllOrders);
+router.post(
+  "/admin",
+  authenticateToken,
+  requireAdmin,
+  orderController.createOrder
+);
 router.patch(
-  "/:id/:status",
+  "/admin/:id",
   authenticateToken,
   requireAdmin,
   orderController.updateOrderStatus
 );
 router.delete(
-  "/:id",
+  "/admin/:id",
   authenticateToken,
   requireAdmin,
   orderController.deleteOrder
