@@ -17,6 +17,8 @@ import AdminSuppliers from "./pages/AdminSuppliers";
 import AdminReports from "./pages/AdminReports";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Information from "./pages/Checkout/Information";
+import Payment from "./pages/Checkout/Payment";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,6 +42,10 @@ function App() {
         <Route path="/admin/categories" element={<AdminCategories />} />
         <Route path="/admin/suppliers" element={<AdminSuppliers />} />
         <Route path="/admin/reports" element={<AdminReports />} />
+
+        {/* Order Placement routes */}
+        <Route path="/checkout/information" element={<Information />} />
+        <Route path="/checkout/payment" element={<Payment />} />
       </Routes>
 
       <Footer />
