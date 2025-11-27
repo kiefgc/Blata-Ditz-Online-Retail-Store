@@ -51,7 +51,10 @@ function OrderPopup({ order, onClose }) {
 
       await api.patch(
         `/orders/admin/${order._id}`,
-        { order_status: orderStatus.toLowerCase() },
+        {
+          order_status: orderStatus.toLowerCase(),
+          payment_status: paymentStatus.toLowerCase(),
+        },
         {
           headers: { Authorization: `Bearer ${token}` },
         }

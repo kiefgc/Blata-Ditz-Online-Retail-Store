@@ -34,7 +34,7 @@ function AdminOrders() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await api.get("/orders/");
+        const response = await api.get("/orders");
         const data = response.data;
 
         if (Array.isArray(data)) {

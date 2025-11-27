@@ -14,7 +14,7 @@ router.get("/:id", authenticateToken, orderController.getOrderById);
 router.patch("/:id", authenticateToken, orderController.updateOrderByCustomer);
 
 // Admin Routes
-router.get("/admin", authenticateToken, orderController.getAllOrders);
+router.get("/", authenticateToken, orderController.getAllOrders);
 router.post(
   "/admin",
   authenticateToken,
