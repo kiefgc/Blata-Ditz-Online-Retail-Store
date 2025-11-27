@@ -59,24 +59,82 @@ function AdminSuppliers() {
           <div className="sidebar">
             <ul>
               <li>
-                <Link to="/admin/users">Users</Link>
+                <img
+                  width="24"
+                  height="24"
+                  src="https://img.icons8.com/ios-filled/50/FFFFFF/conference-call.png"
+                  alt="conference-call"
+                />
+                <span>
+                  <Link to="/admin/users" className="unselectedtab">
+                    Users
+                  </Link>
+                </span>
               </li>
               <li>
-                <Link to="/admin/orders">Orders</Link>
+                <img
+                  width="22"
+                  height="22"
+                  src="https://img.icons8.com/ios-filled/50/FFFFFF/untested.png"
+                  alt="untested"
+                />
+                <span>
+                  <Link to="/admin/orders" className="unselectedtab">
+                    Orders
+                  </Link>
+                </span>
               </li>
               <li>
-                <Link to="/admin/inventory">Inventory</Link>
+                <img
+                  width="24"
+                  height="24"
+                  src="https://img.icons8.com/material-rounded/24/FFFFFF/move-by-trolley.png"
+                  alt="move-by-trolley"
+                />
+                <span>
+                  <Link to="/admin/inventory" className="unselectedtab">
+                    Inventory
+                  </Link>
+                </span>
               </li>
               <li>
-                <Link to="/admin/categories">Categories</Link>
+                <img
+                  width="24"
+                  height="24"
+                  src="https://img.icons8.com/material-outlined/24/FFFFFF/categorize.png"
+                  alt="categorize"
+                />
+                <span>
+                  <Link to="/admin/categories" className="unselectedtab">
+                    Categories
+                  </Link>
+                </span>
               </li>
               <li className="selectedli">
-                <Link to="/admin/suppliers" className="selectedtab">
-                  Suppliers
-                </Link>
+                <img
+                  width="24"
+                  height="24"
+                  src="https://img.icons8.com/glyph-neue/64/FFCF33/supplier.png"
+                  alt="supplier"
+                />
+                <span>
+                  <Link to="/admin/suppliers" className="selectedtab">
+                    Suppliers
+                  </Link>
+                </span>
               </li>
               <li>
-                <Link to="/admin/reports">Reports</Link>
+                <img
+                  width="24"
+                  height="24"
+                  src="https://img.icons8.com/forma-regular-filled/24/FFFFFF/combo-chart.png"
+                  alt="combo-chart"
+                />
+                <span>
+                  <Link to="/admin/reports" className="unselectedtab">
+                    Reports
+                  </Link>
+                </span>
               </li>
             </ul>
           </div>
@@ -85,9 +143,15 @@ function AdminSuppliers() {
           <div className="main-content">
             <div className="supplier-header">
               <div className="search-bar">
+                <img
+                  width="20"
+                  height="20"
+                  src="https://img.icons8.com/ios-glyphs/30/FFD033/search--v1.png"
+                  alt="search--v1"
+                />
                 <input
                   type="text"
-                  placeholder="Search supplier..."
+                  placeholder="Search supplier"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -104,7 +168,7 @@ function AdminSuppliers() {
             ) : (
               <table className="supplier-table">
                 <thead>
-                  <tr>
+                  <tr className="supplier-table-header">
                     <th>Supplier Name</th>
                     <th>Contact Person</th>
                     <th>Email</th>

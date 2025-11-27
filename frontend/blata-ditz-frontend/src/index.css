@@ -95,6 +95,7 @@ select,
   gap: 0.8rem;
   min-width: 0;
   max-width: 100%;
+  align-items: center;
 }
 
 .small-screen-searchbar {

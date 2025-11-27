@@ -114,6 +114,11 @@ li {
   }
 }
 /* STYLES FOR ORDERS-TAB */
+
+.sb-orders {
+  padding: 15px;
+}
+
 .admin-orders-section {
   gap: 1.6rem;
   display: flex;

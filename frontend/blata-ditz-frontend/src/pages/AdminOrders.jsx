@@ -155,7 +155,7 @@ function AdminOrders() {
         {/* MAIN CONTENT */}
         <div className="main-content">
           <div className="admin-orders-section">
-            <div className="search-bar">
+            <div className="search-bar sb-orders">
               <img
                 width="20"
                 height="20"
