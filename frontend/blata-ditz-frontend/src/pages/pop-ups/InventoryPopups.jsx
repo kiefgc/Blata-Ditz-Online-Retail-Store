@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 
 // Helper function to create a URL for file previews
 const getFileUrl = (file) => {
@@ -328,6 +328,8 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
+  const [showUpdateConfirmation, setShowUpdateConfirmation] = useState(false);
+
   useEffect(() => {
     return () => {
       images.forEach((image) => {
@@ -401,7 +403,17 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
     console.log("Updating product:", product.id);
     console.log("Product data:", product);
     console.log("Images:", images);
+    setShowUpdateConfirmation(true);
+  };
+
+  const confirmUpdate = () => {
+    console.log("Updating product:", product.id);
+    setShowUpdateConfirmation(false);
     onClose();
+  };
+
+  const cancelUpdate = () => {
+    setShowUpdateConfirmation(false);
   };
 
   const handleDelete = () => {
@@ -611,6 +623,28 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
         </div>
       </div>
       {/* --- Confirmation Modal JSX --- */}
+      {showUpdateConfirmation && (
+        <div className="confirmation-backdrop">
+          <div className="confirmation-modal">
+            <h3>Update Product?</h3>
+            <p>
+              Are you sure you want to update {product.name} with the new
+              details?
+            </p>
+            <div className="confirmation-actions">
+              <button className="cancel-btn-final" onClick={cancelUpdate}>
+                Cancel
+              </button>
+              <button
+                className="delete-product-final-btn"
+                onClick={confirmUpdate}
+              >
+                Confirm Update
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {showDeleteConfirmation && (
         <div className="confirmation-backdrop">
           <div className="confirmation-modal">

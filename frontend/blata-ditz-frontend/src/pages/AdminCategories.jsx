@@ -5,6 +5,7 @@ import {
   CategoryCreateModal,
   CategoryEditModal,
   CategoryDeleteModal,
+  CategoryUpdateConfirmModal,
 } from "./pop-ups/CategoriesPopups.jsx";
 
 const categories = [
@@ -99,8 +100,9 @@ function AdminCategories() {
   const [data, setData] = useState(categories);
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
-  const [activeModal, setActiveModal] = useState(null); // 'create', 'edit', 'delete'
+  const [activeModal, setActiveModal] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoryToUpdate, setCategoryToUpdate] = useState(null);
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -151,13 +153,20 @@ function AdminCategories() {
     handleCloseModal();
   };
 
-  const handleUpdateCategory = (updatedCategory) => {
+  const handleConfirmUpdate = () => {
+    if (!categoryToUpdate) return;
+
     setData((prevData) =>
       prevData.map((cat) =>
-        cat.id === updatedCategory.id ? updatedCategory : cat
+        cat.id === categoryToUpdate.id ? categoryToUpdate : cat
       )
     );
     handleCloseModal();
+  };
+
+  const handleOpenUpdateConfirmation = (updatedCategoryData) => {
+    setCategoryToUpdate(updatedCategoryData);
+    setActiveModal("confirmUpdate");
   };
 
   const handleDeleteCategory = (categoryId) => {
@@ -173,6 +182,7 @@ function AdminCategories() {
   const handleCloseModal = () => {
     setActiveModal(null);
     setSelectedCategory(null);
+    setCategoryToUpdate(null);
   };
 
   return (
@@ -292,7 +302,7 @@ function AdminCategories() {
         <CategoryEditModal
           category={selectedCategory}
           onClose={handleCloseModal}
-          onUpdate={handleUpdateCategory}
+          onUpdate={handleOpenUpdateConfirmation}
           onDeleteClick={handleOpenDeleteConfirmation}
         />
       )}
@@ -302,6 +312,12 @@ function AdminCategories() {
           category={selectedCategory}
           onClose={handleCloseModal}
           onDeleteConfirm={handleDeleteCategory}
+        />
+      )}
+      {activeModal === "confirmUpdate" && categoryToUpdate && (
+        <CategoryUpdateConfirmModal
+          category={categoryToUpdate}
+          onClose={handleCloseModal}
         />
       )}
     </>
