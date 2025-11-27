@@ -40,7 +40,7 @@ export class Product {
       updates.category_ids = await this.toObjectIdArray(updates.category_ids);
     }
 
-    if (!updates.hasOwnProperty("supplier_id")) {
+    if (!Object.prototype.hasOwnProperty.call(updates, "supplier_id")) {
       updates.supplier_id = null;
     }
 
