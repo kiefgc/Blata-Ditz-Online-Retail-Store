@@ -63,8 +63,10 @@ export const ProductCreateModal = ({ brandName, onClose }) => {
   const [product, setProduct] = useState({
     name: "",
     specifications: [],
-    requirements: [],
-    connectivity: [],
+    inStock: "",
+    reOrderLevel: "",
+    maxStock: "",
+    lastRestocked: "",
     supplier: brandName || "",
     category: "",
   });
@@ -177,29 +179,43 @@ export const ProductCreateModal = ({ brandName, onClose }) => {
                   <button className="add-detail-btn">ADD DETAIL</button>
                 </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="requirements">Requirements</label>
-                <div className="input-with-button">
+              <div className="select-group">
+                <div className="form-group">
+                  <label htmlFor="stock">Stock</label>
                   <input
-                    type="text"
-                    id="requirements"
-                    placeholder="Add requirements"
-                  />
-                  <button className="add-detail-btn">ADD DETAIL</button>
+                    type="number"
+                    id="stock"
+                    placeholder="Quantity"
+                    max="99"
+                  ></input>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="stock">Reorder Level</label>
+                  <input
+                    type="number"
+                    id="reorder-level"
+                    placeholder="Quantity"
+                    max="99"
+                  ></input>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="stock">Max Stock</label>
+                  <input
+                    type="number"
+                    id="max-stock"
+                    placeholder="Quantity"
+                    max="99"
+                  ></input>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="stock">Last Restock</label>
+                  <input
+                    type="date"
+                    id="last-restock"
+                    placeholder="Quantity"
+                  ></input>
                 </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="connectivity">Connectivity</label>
-                <div className="input-with-button">
-                  <input
-                    type="text"
-                    id="connectivity"
-                    placeholder="Add connectivity"
-                  />
-                  <button className="add-detail-btn">ADD DETAIL</button>
-                </div>
-              </div>
-
               <div className="select-group">
                 <div className="form-group">
                   <label htmlFor="supplier">Supplier</label>
@@ -436,28 +452,54 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
                 </div>
               </div>
 
+              <div className="select-group">
+                <div className="form-group">
+                  <label htmlFor="stock">Stock</label>
+                  <input
+                    type="number"
+                    id="stock"
+                    value={product.inStock || ""}
+                    onChange={handleChange}
+                    max="99"
+                  ></input>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="stock">Reorder Level</label>
+                  <input
+                    type="number"
+                    id="reorder-level"
+                    value={product.reOrderLevel || ""}
+                    onChange={handleChange}
+                    max="99"
+                  ></input>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="stock">Max Stock</label>
+                  <input
+                    type="number"
+                    id="max-stock"
+                    value={product.maxStock || ""}
+                    onChange={handleChange}
+                    max="99"
+                  ></input>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="stock">Last Restock</label>
+                  <input
+                    type="date"
+                    id="last-restock"
+                    value={product.lastRestocked || ""}
+                    onChange={handleChange}
+                  ></input>
+                </div>
+              </div>
+
               {/* Product Specifications Tag Input */}
               <TagInput
                 label="Product Specifications"
                 tags={product.specifications || []}
                 onAddTag={(tag) => handleAddTag("specifications", tag)}
                 onRemoveTag={(tag) => handleRemoveTag("specifications", tag)}
-              />
-
-              {/* Requirements Tag Input */}
-              <TagInput
-                label="Requirements"
-                tags={product.requirements || []}
-                onAddTag={(tag) => handleAddTag("requirements", tag)}
-                onRemoveTag={(tag) => handleRemoveTag("requirements", tag)}
-              />
-
-              {/* Connectivity Tag Input */}
-              <TagInput
-                label="Connectivity"
-                tags={product.connectivity || []}
-                onAddTag={(tag) => handleAddTag("connectivity", tag)}
-                onRemoveTag={(tag) => handleRemoveTag("connectivity", tag)}
               />
             </div>
 
@@ -488,24 +530,6 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
                     <option value="Mouse">Mouse</option>
                   </select>
                 </div>
-              </div>
-
-              {/* Status */}
-              <div className="form-group">
-                <label htmlFor="status">Status</label>
-                <select
-                  id="status"
-                  value={product.active ? "Active" : "Inactive"}
-                  onChange={(e) =>
-                    setProduct((prev) => ({
-                      ...prev,
-                      active: e.target.value === "Active",
-                    }))
-                  }
-                >
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
               </div>
 
               {/* Images Section */}
@@ -575,7 +599,10 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
                 <button className="delete-product-btn" onClick={handleDelete}>
                   Delete
                 </button>
-                <button className="update-details-btn" onClick={handleUpdate}>
+                <button
+                  className="update-details-btn-inventory"
+                  onClick={handleUpdate}
+                >
                   Update Details
                 </button>
               </div>

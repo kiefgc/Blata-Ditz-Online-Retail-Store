@@ -13,10 +13,13 @@ const productsData = [
     logo: "D",
     products: [
       {
-        id: "0013948",
+        id: "001",
         image: "https://i.imgur.com/47cdfb.png",
         name: "Akko MU01 Mountain Seclusion Walnut Wood Case Multi-Mode RGB Hot-Swappable Mechanical Keyboard",
         inStock: 9,
+        reorderLevel: 10,
+        maxStock: 20,
+        lastRestocked: 1,
         retailPrice: "₱6,295",
         active: true,
         supplier: "Akko",
@@ -24,18 +27,15 @@ const productsData = [
         specifications: ["Walnut Wood Case", "Multi-Mode", "RGB Hot-Swappable"], // Tags
         requirements: ["USB-C Port", "Windows 10+"],
         connectivity: ["Wired", "Bluetooth 5.0"],
-        images: [
-          "https://i.imgur.com/example1.png",
-          "https://i.imgur.com/example2.png",
-          "https://i.imgur.com/example3.png",
-          "https://i.imgur.com/example4.png",
-        ],
       },
       {
         id: "002",
         image: "https://i.imgur.com/47cdfb.png",
         name: "Akko MU01 Mountain Seclusion Walnut Wood Case Multi-Mode RGB Hot-Swappable Mechanical Keyboard (Akko Rosewood, Akko V3 Piano Pro)",
-        inStock: 2,
+        inStock: 9,
+        reorderLevel: 10,
+        maxStock: 20,
+        lastRestocked: 1,
         retailPrice: "₱6,295",
         active: true,
         supplier: "Akko",
@@ -43,7 +43,6 @@ const productsData = [
         specifications: ["Akko Rosewood", "V3 Piano Pro"],
         requirements: ["USB-C Port"],
         connectivity: ["Wired"],
-        images: [],
       },
     ],
   },
@@ -55,7 +54,10 @@ const productsData = [
         id: "101",
         image: "https://via.placeholder.com/80x50/333333/FFFFFF?text=Corsair",
         name: "Corsair K100 RGB Mechanical Gaming Keyboard",
-        inStock: 50,
+        inStock: 9,
+        reorderLevel: 10,
+        maxStock: 20,
+        lastRestocked: 1,
         retailPrice: "₱9,500",
         active: true,
       },
@@ -71,14 +73,16 @@ const productsData = [
 const ProductRow = ({ product, onEditClick }) => (
   <div className="product-row-clickable" onClick={() => onEditClick(product)}>
     <div className="product-cell">{product.id}</div>
-    <div className="product-cell product-cell-image">
-      <img src={product.image} alt={product.name} />
-    </div>
     <div className="product-cell product-cell-name">{product.name}</div>
     <div className="product-cell product-cell-stock">{product.inStock}</div>
-    <div className="product-cell product-cell-price">{product.retailPrice}</div>
-    <div className="product-cell product-cell-active">
-      <input type="checkbox" checked={product.active} readOnly />
+    <div className="product-cell product-cell-reorder">
+      {product.reorderLevel}
+    </div>
+    <div className="product-cell product-cell-max-stock">
+      {product.maxStock}
+    </div>
+    <div className="product-cell product-cell-last-restock">
+      {product.lastRestocked}
     </div>
   </div>
 );
@@ -87,11 +91,11 @@ const ProductTable = ({ products, onEditClick }) => (
   <div className="product-table-wrapper">
     <div className="product-table-header">
       <div className="table-header-cell">Product ID</div>
-      <div className="table-header-cell">Image</div>
       <div className="table-header-cell">Product Name</div>
-      <div className="table-header-cell">In Stock</div>
-      <div className="table-header-cell">Retail Price</div>
-      <div className="table-header-cell product-cell-active">Active</div>
+      <div className="table-header-cell">Stock</div>
+      <div className="table-header-cell">Reorder Level</div>
+      <div className="table-header-cell">Max Stock</div>
+      <div className="table-header-cell">Last Restock</div>
     </div>
 
     <div className="product-table-rows">
