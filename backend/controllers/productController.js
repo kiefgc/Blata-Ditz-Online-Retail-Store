@@ -2,6 +2,8 @@ import { Product } from "../models/Product.js";
 import { Inventory } from "../models/Inventory.js";
 import { Category } from "../models/Category.js";
 import { Supplier } from "../models/Supplier.js";
+import path from "path";
+import fs from "fs";
 
 export async function getAllProducts(req, res) {
   try {
@@ -12,6 +14,18 @@ export async function getAllProducts(req, res) {
     if (search) filters.product_name = { $regex: search, $options: "i" };
 
     const products = await Product.getAll(filters);
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getProductsBySupplier(req, res) {
+  try {
+    const { supplier_id } = req.params;
+
+    const products = await Product.getAll({ supplier_id: supplier_id });
+
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -125,8 +139,13 @@ export async function updateProduct(req, res) {
     const { id } = req.params;
     const updates = req.body;
 
-    if (!updates || Object.keys(updates).length === 0)
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
+    // Allow updates if at least one field OR a file exists
+    if ((!updates || Object.keys(updates).length === 0) && !req.file) {
       return res.status(400).json({ message: "No data provided for update" });
+    }
 
     delete updates.product_id;
     delete updates.created_at;
@@ -148,9 +167,28 @@ export async function updateProduct(req, res) {
 
     if (updates.unit_price !== undefined && updates.cost_price !== undefined) {
       if (updates.unit_price < updates.cost_price)
-        return res
-          .status(400)
-          .json({ message: "Unit price cannot be lower than cost price" });
+        return res.status(400).json({
+          message: "Unit price cannot be lower than cost price",
+        });
+    }
+
+    if (req.file) {
+      const newImagePath = `/uploads/${req.file.filename}`;
+
+      const existingProduct = await Product.findById(id);
+      if (!existingProduct)
+        return res.status(404).json({ message: "Product not found" });
+
+      const oldImagePath = existingProduct.image;
+
+      updates.image = newImagePath;
+
+      if (oldImagePath) {
+        const absoluteOldPath = path.join(process.cwd(), oldImagePath);
+        fs.unlink(absoluteOldPath, (err) => {
+          if (err) console.error("Failed to delete old image:", err);
+        });
+      }
     }
 
     const result = await Product.update(id, updates);
@@ -158,8 +196,9 @@ export async function updateProduct(req, res) {
     if (result.matchedCount === 0)
       return res.status(404).json({ message: "Product not found" });
 
-    res.status(200).json({ message: "Product updated successfully" });
+    res.json({ message: "Product updated successfully" });
   } catch (error) {
+    console.error("Update product error:", error);
     res.status(500).json({ message: error.message });
   }
 }

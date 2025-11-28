@@ -1,88 +1,29 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminInventory.css";
+import api from "../api/api.js";
 import {
   ProductCreateModal,
   ProductEditModal,
 } from "./pop-ups/InventoryPopups.jsx";
 
-// test data
-const productsData = [
-  {
-    brand: "Akko",
-    logo: "D",
-    products: [
-      {
-        id: "001",
-        image: "https://i.imgur.com/47cdfb.png",
-        name: "Akko MU01 Mountain Seclusion Walnut Wood Case Multi-Mode RGB Hot-Swappable Mechanical Keyboard",
-        inStock: 9,
-        reorderLevel: 10,
-        maxStock: 20,
-        lastRestocked: 1,
-        retailPrice: "₱6,295",
-        active: true,
-        supplier: "Akko",
-        category: "Keyboard",
-        specifications: ["Walnut Wood Case", "Multi-Mode", "RGB Hot-Swappable"], // Tags
-        requirements: ["USB-C Port", "Windows 10+"],
-        connectivity: ["Wired", "Bluetooth 5.0"],
-      },
-      {
-        id: "002",
-        image: "https://i.imgur.com/47cdfb.png",
-        name: "Akko MU01 Mountain Seclusion Walnut Wood Case Multi-Mode RGB Hot-Swappable Mechanical Keyboard (Akko Rosewood, Akko V3 Piano Pro)",
-        inStock: 9,
-        reorderLevel: 10,
-        maxStock: 20,
-        lastRestocked: 1,
-        retailPrice: "₱6,295",
-        active: true,
-        supplier: "Akko",
-        category: "Keyboard",
-        specifications: ["Akko Rosewood", "V3 Piano Pro"],
-        requirements: ["USB-C Port"],
-        connectivity: ["Wired"],
-      },
-    ],
-  },
-  {
-    brand: "Corsair",
-    logo: "C", // placeholder for Corsair logo
-    products: [
-      {
-        id: "101",
-        image: "https://via.placeholder.com/80x50/333333/FFFFFF?text=Corsair",
-        name: "Corsair K100 RGB Mechanical Gaming Keyboard",
-        inStock: 9,
-        reorderLevel: 10,
-        maxStock: 20,
-        lastRestocked: 1,
-        retailPrice: "₱9,500",
-        active: true,
-      },
-    ],
-  },
-  {
-    brand: "Redragon",
-    logo: "R", // placeholder for Redragon logo
-    products: [],
-  },
-];
-
 const ProductRow = ({ product, onEditClick }) => (
   <div className="product-row-clickable" onClick={() => onEditClick(product)}>
-    <div className="product-cell">{product.id}</div>
-    <div className="product-cell product-cell-name">{product.name}</div>
-    <div className="product-cell product-cell-stock">{product.inStock}</div>
+    <div className="product-cell">{product._id}</div>
+    <div className="product-cell product-cell-name">{product.product_name}</div>
+    <div className="product-cell product-cell-stock">
+      {product.stock_quantity ?? 0}
+    </div>
     <div className="product-cell product-cell-reorder">
-      {product.reorderLevel}
+      {product.reorder_level ?? "-"}
     </div>
     <div className="product-cell product-cell-max-stock">
-      {product.maxStock}
+      {product.max_stock_level ?? "-"}
     </div>
     <div className="product-cell product-cell-last-restock">
-      {product.lastRestocked}
+      {product.last_restocked
+        ? new Date(product.last_restocked).toLocaleDateString()
+        : "-"}
     </div>
   </div>
 );
@@ -97,11 +38,10 @@ const ProductTable = ({ products, onEditClick }) => (
       <div className="table-header-cell">Max Stock</div>
       <div className="table-header-cell">Last Restock</div>
     </div>
-
     <div className="product-table-rows">
       {products.map((product) => (
         <ProductRow
-          key={product.id}
+          key={product._id}
           product={product}
           onEditClick={onEditClick}
         />
@@ -111,57 +51,81 @@ const ProductTable = ({ products, onEditClick }) => (
 );
 
 function AdminInventory() {
-  const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
-  const [openBrands, setOpenBrands] = useState({
-    Akko: false,
-    Corsair: false,
-    Redragon: false,
-  });
-
+  const [suppliers, setSuppliers] = useState([]);
+  const [openSuppliers, setOpenSuppliers] = useState({});
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [createModalBrand, setCreateModalBrand] = useState("");
-
+  const [createModalSupplier, setCreateModalSupplier] = useState("");
   const [editingProduct, setEditingProduct] = useState(null);
 
   useEffect(() => {
-    const searchbarScreenResize = () => {
-      if (window.innerWidth >= 830) {
-        setShowSmallSearchbar(false);
+    const fetchSuppliers = async () => {
+      try {
+        // Fetch suppliers
+        const res = await api.get("/suppliers");
+        const suppliersData = res.data;
+
+        // Fetch all inventory
+        const invRes = await api.get("/inventory");
+        const inventoryData = invRes.data;
+
+        // Initialize open state
+        const openState = {};
+        suppliersData.forEach(
+          (supplier) => (openState[supplier.supplier_name] = false)
+        );
+        setOpenSuppliers(openState);
+
+        // Fetch products per supplier and merge with inventory
+        const suppliersWithProducts = await Promise.all(
+          suppliersData.map(async (supplier) => {
+            const prodRes = await api.get(`/products/supplier/${supplier._id}`);
+            const products = prodRes.data;
+
+            const productsWithInventory = products.map((prod) => {
+              const inv = inventoryData.find((i) => i.product_id === prod._id);
+              return {
+                ...prod,
+                stock_quantity: inv?.stock_quantity ?? 0,
+                reorder_level: inv?.reorder_level ?? "-",
+                max_stock_level: inv?.max_stock_level ?? "-",
+                last_restocked: inv?.last_restocked ?? null,
+              };
+            });
+
+            return { ...supplier, products: productsWithInventory };
+          })
+        );
+
+        setSuppliers(suppliersWithProducts);
+      } catch (error) {
+        console.error("Error fetching suppliers/products/inventory:", error);
       }
     };
-    window.addEventListener("resize", searchbarScreenResize);
 
-    searchbarScreenResize();
-    return () => {
-      window.removeEventListener("resize", searchbarScreenResize);
-    };
+    fetchSuppliers();
   }, []);
 
-  const toggleBrand = (brandName) => {
-    setOpenBrands((prev) => ({
+  const toggleSupplier = (supplierName) => {
+    setOpenSuppliers((prev) => ({
       ...prev,
-      [brandName]: !prev[brandName],
+      [supplierName]: !prev[supplierName],
     }));
   };
 
-  // Handler to open the CREATE modal
-  const handleOpenCreateModal = (brandName) => {
-    setCreateModalBrand(brandName);
+  const handleOpenCreateModal = (supplierName) => {
+    setCreateModalSupplier(supplierName);
     setIsCreateModalOpen(true);
   };
 
-  // Handler to close the CREATE modal
   const handleCloseCreateModal = () => {
     setIsCreateModalOpen(false);
-    setCreateModalBrand("");
+    setCreateModalSupplier("");
   };
 
-  // Handler to open the EDIT modal
   const handleOpenEditModal = (productData) => {
     setEditingProduct(productData);
   };
 
-  // Handler to close the EDIT modal
   const handleCloseEditModal = () => {
     setEditingProduct(null);
   };
@@ -271,15 +235,15 @@ function AdminInventory() {
               />
             </div>
             <div className="inventory-list">
-              {productsData.map((brandData) => (
-                <div key={brandData.brand} className="brand-section">
+              {suppliers.map((supplier) => (
+                <div key={supplier._id} className="brand-section">
                   <div
                     className={`brand-header ${
-                      openBrands[brandData.brand] ? "active" : ""
+                      openSuppliers[supplier.supplier_name] ? "active" : ""
                     }`}
-                    onClick={() => toggleBrand(brandData.brand)}
+                    onClick={() => toggleSupplier(supplier.supplier_name)}
                   >
-                    <span className="brand-name">{brandData.brand}</span>
+                    <span className="brand-name">{supplier.supplier_name}</span>
                     <img
                       width="20"
                       height="20"
@@ -288,29 +252,31 @@ function AdminInventory() {
                       className="brand-dropdown-icon"
                     />
                   </div>
-                  {openBrands[brandData.brand] &&
-                    brandData.products.length > 0 && (
+                  {openSuppliers[supplier.supplier_name] &&
+                    supplier.products.length > 0 && (
                       <ProductTable
-                        products={brandData.products}
+                        products={supplier.products}
                         onEditClick={handleOpenEditModal}
                       />
                     )}
-                  {openBrands[brandData.brand] &&
-                    brandData.products.length === 0 && (
+                  {openSuppliers[supplier.supplier_name] &&
+                    supplier.products.length === 0 && (
                       <p className="no-products-message">
-                        No inventory items found for {brandData.brand}.
+                        No inventory items found for {supplier.supplier_name}.
                       </p>
                     )}
-                  {openBrands[brandData.brand] && (
+                  {openSuppliers[supplier.supplier_name] && (
                     <div className="add-product-row">
                       <div className="edit-hint">
                         Click on product row to edit details
                       </div>
                       <button
                         className="add-product-btn"
-                        onClick={() => handleOpenCreateModal(brandData.brand)}
+                        onClick={() =>
+                          handleOpenCreateModal(supplier.supplier_name)
+                        }
                       >
-                        + Add New Product to {brandData.brand}
+                        + Add New Product to {supplier.supplier_name}
                       </button>
                     </div>
                   )}
@@ -323,7 +289,7 @@ function AdminInventory() {
 
       {isCreateModalOpen && (
         <ProductCreateModal
-          brandName={createModalBrand}
+          brandName={createModalSupplier}
           onClose={handleCloseCreateModal}
         />
       )}

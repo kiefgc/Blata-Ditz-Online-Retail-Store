@@ -7,6 +7,7 @@ import {
   updateProduct,
   deleteProduct,
   getProductsByCategory,
+  getProductsBySupplier,
 } from "../controllers/productController.js";
 import {
   authenticateToken,
@@ -21,6 +22,12 @@ router.get("/category/:id", getProductsByCategory);
 router.get("/:id", getProductById);
 
 // Admin-only Routes
+router.get(
+  "/supplier/:supplier_id",
+  authenticateToken,
+  requireAdmin,
+  getProductsBySupplier
+);
 router.post(
   "/",
   authenticateToken,
@@ -28,7 +35,13 @@ router.post(
   upload.single("image"),
   createProduct
 );
-router.patch("/:id", authenticateToken, requireAdmin, updateProduct);
+router.patch(
+  "/:id",
+  authenticateToken,
+  requireAdmin,
+  upload.single("image"),
+  updateProduct
+);
 router.delete("/:id", authenticateToken, requireAdmin, deleteProduct);
 
 export default router;
