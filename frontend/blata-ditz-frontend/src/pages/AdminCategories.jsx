@@ -8,96 +8,68 @@ import {
   CategoryUpdateConfirmModal,
 } from "./pop-ups/CategoriesPopups.jsx";
 
-const categories = [
+const initialCategories = [
   {
     id: "ps5",
     name: "PS5",
     icon: "https://img.icons8.com/ios-filled/50/FFFFFF/playstation-5.png",
+    isActive: true,
     description: "Games and accessories for PlayStation 5.",
   },
   {
     id: "ps4",
     name: "PS4",
     icon: "https://img.icons8.com/ios-filled/50/FFFFFF/ps-controller.png",
+    isActive: true,
     description: "Games and accessories for PlayStation 4.",
   },
   {
     id: "switch",
     name: "SWITCH",
     icon: "https://img.icons8.com/ios-filled/50/FFFFFF/nintendo-switch--v1.png",
+    isActive: true,
     description: "Games and accessories for Nintendo Switch.",
   },
   {
     id: "xbox",
     name: "XBOX",
     icon: "https://img.icons8.com/ios-filled/50/FFFFFF/xbox.png",
+    isActive: true,
     description: "Games and accessories for Microsoft Xbox.",
   },
   {
     id: "pcmac",
     name: "PC/MAC",
     icon: "https://img.icons8.com/ios-filled/50/FFFFFF/monitor.png",
+    isActive: true,
     description: "Software and hardware for PC and Mac.",
   },
   {
     id: "collectibles",
     name: "COLLECTIBLES",
     icon: "https://img.icons8.com/ios-filled/50/FFFFFF/funko.png",
+    isActive: true,
     description: "Figurines and other collectible items.",
   },
   {
     id: "more",
     name: "MORE",
     icon: "https://img.icons8.com/ios-filled/50/FFFFFF/more.png",
+    isActive: true,
     description: "Miscellaneous products.",
   },
   {
     id: "preorders",
     name: "PRE-ORDERS",
     icon: "https://img.icons8.com/pastel-glyph/64/FFFFFF/box--v1.png",
+    isActive: true,
     description: "Products available for pre-purchase.",
-  },
-  {
-    id: "add",
-    name: "ADD",
-    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/plus.png",
-    isAction: true,
-    link: "/admin/categories/add",
-    description: "",
   },
 ];
 
-const CategoryCard = ({ name, icon, onClick, isAction, link }) => {
-  const CardContent = (
-    <>
-      <img src={icon} alt={`${name} icon`} className="category-card-icon" />
-      <span className="category-card-name">{name}</span>
-    </>
-  );
-
-  if (isAction && link) {
-    return (
-      <Link
-        to={link}
-        className={`category-card ${isAction ? "category-card-action" : ""}`}
-      >
-        {CardContent}
-      </Link>
-    );
-  }
-
-  return (
-    <button
-      className={`category-card ${isAction ? "category-card-action" : ""}`}
-      onClick={onClick}
-    >
-      {CardContent}
-    </button>
-  );
-};
-
 function AdminCategories() {
-  const [data, setData] = useState(categories);
+  const [categories, setCategories] = useState(initialCategories);
+  const [searchTerm, setSearchTerm] = useState("");
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
   const [activeModal, setActiveModal] = useState(null);
@@ -127,63 +99,58 @@ function AdminCategories() {
     }
   };
 
-  const handleCreateCategory = (newCategoryData) => {
-    const newId = newCategoryData.name
-      .toLowerCase()
-      .replace(/\s/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
-
-    const uniqueId = data.some((cat) => cat.id === newId)
-      ? `${newId}-${Date.now()}`
-      : newId;
-
-    const newCategory = {
-      ...newCategoryData,
-      id: uniqueId,
-      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/more.png",
-      isAction: false,
-    };
-
-    setData((prevData) => {
-      const addIndex = prevData.findIndex((cat) => cat.isAction);
-      const newData = [...prevData];
-      newData.splice(addIndex, 0, newCategory);
-      return newData;
-    });
-    handleCloseModal();
-  };
-
-  const handleConfirmUpdate = () => {
-    if (!categoryToUpdate) return;
-
-    setData((prevData) =>
-      prevData.map((cat) =>
-        cat.id === categoryToUpdate.id ? categoryToUpdate : cat
-      )
-    );
-    handleCloseModal();
-  };
-
-  const handleOpenUpdateConfirmation = (updatedCategoryData) => {
-    setCategoryToUpdate(updatedCategoryData);
-    setActiveModal("confirmUpdate");
-  };
-
-  const handleDeleteCategory = (categoryId) => {
-    setData((prevData) => prevData.filter((cat) => cat.id !== categoryId));
-    handleCloseModal();
-  };
-
-  const handleOpenDeleteConfirmation = (category) => {
-    setSelectedCategory(category);
-    setActiveModal("delete");
-  };
-
   const handleCloseModal = () => {
     setActiveModal(null);
     setSelectedCategory(null);
     setCategoryToUpdate(null);
   };
+
+  const handleCreateCategory = (newCategoryData) => {
+    const newId = `c_${Date.now()}`;
+    const newCategory = {
+      ...newCategoryData,
+      id: newId,
+      isActive: true,
+    };
+    setCategories((prev) => [...prev, newCategory]);
+    handleCloseModal();
+  };
+
+  const handleOpenEdit = (category) => {
+    setSelectedCategory(category);
+    setActiveModal("edit");
+  };
+
+  const handleOpenUpdateConfirmation = (updatedCategoryData) => {
+    setSelectedCategory(null);
+    setCategoryToUpdate(updatedCategoryData);
+    setActiveModal("confirmUpdate");
+  };
+
+  const handleConfirmUpdate = () => {
+    if (!categoryToUpdate) return;
+    setCategories((prev) =>
+      prev.map((s) => (s.id === categoryToUpdate.id ? categoryToUpdate : s))
+    );
+    handleCloseModal();
+  };
+
+  const handleOpenDeleteConfirmation = (category) => {
+    setSelectedCategory(null);
+    setSelectedCategory(category);
+    setActiveModal("delete");
+  };
+
+  const handleDeleteCategory = (categoryId) => {
+    setCategories((prev) => prev.filter((s) => s.id !== categoryId));
+    handleCloseModal();
+  };
+
+  const filteredCategories = categories.filter((category) =>
+    Object.values(category).some((value) =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
   return (
     <>
@@ -277,49 +244,86 @@ function AdminCategories() {
             </ul>
           </div>
           <div className="main-content-categories">
-            <div className="category-grid-container">
-              {data.map((category) => (
-                <CategoryCard
-                  key={category.id}
-                  name={category.name}
-                  icon={category.icon}
-                  isAction={category.isAction}
-                  onClick={() => handleCardClick(category)}
-                />
-              ))}
+            <div className="categories-table-container">
+              <table className="categories-table">
+                <thead>
+                  <tr>
+                    <th>Category Name</th>
+                    <th>Description</th>
+                    <th>Active Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCategories.map((category) => (
+                    <tr
+                      key={category.id}
+                      onClick={() => handleOpenEdit(category)}
+                    >
+                      <td>{category.name}</td>
+                      <td className="description-cell">
+                        {category.description}
+                      </td>
+                      <td
+                        className={
+                          category.isActive
+                            ? "active-status"
+                            : "inactive-status"
+                        }
+                      >
+                        {category.isActive ? "Active" : "Inactive"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {filteredCategories.length === 0 && (
+                <div className="no-results">
+                  No categories found matching "{searchTerm}".
+                </div>
+              )}
+            </div>
+            <div className="categories-controls">
+              <button
+                className="add-category-btn"
+                onClick={() => setActiveModal("create")}
+              >
+                Add Category
+              </button>
             </div>
           </div>
         </div>
+        {activeModal === "create" && (
+          <CategoryCreateModal
+            onClose={handleCloseModal}
+            onCreate={handleCreateCategory}
+          />
+        )}
+
+        {activeModal === "edit" && selectedCategory && (
+          <CategoryEditModal
+            category={selectedCategory}
+            onClose={handleCloseModal}
+            onUpdate={handleOpenUpdateConfirmation}
+            onDeleteClick={handleOpenDeleteConfirmation}
+          />
+        )}
+
+        {activeModal === "delete" && selectedCategory && (
+          <CategoryDeleteModal
+            category={selectedCategory}
+            onClose={handleCloseModal}
+            onDeleteConfirm={handleDeleteCategory}
+          />
+        )}
+
+        {activeModal === "confirmUpdate" && categoryToUpdate && (
+          <CategoryUpdateConfirmModal
+            category={categoryToUpdate}
+            onClose={handleCloseModal}
+            onConfirmUpdate={handleConfirmUpdate}
+          />
+        )}
       </div>
-      {activeModal === "create" && (
-        <CategoryCreateModal
-          onClose={handleCloseModal}
-          onCreate={handleCreateCategory}
-        />
-      )}
-
-      {activeModal === "edit" && selectedCategory && (
-        <CategoryEditModal
-          category={selectedCategory}
-          onClose={handleCloseModal}
-          onUpdate={handleOpenUpdateConfirmation}
-          onDeleteClick={handleOpenDeleteConfirmation}
-        />
-      )}
-
-      {activeModal === "delete" && selectedCategory && (
-        <CategoryDeleteModal
-          category={selectedCategory}
-          onClose={handleCloseModal}
-          onDeleteConfirm={handleDeleteCategory}
-        />
-      )}
-      {activeModal === "confirmUpdate" && categoryToUpdate && (
-        <CategoryUpdateConfirmModal
-          category={categoryToUpdate}
-          onClose={handleCloseModal}
-        />
-      )}
     </>
   );
 }

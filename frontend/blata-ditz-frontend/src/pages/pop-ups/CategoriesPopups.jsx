@@ -1,72 +1,68 @@
-import React, { useState } from "react";
-
-const getFileUrl = (file) => {
-  return file instanceof File ? URL.createObjectURL(file) : file;
-};
+import { useEffect, useState } from "react";
 
 export const CategoryCreateModal = ({ onClose, onCreate }) => {
-  const [name, setName] = useState("");
-  const [icon, setIcon] = useState("");
-  const [description, setDescription] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+  });
+  const [showError, setShowError] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = () => {
-    if (name.trim()) {
-      onCreate({
-        name: name.trim(),
-        icon: icon.trim(),
-        description: description.trim(),
-      });
-      onClose();
+    // Client-side validation
+    if (formData.name.trim() && formData.description.trim()) {
+      onCreate(formData);
     } else {
-      alert("Category Name is required.");
+      setShowError(true);
     }
   };
 
   return (
     <div className="modal-backdrop">
       <div className="category-modal-content">
-        <div className="category-create-modal-content">
-          <h3>Add New Category</h3>
-          <div className="form-group">
-            <label htmlFor="categoryName">Category Name</label>
-            <input
-              type="text"
-              id="categoryName"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter category name"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="categoryName">Category Icon</label>
-            <input
-              type="url"
-              id="categoryIcon"
-              value={icon}
-              onChange={(e) => setIcon(e.target.value)}
-              placeholder="Enter category icon url"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="categoryDescription">Category Description</label>
-            <textarea
-              id="categoryDescription"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter category description (optional)"
-              rows="3"
-            />
-          </div>
-          <div className="modal-actions">
-            <button className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button className="update-details-btn" onClick={handleSubmit}>
-              Add Category
-            </button>
-          </div>
+        {showError && (
+          <CustomMessageModal
+            title="Error"
+            message="Category Name and Description are required."
+            onClose={() => setShowError(false)}
+          />
+        )}
+        <h3>Add New Category</h3>
+        <div className="form-group">
+          <label htmlFor="categoryName">Category Name</label>
+          <input
+            type="text"
+            id="categoryName"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="e.g., Adventure"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Briefly describe this category."
+            required
+            rows="3"
+          />
+        </div>
+        <div className="modal-actions">
+          <button className="cancel-btn" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="update-details-btn" onClick={handleSubmit}>
+            Add Category
+          </button>
         </div>
       </div>
     </div>
@@ -79,77 +75,88 @@ export const CategoryEditModal = ({
   onUpdate,
   onDeleteClick,
 }) => {
-  const [name, setName] = useState(category.name || "");
-  const [description, setDescription] = useState(category.description || "");
-  const [icon, setIcon] = useState(category.icon || "");
+  const [formData, setFormData] = useState(category);
+  const [showError, setShowError] = useState(false);
 
-  const handleOpenConfirmation = () => {
-    if (name.trim()) {
-      onUpdate({
-        ...category,
-        name: name.trim(),
-        icon: icon.trim(),
-        description: description.trim(),
-      });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "isActive") {
+      setFormData((prev) => ({ ...prev, [name]: value === "true" }));
     } else {
-      alert("Category Name is required.");
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleUpdate = () => {
+    if (formData.name.trim() && formData.description.trim()) {
+      onUpdate(formData);
+    } else {
+      setShowError(true);
     }
   };
 
   return (
     <div className="modal-backdrop">
       <div className="category-modal-content">
-        <div className="category-edit-modal-content">
-          <h3>View/Edit Category</h3>
-          <div className="form-group">
-            <label htmlFor="categoryName">Category Name</label>
-            <div className="input-with-edit-icon">
-              <input
-                type="text"
-                id="categoryName"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="categoryName">Category Icon</label>
-            <input
-              type="url"
-              id="categoryIcon"
-              value={icon}
-              onChange={(e) => setIcon(e.target.value)}
-              placeholder="Enter category icon url"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="categoryDescription">Category Description</label>
-            <textarea
-              id="categoryDescription"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows="5"
-            />
-          </div>
-          <div className="modal-actions-delete">
-            <button
-              className="delete-category-btn"
-              onClick={() => onDeleteClick(category)}
-            >
-              Delete
-            </button>
+        {showError && (
+          <CustomMessageModal
+            title="Error"
+            message="Category Name and Description are required."
+            onClose={() => setShowError(false)}
+          />
+        )}
+        <h3>Edit Category: {category.name}</h3>
 
-            <button className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button
-              className="update-details-btn"
-              onClick={handleOpenConfirmation}
-            >
-              Update Details
-            </button>
-          </div>
+        <div className="form-group">
+          <label htmlFor="categoryName">Category Name</label>
+          <input
+            type="text"
+            id="categoryName"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+            rows="3"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="isActive">Status</label>
+          <select
+            id="isActive"
+            name="isActive"
+            value={formData.isActive ? "true" : "false"}
+            onChange={handleChange}
+            className="status-select-input"
+          >
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+
+        <div className="modal-actions-delete">
+          <button
+            className="delete-category-btn"
+            onClick={() => onDeleteClick(category)}
+          >
+            Delete
+          </button>
+          <button className="cancel-btn" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="update-details-btn" onClick={handleUpdate}>
+            Update Details
+          </button>
         </div>
       </div>
     </div>
@@ -161,16 +168,26 @@ export const CategoryDeleteModal = ({ category, onClose, onDeleteConfirm }) => {
     <div className="modal-backdrop">
       <div className="category-modal-content category-delete-modal">
         <h3>Delete Category</h3>
-        <p>Are you sure you want to delete the category: {category.name}?</p>
+        <p>Are you sure you want to delete category: {category.name}?</p>
         <div className="modal-actions-delete-confirm">
           <button
             className="update-details-btn"
             onClick={() => onDeleteConfirm(category.id)}
+            style={{
+              width: "auto",
+              padding: "10px 20px",
+              color: "white",
+              backgroundColor: "#880000",
+            }}
           >
-            Yes
+            Yes, Delete
           </button>
-          <button className="cancel-btn" onClick={onClose}>
-            No
+          <button
+            className="cancel-btn"
+            onClick={onClose}
+            style={{ width: "auto", padding: "10px 20px" }}
+          >
+            Cancel
           </button>
         </div>
       </div>
@@ -181,21 +198,28 @@ export const CategoryDeleteModal = ({ category, onClose, onDeleteConfirm }) => {
 export const CategoryUpdateConfirmModal = ({
   category,
   onClose,
-  onUpdateConfirm,
+  onConfirmUpdate,
 }) => {
   return (
     <div className="modal-backdrop">
       <div className="category-modal-content category-delete-modal">
         <h3>Confirm Update</h3>
-        <p>Are you sure you want to update the category: {category.name}?</p>
+        <p>
+          Are you sure you want to save changes for category: {category.name}?
+        </p>
         <div className="modal-actions-delete-confirm">
           <button
             className="update-details-btn"
-            onClick={() => onUpdateConfirm(category.id)}
+            onClick={onConfirmUpdate}
+            style={{ width: "auto", padding: "10px 20px" }}
           >
             Yes, Update
           </button>
-          <button className="cancel-btn" onClick={onClose}>
+          <button
+            className="cancel-btn"
+            onClick={onClose}
+            style={{ width: "auto", padding: "10px 20px" }}
+          >
             Cancel
           </button>
         </div>
