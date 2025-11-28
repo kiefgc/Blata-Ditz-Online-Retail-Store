@@ -5,16 +5,16 @@ function OrderPopup({ order, onClose }) {
   if (!order) return null;
 
   return (
-    <div className="admin-orders-popup-overlay">
-      <div className="admin-orders-popup">
-        <div className="admin-edit-header">
+    <div className="user-orders-popup-overlay">
+      <div className="user-orders-popup">
+        <div className="user-edit-header">
           <h3>View Order</h3>
           <button className="close-edit-modal-btn" onClick={onClose}>
             x
           </button>
         </div>
 
-        <div className="admin-orders-popup-content">
+        <div className="user-orders-popup-content">
           <div className="orders-id">
             <span className="order-id-title">ID No. </span>
             <span className="order-id-no">{order.id}</span>

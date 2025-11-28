@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import "./UserProfile.css";
+import ConfirmPopup from "./pop-ups/ConfirmPopup.jsx";
 
 const ordersMock = [
   {
@@ -18,7 +19,6 @@ const ordersMock = [
       email: "dana.alania@fmail.com",
       contact: "+63 976 348 5930",
       address: "578 Eymard Sweets, 1354, Quezon City, Metro Manila",
-      isDefault: true,
     },
     details: [
       {
@@ -35,11 +35,14 @@ const ordersMock = [
 function UserDashboard() {
   const { id } = useParams();
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const user = ordersMock[0].customer;
   const [firstName, setfirstName] = useState(ordersMock[0].customer.firstName);
   const [lastName, setlastName] = useState(ordersMock[0].customer.lastName);
   const [email, setEmail] = useState(ordersMock[0].customer.email);
+  const [address, setAddress] = useState(ordersMock[0].customer.address);
+  const [contactNum, setContactNum] = useState(ordersMock[0].customer.contact);
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -118,15 +121,14 @@ function UserDashboard() {
             </ul>
           </div>
 
-          {/*MAIN CONTENT*/}
+          {/*MAIN PROFILE CONTENT*/}
           <div className="main-content">
-            {/*profile content*/}
             <h1>
               <span style={{ color: "#FFCF33" }}>Personal Information</span>
             </h1>
             <div className="user-profile-section">
               {/*personal information section*/}
-              <div className="user-profile-info">
+              <div className="user-profile-base user-profile-info">
                 <div className="form-group">
                   <label>First Name:</label>
                   <input
@@ -156,16 +158,20 @@ function UserDashboard() {
                 </div>
               </div>
               <div className="button-container">
-                <button type="button" onClick={() => openPopup("add")}>
-                  Save Details
+                {" "}
+                <button type="button" onClick={() => setShowPopup(true)}>
+                  Save Changes
                 </button>
+                {showPopup && (
+                  <ConfirmPopup onClose={() => setShowPopup(false)} />
+                )}
               </div>
 
               {/*change password section*/}
               <h1>
                 <span style={{ color: "#FFCF33" }}>Change Password</span>
               </h1>
-              <div className="user-profile-pw">
+              <div className="user-profile-base user-profile-pw">
                 <div className="form-group">
                   <label>New Password</label>
                   <input type="text" placeholder="New Password" />
@@ -176,36 +182,67 @@ function UserDashboard() {
                 </div>
               </div>
               <div className="button-container">
-                <button type="button" onClick={() => openPopup("add")}>
-                  Confirm
+                {" "}
+                <button type="button" onClick={() => setShowPopup(true)}>
+                  Save Changes
                 </button>
+                {showPopup && (
+                  <ConfirmPopup onClose={() => setShowPopup(false)} />
+                )}
               </div>
 
-              {/*saved addresses section*/}
+              {/*saved address section*/}
               <h1>
-                <span style={{ color: "#FFCF33" }}>Saved Addresses</span>
+                <span style={{ color: "#FFCF33" }}>Saved Address</span>
               </h1>
-              <div className="user-profile-addresses">
-                <div className="user-address-list">
-                  <div className="address-card clickable">
-                    {user.isDefault && (
-                      <span className="default-tag">DEFAULT</span>
-                    )}
-
-                    <div className="user-address-info">
-                      <p className="name">
-                        {user.firstName} {user.lastName}
-                      </p>
-                      <p>{user.address}</p>
-                      <p>{user.contact}</p>
-                    </div>
+              <div className="user-profile-base user-profile-address">
+                <div className="container">
+                  <div className="form-group">
+                    <label>First Name</label>
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setfirstName(e.target.value)}
+                      className="inputField"
+                    />
                   </div>
-
-                  {/* add new address card */}
-                  <div className="address-card add-new clickable">
-                    <p>Add new address</p>
+                  <div className="form-group">
+                    <label>Last Name:</label>
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setlastName(e.target.value)}
+                      className="inputField"
+                    />
                   </div>
                 </div>
+                <div className="form-group">
+                  <label>Address:</label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="inputField"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Contact Number:</label>
+                  <input
+                    type="text"
+                    value={contactNum}
+                    onChange={(e) => setContactNum(e.target.value)}
+                    className="inputField"
+                  />
+                </div>
+              </div>
+              <div className="button-container">
+                {" "}
+                <button type="button" onClick={() => setShowPopup(true)}>
+                  Save Changes
+                </button>
+                {showPopup && (
+                  <ConfirmPopup onClose={() => setShowPopup(false)} />
+                )}
               </div>
             </div>
           </div>
