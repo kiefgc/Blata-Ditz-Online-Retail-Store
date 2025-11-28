@@ -1,6 +1,20 @@
-import "./Information.css";
+import "./Checkout.css";
 
 import { Link } from "react-router-dom";
+
+const mockOrderOverview = [
+  {
+    id: "001",
+    image: "https://picsum.photos/200/300",
+
+    name: "Pulsar XBOARD QS Mechanical Gaming Keyboard with Quick Switching Technology, Win/Mac Switch Key (Black)",
+    price: "16,450.00",
+    quantity: 1,
+    shipping: "FREE",
+    subtotal: "16,450.00",
+    total: "16,450.00",
+  },
+];
 function CheckoutInformation() {
   return (
     <div className="checkout-container">
@@ -62,7 +76,35 @@ function CheckoutInformation() {
             </button>
           </div>
         </div>
-        <div className="order-overview">asd</div>
+        <div className="order-overview-container">
+          {/* LIST OF ORDERS */}
+          {mockOrderOverview.map((s) => (
+            <div className="order-overview" key={s.id}>
+              <div className="order-products">
+                <img className="product-img" src={s.image} />
+                <span>x{s.quantity}</span>
+                <div className="overview-name-price">
+                  <span>{s.name}</span>
+                  <span className="overview-price">₱{s.price}</span>
+                </div>
+              </div>
+              <div className="order-amount">
+                <div className="overview-subtotal">
+                  <span>Subtotal</span>
+                  <span>₱{s.subtotal}</span>
+                </div>
+                <div className="overview-shipping">
+                  <span>Shipping</span>
+                  <span>{s.shipping}</span>
+                </div>
+                <div className="overview-total">
+                  <span>Total</span>
+                  <span style={{ color: "#ffcf33" }}>₱{s.total}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
