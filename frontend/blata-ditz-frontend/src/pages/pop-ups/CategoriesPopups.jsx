@@ -83,7 +83,7 @@ export const CategoryEditModal = ({
   const [description, setDescription] = useState(category.description || "");
   const [icon, setIcon] = useState(category.icon || "");
 
-  const handleUpdate = () => {
+  const handleOpenConfirmation = () => {
     if (name.trim()) {
       onUpdate({
         ...category,
@@ -91,7 +91,6 @@ export const CategoryEditModal = ({
         icon: icon.trim(),
         description: description.trim(),
       });
-      onClose();
     } else {
       alert("Category Name is required.");
     }
@@ -144,7 +143,10 @@ export const CategoryEditModal = ({
             <button className="cancel-btn" onClick={onClose}>
               Cancel
             </button>
-            <button className="update-details-btn" onClick={handleUpdate}>
+            <button
+              className="update-details-btn"
+              onClick={handleOpenConfirmation}
+            >
               Update Details
             </button>
           </div>
@@ -169,6 +171,32 @@ export const CategoryDeleteModal = ({ category, onClose, onDeleteConfirm }) => {
           </button>
           <button className="cancel-btn" onClick={onClose}>
             No
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const CategoryUpdateConfirmModal = ({
+  category,
+  onClose,
+  onUpdateConfirm,
+}) => {
+  return (
+    <div className="modal-backdrop">
+      <div className="category-modal-content category-delete-modal">
+        <h3>Confirm Update</h3>
+        <p>Are you sure you want to update the category: {category.name}?</p>
+        <div className="modal-actions-delete-confirm">
+          <button
+            className="update-details-btn"
+            onClick={() => onUpdateConfirm(category.id)}
+          >
+            Yes, Update
+          </button>
+          <button className="cancel-btn" onClick={onClose}>
+            Cancel
           </button>
         </div>
       </div>
