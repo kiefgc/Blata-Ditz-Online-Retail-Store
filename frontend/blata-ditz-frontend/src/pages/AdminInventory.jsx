@@ -112,8 +112,11 @@ function AdminInventory() {
     }));
   };
 
-  const handleOpenCreateModal = (supplierName) => {
-    setCreateModalSupplier(supplierName);
+  const handleOpenCreateModal = (supplier) => {
+    setCreateModalSupplier({
+      name: supplier.supplier_name,
+      id: supplier._id,
+    });
     setIsCreateModalOpen(true);
   };
 
@@ -272,9 +275,7 @@ function AdminInventory() {
                       </div>
                       <button
                         className="add-product-btn"
-                        onClick={() =>
-                          handleOpenCreateModal(supplier.supplier_name)
-                        }
+                        onClick={() => handleOpenCreateModal(supplier)}
                       >
                         + Add New Product to {supplier.supplier_name}
                       </button>
