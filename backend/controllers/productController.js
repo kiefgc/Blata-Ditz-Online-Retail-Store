@@ -20,6 +20,18 @@ export async function getAllProducts(req, res) {
   }
 }
 
+export async function getProductsBySupplier(req, res) {
+  try {
+    const { supplier_id } = req.params;
+
+    const products = await Product.getAll({ supplier_id: supplier_id });
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export async function getProductById(req, res) {
   try {
     const { id } = req.params;
