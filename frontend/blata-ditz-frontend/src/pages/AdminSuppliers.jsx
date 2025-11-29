@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminSuppliers.css";
-import api from "../api/api";
+import api from "../api/api.js";
 import SupplierPopup from "./pop-ups/SupplierPopups";
 
 function AdminSuppliers() {

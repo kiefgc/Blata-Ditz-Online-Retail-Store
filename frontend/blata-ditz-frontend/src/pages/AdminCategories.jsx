@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminCategories.css";
+import api from "../api/api.js";
 import {
   CategoryCreateModal,
   CategoryEditModal,
@@ -8,67 +9,9 @@ import {
   CategoryUpdateConfirmModal,
 } from "./pop-ups/CategoriesPopups.jsx";
 
-const initialCategories = [
-  {
-    id: "ps5",
-    name: "PS5",
-    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/playstation-5.png",
-    isActive: true,
-    description: "Games and accessories for PlayStation 5.",
-  },
-  {
-    id: "ps4",
-    name: "PS4",
-    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/ps-controller.png",
-    isActive: true,
-    description: "Games and accessories for PlayStation 4.",
-  },
-  {
-    id: "switch",
-    name: "SWITCH",
-    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/nintendo-switch--v1.png",
-    isActive: true,
-    description: "Games and accessories for Nintendo Switch.",
-  },
-  {
-    id: "xbox",
-    name: "XBOX",
-    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/xbox.png",
-    isActive: true,
-    description: "Games and accessories for Microsoft Xbox.",
-  },
-  {
-    id: "pcmac",
-    name: "PC/MAC",
-    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/monitor.png",
-    isActive: true,
-    description: "Software and hardware for PC and Mac.",
-  },
-  {
-    id: "collectibles",
-    name: "COLLECTIBLES",
-    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/funko.png",
-    isActive: true,
-    description: "Figurines and other collectible items.",
-  },
-  {
-    id: "more",
-    name: "MORE",
-    icon: "https://img.icons8.com/ios-filled/50/FFFFFF/more.png",
-    isActive: true,
-    description: "Miscellaneous products.",
-  },
-  {
-    id: "preorders",
-    name: "PRE-ORDERS",
-    icon: "https://img.icons8.com/pastel-glyph/64/FFFFFF/box--v1.png",
-    isActive: true,
-    description: "Products available for pre-purchase.",
-  },
-];
-
 function AdminCategories() {
-  const [categories, setCategories] = useState(initialCategories);
+  const [categories, setCategories] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
@@ -90,6 +33,30 @@ function AdminCategories() {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get("/categories");
+        const data = res.data;
+
+        const mapped = data.map((item) => ({
+          id: item._id,
+          name: item.category_name,
+          description: item.description,
+          isActive: item.is_active,
+          createdAt: item.created_at,
+          updatedAt: item.updated_at,
+        }));
+
+        setCategories(mapped);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const handleCardClick = (category) => {
     if (category.isAction) {
       setActiveModal("create");
@@ -105,15 +72,31 @@ function AdminCategories() {
     setCategoryToUpdate(null);
   };
 
-  const handleCreateCategory = (newCategoryData) => {
-    const newId = `c_${Date.now()}`;
-    const newCategory = {
-      ...newCategoryData,
-      id: newId,
-      isActive: true,
-    };
-    setCategories((prev) => [...prev, newCategory]);
-    handleCloseModal();
+  const handleCreateCategory = async (newCategoryData) => {
+    try {
+      const payload = {
+        category_name: newCategoryData.category_name,
+        description: newCategoryData.description,
+      };
+
+      const res = await api.post("/categories", payload);
+
+      const saved = res.data;
+
+      const mapped = {
+        id: saved._id,
+        name: saved.category_name,
+        description: saved.description,
+        isActive: saved.is_active,
+        createdAt: saved.created_at,
+        updatedAt: saved.updated_at,
+      };
+
+      setCategories((prev) => [...prev, mapped]);
+      handleCloseModal();
+    } catch (error) {
+      console.error("Failed to create category:", error);
+    }
   };
 
   const handleOpenEdit = (category) => {
@@ -141,9 +124,53 @@ function AdminCategories() {
     setActiveModal("delete");
   };
 
-  const handleDeleteCategory = (categoryId) => {
-    setCategories((prev) => prev.filter((s) => s.id !== categoryId));
-    handleCloseModal();
+  const handleUpdateCategory = async (updatedCategoryData) => {
+    if (!selectedCategory) return;
+
+    try {
+      const payload = {
+        category_name: updatedCategoryData.category_name,
+        description: updatedCategoryData.description,
+        is_active: updatedCategoryData.isActive,
+      };
+
+      const res = await api.patch(
+        `/categories/${selectedCategory.id}`,
+        payload
+      );
+
+      const saved = res.data;
+
+      setCategories((prev) =>
+        prev.map((cat) =>
+          cat.id === selectedCategory.id
+            ? {
+                ...cat,
+                name: saved.category_name,
+                description: saved.description,
+                isActive: saved.is_active,
+                updatedAt: saved.updated_at,
+              }
+            : cat
+        )
+      );
+
+      handleCloseModal();
+    } catch (error) {
+      console.error("Failed to update category:", error);
+    }
+  };
+
+  const handleDeleteCategory = async (categoryId) => {
+    try {
+      await api.delete(`/categories/${categoryId}`);
+
+      setCategories((prev) => prev.filter((cat) => cat.id !== categoryId));
+
+      handleCloseModal();
+    } catch (error) {
+      console.error("Failed to delete category:", error);
+    }
   };
 
   const filteredCategories = categories.filter((category) =>
@@ -303,7 +330,7 @@ function AdminCategories() {
           <CategoryEditModal
             category={selectedCategory}
             onClose={handleCloseModal}
-            onUpdate={handleOpenUpdateConfirmation}
+            onUpdate={handleUpdateCategory}
             onDeleteClick={handleOpenDeleteConfirmation}
           />
         )}

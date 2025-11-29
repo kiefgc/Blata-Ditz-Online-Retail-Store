@@ -32,7 +32,7 @@ export async function createCategory(req, res) {
       return res.status(400).json({ message: "Category name is required" });
     }
 
-    await Category.create({ category_name, description, is_active: true });
+    await Category.create({ category_name, description, is_active: false });
     res.status(201).json({ message: "Category created successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

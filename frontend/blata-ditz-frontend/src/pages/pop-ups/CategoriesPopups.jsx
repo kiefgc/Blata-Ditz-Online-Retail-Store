@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 
 export const CategoryCreateModal = ({ onClose, onCreate }) => {
   const [formData, setFormData] = useState({
-    name: "",
+    category_name: "",
     description: "",
   });
+
   const [showError, setShowError] = useState(false);
 
   const handleChange = (e) => {
@@ -13,8 +14,7 @@ export const CategoryCreateModal = ({ onClose, onCreate }) => {
   };
 
   const handleSubmit = () => {
-    // Client-side validation
-    if (formData.name.trim() && formData.description.trim()) {
+    if (formData.category_name.trim() && formData.description.trim()) {
       onCreate(formData);
     } else {
       setShowError(true);
@@ -25,25 +25,26 @@ export const CategoryCreateModal = ({ onClose, onCreate }) => {
     <div className="modal-backdrop">
       <div className="category-modal-content">
         {showError && (
-          <CustomMessageModal
-            title="Error"
-            message="Category Name and Description are required."
-            onClose={() => setShowError(false)}
-          />
+          <p className="error-text">
+            Category Name and Description are required.
+          </p>
         )}
+
         <h3>Add New Category</h3>
+
         <div className="form-group">
           <label htmlFor="categoryName">Category Name</label>
           <input
             type="text"
             id="categoryName"
-            name="name"
-            value={formData.name}
+            name="category_name"
+            value={formData.category_name}
             onChange={handleChange}
             placeholder="e.g., Adventure"
             required
           />
         </div>
+
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <textarea
@@ -56,6 +57,7 @@ export const CategoryCreateModal = ({ onClose, onCreate }) => {
             rows="3"
           />
         </div>
+
         <div className="modal-actions">
           <button className="cancel-btn" onClick={onClose}>
             Cancel
@@ -75,7 +77,12 @@ export const CategoryEditModal = ({
   onUpdate,
   onDeleteClick,
 }) => {
-  const [formData, setFormData] = useState(category);
+  const [formData, setFormData] = useState({
+    category_name: category?.name ?? "",
+    description: category?.description ?? "",
+    isActive: category?.isActive ?? true,
+  });
+
   const [showError, setShowError] = useState(false);
 
   const handleChange = (e) => {
@@ -89,7 +96,7 @@ export const CategoryEditModal = ({
   };
 
   const handleUpdate = () => {
-    if (formData.name.trim() && formData.description.trim()) {
+    if (formData.category_name.trim() && formData.description.trim()) {
       onUpdate(formData);
     } else {
       setShowError(true);
@@ -100,12 +107,11 @@ export const CategoryEditModal = ({
     <div className="modal-backdrop">
       <div className="category-modal-content">
         {showError && (
-          <CustomMessageModal
-            title="Error"
-            message="Category Name and Description are required."
-            onClose={() => setShowError(false)}
-          />
+          <p className="error-text">
+            Category Name and Description are required.
+          </p>
         )}
+
         <h3>Edit Category: {category.name}</h3>
 
         <div className="form-group">
@@ -113,10 +119,9 @@ export const CategoryEditModal = ({
           <input
             type="text"
             id="categoryName"
-            name="name"
-            value={formData.name}
+            name="category_name"
+            value={formData.category_name}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="form-group">
