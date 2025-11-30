@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/api.js";
 import "../pages/pop-ups/Cart.css";
 
 function Cart({ onClose, customerId }) {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchCart = async (initial = false) => {
     if (initial) setLoading(true);
@@ -150,7 +152,11 @@ function Cart({ onClose, customerId }) {
           <span>₱ {total.toFixed(2)}</span>
         </div>
         <div className="cart-footer-checkout">
-          <button className="checkout-button" disabled={cartIsEmpty}>
+          <button
+            className="checkout-button"
+            disabled={cartIsEmpty}
+            onClick={() => navigate("/checkout/information")}
+          >
             Proceed to Checkout
           </button>
         </div>
