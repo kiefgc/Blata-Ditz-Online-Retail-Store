@@ -11,10 +11,10 @@ function Cart({ onClose, customerId }) {
 
     const fetchCartData = async () => {
       try {
+        // 1️⃣ Fetch cart for the customer
         const cartRes = await api.get(`/cart/${customerId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
-
         const cart = cartRes.data.cart;
 
         if (!cart || !cart.items.length) {
@@ -23,9 +23,15 @@ function Cart({ onClose, customerId }) {
           return;
         }
 
-        const productsRes = await api.get("/products");
+        // 2️⃣ Fetch only products in the cart
+        const productIds = cart.items.map((item) => item.product_id);
+        const productsRes = await api.get("/products", {
+          params: { ids: productIds.join(",") }, // your backend should support filtering by IDs
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
         const products = productsRes.data;
 
+        // 3️⃣ Combine cart items with product details
         const combinedItems = cart.items.map((item) => {
           const product = products.find((p) => p._id === item.product_id);
           return {
@@ -55,7 +61,6 @@ function Cart({ onClose, customerId }) {
       const updatedItems = prevItems
         .map((item) => (item.id === productId ? { ...item, quantity } : item))
         .filter((item) => item.quantity > 0);
-
       return updatedItems;
     });
   };
