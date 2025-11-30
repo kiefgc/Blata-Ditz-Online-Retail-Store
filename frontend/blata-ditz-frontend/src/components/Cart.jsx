@@ -1,21 +1,52 @@
-import { React, useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import api from "../api/api.js";
 import "../pages/pop-ups/Cart.css";
 
-// for testing
-const initialCartItems = [
-  { id: "p1", name: "The Legend of Zelda: TOTK", price: 3899.0, quantity: 2 },
-  {
-    id: "p3",
-    name: "PlayStation 5 Console (Disc)",
-    price: 29990.0,
-    quantity: 1,
-  },
-  { id: "p4", name: "Razer BlackShark V2 Headset", price: 1500.0, quantity: 3 },
-  { id: "p5", name: "Xbox Wireless Controller", price: 2899.5, quantity: 1 },
-];
+function Cart({ onClose, customerId }) {
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-function Cart({ onClose }) {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  useEffect(() => {
+    if (!customerId) return;
+
+    const fetchCartData = async () => {
+      try {
+        const cartRes = await api.get(`/cart/${customerId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+
+        const cart = cartRes.data.cart;
+
+        if (!cart || !cart.items.length) {
+          setCartItems([]);
+          setLoading(false);
+          return;
+        }
+
+        const productsRes = await api.get("/products");
+        const products = productsRes.data;
+
+        const combinedItems = cart.items.map((item) => {
+          const product = products.find((p) => p._id === item.product_id);
+          return {
+            id: item.product_id,
+            name: product?.product_name || "Unknown Product",
+            price: product?.unit_price || 0,
+            quantity: item.quantity,
+          };
+        });
+
+        setCartItems(combinedItems);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+        setCartItems([]);
+        setLoading(false);
+      }
+    };
+
+    fetchCartData();
+  }, [customerId]);
 
   const handleQuantityChange = (productId, newQuantity) => {
     const quantity = Math.max(0, newQuantity);
@@ -42,6 +73,8 @@ function Cart({ onClose }) {
   }, [cartItems]);
 
   const cartIsEmpty = cartItems.length === 0;
+
+  if (loading) return <div className="cart-popup">Loading cart...</div>;
 
   return (
     <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
@@ -73,7 +106,6 @@ function Cart({ onClose }) {
                       -
                     </button>
                     <span className="item-qty-value">{item.quantity}</span>
-
                     <button
                       className="qty-button plus"
                       onClick={() =>
@@ -107,4 +139,5 @@ function Cart({ onClose }) {
     </div>
   );
 }
+
 export default Cart;
