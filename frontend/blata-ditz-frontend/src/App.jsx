@@ -19,6 +19,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Information from "./pages/Checkout/Information";
 import Payment from "./pages/Checkout/Payment";
+import CheckoutProcessing from "./pages/Checkout/CheckoutProcessing";
+import Checkout from "./pages/Checkout/Checkout";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,8 +46,8 @@ function App() {
         <Route path="/admin/reports" element={<AdminReports />} />
 
         {/* Order Placement routes */}
-        <Route path="/checkout/information" element={<Information />} />
-        <Route path="/checkout/payment" element={<Payment />} />
+        <Route path="/checkout/*" element={<Checkout />} />
+        <Route path="/checkout/processing" element={<CheckoutProcessing />} />
       </Routes>
 
       <Footer />
