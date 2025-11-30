@@ -99,6 +99,7 @@ export async function login(req, res) {
       const { accessToken, refreshToken } = await generateTokens({
         _id: admin._id,
         role: "admin",
+        admin_id: admin._id,
       });
 
       res.cookie("refreshToken", refreshToken, {
@@ -133,6 +134,7 @@ export async function login(req, res) {
         message: "Customer login successful",
         accessToken,
         role: "customer",
+        customer_id: customer._id,
       });
     }
 

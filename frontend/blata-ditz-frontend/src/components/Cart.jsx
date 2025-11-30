@@ -1,15 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../api/api.js";
 import "../pages/pop-ups/Cart.css";
 
-function Cart({ onClose }) {
-  const cartItems = [
-    { id: 1, name: "Product", quantity: 2, price: 10.0 },
-    { id: 2, name: "Product", quantity: 1, price: 25.5 },
-  ];
+function Cart({ onClose, customerId }) {
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!customerId) return;
+
+    const fetchCartData = async () => {
+      try {
+        const cartRes = await api.get(`/cart/${customerId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+
+        const cart = cartRes.data.cart;
+
+        if (!cart || !cart.items.length) {
+          setCartItems([]);
+          setLoading(false);
+          return;
+        }
+
+        const productsRes = await api.get("/products");
+        const products = productsRes.data;
+
+        const combinedItems = cart.items.map((item) => {
+          const product = products.find((p) => p._id === item.product_id);
+          return {
+            id: item.product_id,
+            name: product?.product_name || "Unknown Product",
+            price: product?.unit_price || 0,
+            quantity: item.quantity,
+          };
+        });
+
+        setCartItems(combinedItems);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+        setCartItems([]);
+        setLoading(false);
+      }
+    };
+
+    fetchCartData();
+  }, [customerId]);
+
   const total = cartItems.reduce(
     (sum, item) => sum + item.quantity * item.price,
     0
   );
+
+  if (loading) return <div className="cart-popup">Loading cart...</div>;
 
   return (
     <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
@@ -29,7 +73,6 @@ function Cart({ onClose }) {
                 <span className="item-name">{item.name}</span>
                 <span className="item-qty">Qty: {item.quantity}</span>
               </div>
-
               <span className="item-price">
                 Php {(item.quantity * item.price).toFixed(2)}
               </span>
@@ -50,4 +93,5 @@ function Cart({ onClose }) {
     </div>
   );
 }
+
 export default Cart;
