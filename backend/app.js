@@ -8,6 +8,7 @@ import supplierRoutes from "./routes/suppliersRoutes.js";
 import inventoryRoutes from "./routes/inventoryRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import orderDetailRoutes from "./routes/orderDetailsRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/inventory", inventoryRoutes);
 app.use("/suppliers", supplierRoutes);
 app.use("/orders", orderRoutes);
 app.use("/orderdetails", orderDetailRoutes);
+app.use("/cart", cartRoutes);
 
 app.use("/uploads", express.static("uploads"));
 app.use((req, res) => {
