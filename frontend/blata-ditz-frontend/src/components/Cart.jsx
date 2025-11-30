@@ -6,70 +6,88 @@ function Cart({ onClose, customerId }) {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!customerId) return;
+  const fetchCart = async (initial = false) => {
+    if (initial) setLoading(true);
 
-    const fetchCartData = async () => {
-      try {
-        // 1️⃣ Fetch cart for the customer
-        const cartRes = await api.get(`/cart/${customerId}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-        const cart = cartRes.data.cart;
+    try {
+      const cartRes = await api.get(`/cart/${customerId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
 
-        if (!cart || !cart.items.length) {
-          setCartItems([]);
-          setLoading(false);
-          return;
-        }
+      const cart = cartRes.data.cart;
 
-        // 2️⃣ Fetch only products in the cart
-        const productIds = cart.items.map((item) => item.product_id);
-        const productsRes = await api.get("/products", {
-          params: { ids: productIds.join(",") }, // your backend should support filtering by IDs
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-        const products = productsRes.data;
-
-        // 3️⃣ Combine cart items with product details
-        const combinedItems = cart.items.map((item) => {
-          const product = products.find((p) => p._id === item.product_id);
-          return {
-            id: item.product_id,
-            name: product?.product_name || "Unknown Product",
-            price: product?.unit_price || 0,
-            quantity: item.quantity,
-          };
-        });
-
-        setCartItems(combinedItems);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching cart:", error);
+      if (!cart || !cart.items.length) {
         setCartItems([]);
-        setLoading(false);
+        if (initial) setLoading(false);
+        return;
       }
-    };
 
-    fetchCartData();
-  }, [customerId]);
+      const productIds = cart.items.map((item) => item.product_id);
+      const productsRes = await api.get("/products", {
+        params: { ids: productIds.join(",") },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const products = productsRes.data;
 
-  const handleQuantityChange = (productId, newQuantity) => {
-    const quantity = Math.max(0, newQuantity);
+      const combinedItems = cart.items.map((item) => {
+        const product = products.find((p) => p._id === item.product_id);
+        return {
+          id: item.product_id,
+          name: product?.product_name || "Unknown Product",
+          price: product?.unit_price || 0,
+          quantity: item.quantity,
+        };
+      });
 
-    setCartItems((prevItems) => {
-      const updatedItems = prevItems
-        .map((item) => (item.id === productId ? { ...item, quantity } : item))
-        .filter((item) => item.quantity > 0);
-      return updatedItems;
-    });
+      setCartItems(combinedItems);
+      if (initial) setLoading(false);
+    } catch (err) {
+      console.error("Fetch cart error:", err);
+      setCartItems([]);
+      if (initial) setLoading(false);
+    }
   };
 
-  const handleDecrementOrRemove = (item) => {
-    if (item.quantity > 1) {
-      handleQuantityChange(item.id, item.quantity - 1);
-    } else if (item.quantity === 1) {
-      setCartItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
+  useEffect(() => {
+    if (!customerId) return;
+    fetchCart(true);
+  }, [customerId]);
+
+  const updateQuantity = async (productId, newQty) => {
+    const customer_id = localStorage.getItem("customer_id");
+    const token = localStorage.getItem("token");
+
+    if (!customer_id || !token) return;
+
+    if (newQty <= 0) {
+      return removeItem(productId);
+    }
+
+    try {
+      await api.patch(
+        `/cart/${customer_id}/update`,
+        { product_id: productId, quantity: newQty },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      fetchCart();
+    } catch (err) {
+      console.error("Update quantity error:", err);
+    }
+  };
+
+  const removeItem = async (productId) => {
+    const customer_id = localStorage.getItem("customer_id");
+    const token = localStorage.getItem("token");
+
+    try {
+      await api.delete(`/cart/${customer_id}/remove/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      fetchCart();
+    } catch (err) {
+      console.error("Remove item error:", err);
     }
   };
 
@@ -105,17 +123,13 @@ function Cart({ onClose, customerId }) {
                 <div className="controls-and-price">
                   <div className="quantity-controls">
                     <button
-                      className="quantity-button"
-                      onClick={() => handleDecrementOrRemove(item)}
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
                     >
                       -
                     </button>
                     <span className="item-qty-value">{item.quantity}</span>
                     <button
-                      className="qty-button plus"
-                      onClick={() =>
-                        handleQuantityChange(item.id, item.quantity + 1)
-                      }
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
                     >
                       +
                     </button>
