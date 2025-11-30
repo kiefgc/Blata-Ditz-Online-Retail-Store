@@ -1,9 +1,6 @@
 import { Cart } from "../models/Cart.js";
 import * as orderController from "./orderController.js";
 
-// ===========================
-// GET /cart/:customer_id
-// ===========================
 export async function getCart(req, res) {
   try {
     const { customer_id } = req.params;
@@ -25,9 +22,6 @@ export async function getCart(req, res) {
   }
 }
 
-// ===========================
-// POST /cart/:customer_id/add
-// ===========================
 export async function addItem(req, res) {
   try {
     const { customer_id } = req.params;
@@ -74,9 +68,6 @@ export async function addItem(req, res) {
   }
 }
 
-// ===========================
-// PATCH /cart/:customer_id/update
-// ===========================
 export async function updateQuantity(req, res) {
   try {
     const { customer_id } = req.params;
@@ -109,9 +100,6 @@ export async function updateQuantity(req, res) {
   }
 }
 
-// ===========================
-// DELETE /cart/:customer_id/remove/:product_id
-// ===========================
 export async function removeItem(req, res) {
   try {
     const { customer_id, product_id } = req.params;
@@ -135,9 +123,6 @@ export async function removeItem(req, res) {
   }
 }
 
-// ===========================
-// DELETE /cart/:customer_id
-// ===========================
 export async function deleteCart(req, res) {
   try {
     const { customer_id } = req.params;
@@ -159,13 +144,11 @@ export async function checkoutCart(req, res) {
   try {
     const customer_id = req.user.id;
 
-    // Fetch the cart
     const cart = await Cart.findByCustomerId(customer_id);
     if (!cart || !cart.items.length) {
       return res.status(400).json({ message: "Cart is empty" });
     }
 
-    // Prepare payload for createOrder
     const orderPayload = {
       customer_id,
       payment_method: req.body.payment_method,
@@ -176,24 +159,21 @@ export async function checkoutCart(req, res) {
       })),
     };
 
-    // Call createOrder but capture result without sending response
     let orderResult;
     const fakeRes = {
       status: (code) => ({
         json: (data) => {
           orderResult = { code, data };
-          return { code, data }; // don't send yet
+          return { code, data };
         },
       }),
     };
     await orderController.createOrder({ ...req, body: orderPayload }, fakeRes);
 
-    // Only clear cart if order creation succeeded
     if (orderResult && orderResult.code === 201) {
       await Cart.delete(customer_id);
     }
 
-    // Now send response to client
     return res.status(orderResult.code).json(orderResult.data);
   } catch (err) {
     console.error("Checkout cart error:", err);
