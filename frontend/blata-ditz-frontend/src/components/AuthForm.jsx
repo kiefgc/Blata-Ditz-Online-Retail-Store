@@ -24,6 +24,10 @@ function AuthForm({ isLogin, onClose, onSwitch, onLoginSuccess }) {
         const userRole = response.data.role;
         localStorage.setItem("role", userRole);
 
+        if (response.data.customer_id) {
+          localStorage.setItem("customer_id", response.data.customer_id);
+        }
+
         if (!userRole) {
           console.error(
             "Unable to determine user role from response",

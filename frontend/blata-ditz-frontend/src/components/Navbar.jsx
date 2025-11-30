@@ -12,6 +12,7 @@ function Navbar({ searchQuery, setSearchQuery }) {
   const [isSignedIn, setIsSignedIn] =
     useState(false); /* For changing navbar icons when user logged in */
 
+  const customerId = localStorage.getItem("customer_id");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCartPopup, setShowCartPopup] = useState(false);
 
@@ -198,7 +199,10 @@ function Navbar({ searchQuery, setSearchQuery }) {
                   alt="shopping-cart"
                 />
                 {showCartPopup && (
-                  <Cart onClose={() => setShowCartPopup(false)} />
+                  <Cart
+                    onClose={() => setShowCartPopup(false)}
+                    customerId={customerId}
+                  />
                 )}
               </div>
               <div
