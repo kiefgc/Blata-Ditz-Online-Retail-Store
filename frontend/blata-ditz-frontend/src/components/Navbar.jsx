@@ -187,24 +187,29 @@ function Navbar({ searchQuery, setSearchQuery }) {
                   onClick={() => setShowSmallSearchbar(!showSmallSearchbar)}
                 />
               </a>
-              <div
-                className="pop-up-parent-container"
-                ref={cartIconRef}
-                onClick={clickCartIcon}
-              >
-                <img
-                  width="30"
-                  height="30"
-                  src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/shopping-cart.png"
-                  alt="shopping-cart"
-                />
-                {showCartPopup && (
-                  <Cart
-                    onClose={() => setShowCartPopup(false)}
-                    customerId={customerId}
+
+              {/* Only show cart for customers */}
+              {localStorage.getItem("role") === "customer" && (
+                <div
+                  className="pop-up-parent-container"
+                  ref={cartIconRef}
+                  onClick={clickCartIcon}
+                >
+                  <img
+                    width="30"
+                    height="30"
+                    src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/shopping-cart.png"
+                    alt="shopping-cart"
                   />
-                )}
-              </div>
+                  {showCartPopup && (
+                    <Cart
+                      onClose={() => setShowCartPopup(false)}
+                      customerId={customerId}
+                    />
+                  )}
+                </div>
+              )}
+
               <div
                 className="pop-up-parent-container"
                 ref={userIconRef}

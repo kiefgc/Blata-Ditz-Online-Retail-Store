@@ -1,39 +1,93 @@
-import { React, useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import api from "../api/api.js";
 import "../pages/pop-ups/Cart.css";
 
-// for testing
-const initialCartItems = [
-  { id: "p1", name: "The Legend of Zelda: TOTK", price: 3899.0, quantity: 2 },
-  {
-    id: "p3",
-    name: "PlayStation 5 Console (Disc)",
-    price: 29990.0,
-    quantity: 1,
-  },
-  { id: "p4", name: "Razer BlackShark V2 Headset", price: 1500.0, quantity: 3 },
-  { id: "p5", name: "Xbox Wireless Controller", price: 2899.5, quantity: 1 },
-];
+function Cart({ onClose, customerId }) {
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-function Cart({ onClose }) {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  const fetchCart = async (initial = false) => {
+    if (initial) setLoading(true);
 
-  const handleQuantityChange = (productId, newQuantity) => {
-    const quantity = Math.max(0, newQuantity);
+    try {
+      const cartRes = await api.get(`/cart/${customerId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
 
-    setCartItems((prevItems) => {
-      const updatedItems = prevItems
-        .map((item) => (item.id === productId ? { ...item, quantity } : item))
-        .filter((item) => item.quantity > 0);
+      const cart = cartRes.data.cart;
 
-      return updatedItems;
-    });
+      if (!cart || !cart.items.length) {
+        setCartItems([]);
+        if (initial) setLoading(false);
+        return;
+      }
+
+      const productIds = cart.items.map((item) => item.product_id);
+      const productsRes = await api.get("/products", {
+        params: { ids: productIds.join(",") },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const products = productsRes.data;
+
+      const combinedItems = cart.items.map((item) => {
+        const product = products.find((p) => p._id === item.product_id);
+        return {
+          id: item.product_id,
+          name: product?.product_name || "Unknown Product",
+          price: product?.unit_price || 0,
+          quantity: item.quantity,
+        };
+      });
+
+      setCartItems(combinedItems);
+      if (initial) setLoading(false);
+    } catch (err) {
+      console.error("Fetch cart error:", err);
+      setCartItems([]);
+      if (initial) setLoading(false);
+    }
   };
 
-  const handleDecrementOrRemove = (item) => {
-    if (item.quantity > 1) {
-      handleQuantityChange(item.id, item.quantity - 1);
-    } else if (item.quantity === 1) {
-      setCartItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
+  useEffect(() => {
+    if (!customerId) return;
+    fetchCart(true);
+  }, [customerId]);
+
+  const updateQuantity = async (productId, newQty) => {
+    const customer_id = localStorage.getItem("customer_id");
+    const token = localStorage.getItem("token");
+
+    if (!customer_id || !token) return;
+
+    if (newQty <= 0) {
+      return removeItem(productId);
+    }
+
+    try {
+      await api.patch(
+        `/cart/${customer_id}/update`,
+        { product_id: productId, quantity: newQty },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      fetchCart();
+    } catch (err) {
+      console.error("Update quantity error:", err);
+    }
+  };
+
+  const removeItem = async (productId) => {
+    const customer_id = localStorage.getItem("customer_id");
+    const token = localStorage.getItem("token");
+
+    try {
+      await api.delete(`/cart/${customer_id}/remove/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      fetchCart();
+    } catch (err) {
+      console.error("Remove item error:", err);
     }
   };
 
@@ -42,6 +96,8 @@ function Cart({ onClose }) {
   }, [cartItems]);
 
   const cartIsEmpty = cartItems.length === 0;
+
+  if (loading) return <div className="cart-popup">Loading cart...</div>;
 
   return (
     <div className="cart-popup" onClick={(e) => e.stopPropagation()}>
@@ -67,18 +123,13 @@ function Cart({ onClose }) {
                 <div className="controls-and-price">
                   <div className="quantity-controls">
                     <button
-                      className="quantity-button"
-                      onClick={() => handleDecrementOrRemove(item)}
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
                     >
                       -
                     </button>
                     <span className="item-qty-value">{item.quantity}</span>
-
                     <button
-                      className="qty-button plus"
-                      onClick={() =>
-                        handleQuantityChange(item.id, item.quantity + 1)
-                      }
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
                     >
                       +
                     </button>
@@ -107,4 +158,5 @@ function Cart({ onClose }) {
     </div>
   );
 }
+
 export default Cart;
