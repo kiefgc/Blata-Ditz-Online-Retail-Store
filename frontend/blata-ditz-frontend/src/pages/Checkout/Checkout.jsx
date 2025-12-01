@@ -29,7 +29,7 @@ export default function Checkout() {
   return (
     <Routes>
       <Route
-        path="information"
+        index
         element={
           <Information
             formData={formData}
