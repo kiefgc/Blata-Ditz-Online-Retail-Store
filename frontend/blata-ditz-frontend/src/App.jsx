@@ -2,13 +2,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
 import ScrollPosition from "./pages/ScrollPosition";
-
 import Landing from "./pages/Landing/Landing";
 import Product from "./pages/Product";
 import UserDashboard from "./pages/UserDashboard";
 import UserOrders from "./pages/UserOrders";
 import UserProfile from "./pages/UserProfile";
-
 import AdminUsers from "./pages/AdminUsers";
 import AdminOrders from "./pages/AdminOrders";
 import AdminInventory from "./pages/AdminInventory";
@@ -17,13 +15,11 @@ import AdminSuppliers from "./pages/AdminSuppliers";
 import AdminReports from "./pages/AdminReports";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Information from "./pages/Checkout/Information";
-import Payment from "./pages/Checkout/Payment";
-import CheckoutProcessing from "./pages/Checkout/CheckoutProcessing";
 import Checkout from "./pages/Checkout/Checkout";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
+  const customerId = localStorage.getItem("customer_id");
 
   return (
     <Router>
@@ -33,6 +29,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing searchQuery={searchQuery} />} />
         <Route path="/product/:id" element={<Product />} />
+
+        {/* User dashboard routes */}
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/dashboard/orders" element={<UserOrders />} />
         <Route path="/dashboard/profile" element={<UserProfile />} />
@@ -45,9 +43,11 @@ function App() {
         <Route path="/admin/suppliers" element={<AdminSuppliers />} />
         <Route path="/admin/reports" element={<AdminReports />} />
 
-        {/* Order Placement routes */}
-        <Route path="/checkout/*" element={<Checkout />} />
-        <Route path="/checkout/processing" element={<CheckoutProcessing />} />
+        {/* Checkout flow */}
+        <Route
+          path="/checkout/*"
+          element={<Checkout customerId={customerId} />}
+        />
       </Routes>
 
       <Footer />

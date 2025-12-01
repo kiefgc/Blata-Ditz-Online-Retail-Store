@@ -155,7 +155,7 @@ function Cart({ onClose, customerId }) {
           <button
             className="checkout-button"
             disabled={cartIsEmpty}
-            onClick={() => navigate("/checkout/information")}
+            onClick={() => navigate("/checkout")}
           >
             Proceed to Checkout
           </button>

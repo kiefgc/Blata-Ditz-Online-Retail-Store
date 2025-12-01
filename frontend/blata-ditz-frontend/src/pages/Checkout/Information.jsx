@@ -1,4 +1,6 @@
 import "./Checkout.css";
+import { useEffect, useState } from "react";
+import api from "../../api/api.js";
 import { Link } from "react-router-dom";
 
 const mockOrderOverview = [
@@ -18,6 +20,59 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
   const updateField = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  useEffect(() => {
+    const fetchCartAndProducts = async () => {
+      const customerId = localStorage.getItem("customer_id");
+      const token = localStorage.getItem("token");
+      if (!customerId || !token) return;
+
+      try {
+        const cartRes = await api.get(`/cart/${customerId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const cart = cartRes.data.cart;
+        if (!cart || !cart.items.length) {
+          setCartItems([]);
+          setLoading(false);
+          return;
+        }
+
+        const products = await Promise.all(
+          cart.items.map(async (item) => {
+            const prodRes = await api.get(`/products/${item.product_id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            const product = prodRes.data;
+
+            return {
+              id: product._id,
+              name: product.product_name,
+              price: product.unit_price,
+              quantity: item.quantity,
+              image: `http://localhost:5000${product.image}`,
+            };
+          })
+        );
+
+        setCartItems(products);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching checkout cart:", err);
+        setCartItems([]);
+        setLoading(false);
+      }
+    };
+
+    fetchCartAndProducts();
+  }, []);
 
   return (
     <div className="checkout-container">
@@ -119,32 +174,45 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
           </div>
         </div>
         <div className="order-overview-container">
-          {mockOrderOverview.map((s) => (
-            <div className="order-overview" key={s.id}>
-              <div className="order-products">
-                <img className="product-img" src={s.image} />
-                <span>x{s.quantity}</span>
-                <div className="overview-name-price">
-                  <span>{s.name}</span>
-                  <span className="overview-price">₱{s.price}</span>
+          {loading ? (
+            <p>Loading order overview...</p>
+          ) : cartItems.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
+            <>
+              {cartItems.map((item) => (
+                <div className="order-product-row" key={item.id}>
+                  <div className="order-products">
+                    <img
+                      className="product-img"
+                      src={item.image}
+                      alt={item.name}
+                    />
+                    <span>x{item.quantity}</span>
+                    <div className="overview-name-price">
+                      <span>{item.name}</span>
+                      <span className="overview-price">₱{item.price}</span>
+                    </div>
+                  </div>
+                  <div className="overview-subtotal">
+                    <span>Subtotal</span>
+                    <span>₱{(item.price * item.quantity).toFixed(2)}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="order-amount">
-                <div className="overview-subtotal">
-                  <span>Subtotal</span>
-                  <span>₱{s.subtotal}</span>
-                </div>
+              ))}
+
+              <div className="order-overview-total">
                 <div className="overview-shipping">
                   <span>Shipping</span>
-                  <span>{s.shipping}</span>
+                  <span>FREE</span>
                 </div>
                 <div className="overview-total">
                   <span>Total</span>
-                  <span style={{ color: "#ffcf33" }}>₱{s.total}</span>
+                  <span style={{ color: "#ffcf33" }}>₱{total.toFixed(2)}</span>
                 </div>
               </div>
-            </div>
-          ))}
+            </>
+          )}
         </div>
       </div>
     </div>
