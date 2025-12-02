@@ -1,20 +1,17 @@
 import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Information from "./Information";
+import CheckoutProcessing from "./CheckoutProcessing";
 import Payment from "./Payment";
 
 export default function Checkout() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    fname: "",
-    lname: "",
-    email: "",
-    phone: "",
-    street: "",
-    postal: "",
-    city: "",
-    region: "",
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem("checkoutForm");
+    return saved
+      ? JSON.parse(saved)
+      : { phone: "", street: "", postal: "", city: "", region: "" };
   });
 
   const handleContinue = () => {
@@ -39,6 +36,7 @@ export default function Checkout() {
         }
       />
       <Route path="payment" element={<Payment formData={formData} />} />
+      <Route path="processing" element={<CheckoutProcessing />} />{" "}
     </Routes>
   );
 }

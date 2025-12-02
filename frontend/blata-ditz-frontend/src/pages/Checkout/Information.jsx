@@ -3,25 +3,14 @@ import { useEffect, useState } from "react";
 import api from "../../api/api.js";
 import { Link } from "react-router-dom";
 
-const mockOrderOverview = [
-  {
-    id: "001",
-    image: "https://picsum.photos/200/300",
-    name: "Pulsar XBOARD QS Mechanical Gaming Keyboard with Quick Switching Technology, Win/Mac Switch Key (Black)",
-    price: "16,450.00",
-    quantity: 1,
-    shipping: "FREE",
-    subtotal: "16,450.00",
-    total: "16,450.00",
-  },
-];
-
 function CheckoutInformation({ formData, setFormData, handleContinue }) {
   const updateField = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -80,54 +69,23 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
         <h1>Order Placement</h1>
 
         <span className="selectedCheckout">Information </span>
-
         <span>&gt; </span>
         <Link to="/checkout/payment">
           <span>Payment </span>
         </Link>
       </div>
-      {/* INFORMATION CONTENT */}
+
       <div className="information-container">
         <div className="checkout-customer-details">
-          <div className="first-lastname">
-            <div className="info-input">
-              <span className="info-title">First Name</span>
-              <input
-                type="text"
-                name="fname"
-                value={formData.fname}
-                onChange={updateField}
-              />
-            </div>
-            <div className="info-input">
-              <span className="info-title">Last Name</span>
-              <input
-                type="text"
-                name="lname"
-                value={formData.lname}
-                onChange={updateField}
-              />
-            </div>
-          </div>
-          <div className="email-phone">
-            <div className="info-input">
-              <span className="info-title">Email</span>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={updateField}
-              />
-            </div>
-            <div className="info-input">
-              <span className="info-title">Phone Number</span>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={updateField}
-              />
-            </div>
+          {/* Only show the required address fields */}
+          <div className="info-input">
+            <span className="info-title">Phone Number</span>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={updateField}
+            />
           </div>
           <div className="info-input">
             <span className="info-title">Street No.</span>
@@ -167,12 +125,15 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
               />
             </div>
           </div>
+
           <div className="info-buttons">
             <button className="proceed-btn" onClick={handleContinue}>
               Continue to Payment
             </button>
           </div>
         </div>
+
+        {/* ORDER OVERVIEW */}
         <div className="order-overview-container">
           {loading ? (
             <p>Loading order overview...</p>
