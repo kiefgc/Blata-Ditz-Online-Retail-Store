@@ -28,19 +28,14 @@ function AuthForm({ isLogin, onClose, onSwitch, onLoginSuccess }) {
           localStorage.setItem("customer_id", response.data.customer_id);
         }
 
-        if (!userRole) {
-          console.error(
-            "Unable to determine user role from response",
-            response.data
-          );
-          alert("Login failed: could not determine role");
-          return;
+        if (response.data.username) {
+          localStorage.setItem("username", response.data.username);
         }
 
         if (userRole === "admin") {
-          window.location.href = "/admin/users"; // redirect to admin dashboard page
+          window.location.href = "/admin/users";
         } else {
-          window.location.href = "/"; // regular customer
+          window.location.href = "/";
         }
 
         if (onLoginSuccess) onLoginSuccess();

@@ -9,6 +9,7 @@ const FORM_POSITION_LOGIN = 1;
 const FORM_POSITION_SIGNUP = 2;
 
 function Navbar({ searchQuery, setSearchQuery }) {
+  const navigate = useNavigate();
   const [isSignedIn, setIsSignedIn] =
     useState(false); /* For changing navbar icons when user logged in */
 
@@ -25,6 +26,25 @@ function Navbar({ searchQuery, setSearchQuery }) {
   const [activeFormPosition, setActiveFormPosition] =
     useState(FORM_POSITION_NONE);
   const [isLogin, setIsLogin] = useState(true);
+
+  const goHome = (e) => {
+    e.preventDefault();
+    navigate("/");
+  };
+
+  const handleProfileClick = (e) => {
+    e.preventDefault();
+
+    const role = localStorage.getItem("role");
+
+    if (role === "customer") {
+      navigate("/dashboard");
+    } else if (role === "admin") {
+      navigate("/admin/users");
+    } else {
+      navigate("/");
+    }
+  };
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -146,7 +166,7 @@ function Navbar({ searchQuery, setSearchQuery }) {
     <>
       <div className="navbar">
         <div>
-          <a href="#" className="logo">
+          <a href="/" className="logo" onClick={goHome}>
             BLATADITZ
           </a>
         </div>
@@ -223,7 +243,9 @@ function Navbar({ searchQuery, setSearchQuery }) {
                 />
                 {showDropdown && (
                   <div className="user-dropdown">
-                    <a href="#">Profile</a>
+                    <a href="#" onClick={handleProfileClick}>
+                      Profile
+                    </a>
                     <a href="#">Orders</a>
                     <a href="#" onClick={handleLogout} className="logout-link">
                       Logout

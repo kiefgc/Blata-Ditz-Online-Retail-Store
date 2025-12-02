@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import api from "../api/api.js";
 
 import "./UserDashboard.css";
 import "./Landing.css";
@@ -33,8 +34,10 @@ const ordersMock = [
 
 function UserDashboard() {
   const { id } = useParams();
+  const [username, setUsername] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -47,6 +50,37 @@ function UserDashboard() {
     return () => window.removeEventListener("resize", searchbarScreenResize);
   }, []);
 
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await api.get("/orders");
+        const data = response.data;
+
+        if (Array.isArray(data)) {
+          const pendingOrders = data.filter(
+            (order) => order.order_status === "pending"
+          );
+
+          setOrders(pendingOrders);
+        } else {
+          console.error("Expected array, got:", data);
+          setOrders([]);
+        }
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
   return (
     <>
       <div className="user-dashboard-container">
@@ -55,7 +89,7 @@ function UserDashboard() {
             <span style={{ color: "#FFCF33" }}>My Account</span>
           </h1>
           <h2>
-            Welcome, <span style={{ color: "#FFCF33" }}>Username!</span>
+            Welcome, <span style={{ color: "#FFCF33" }}> {username}!</span>
           </h2>
         </div>
 
@@ -101,15 +135,6 @@ function UserDashboard() {
                   </a>
                 </span>
               </li>
-              <li>
-                <img
-                  width="21"
-                  height="21"
-                  src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/open-pane.png"
-                  alt="open-pane"
-                />
-                <span>Log Out</span>
-              </li>
             </ul>
           </div>
 
@@ -123,24 +148,24 @@ function UserDashboard() {
               </div>
               <div className="user-orders-columnHeader">
                 <span>Order ID</span>
-                <span>Product Name</span>
                 <span>Date</span>
                 <span>Status</span>
                 <span>Total Amount</span>
               </div>
 
               {/* LIST */}
-              {ordersMock.map((order) => (
+              {orders.map((order) => (
                 <div
-                  key={order.id}
+                  key={order._id}
                   className="user-orders-list"
                   onClick={() => setSelectedOrder(order)}
                 >
-                  <span>{order.id}</span>
-                  <span>{order.productName}</span>
-                  <span>{order.date}</span>
-                  <span>{order.orderStatus}</span>
-                  <span>{order.amount}</span>
+                  <span>{order._id}</span>
+                  <span>
+                    {new Date(order.order_date).toISOString().split("T")[0]}
+                  </span>
+                  <span>{order.order_status}</span>
+                  <span>{order.total_amount}</span>
                 </div>
               ))}
             </div>

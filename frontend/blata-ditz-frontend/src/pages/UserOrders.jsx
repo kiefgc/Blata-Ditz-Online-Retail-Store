@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+import api from "../api/api.js";
 import "./UserOrders.css";
 import "./Landing.css";
 import OrderPopup from "./pop-ups/UserOrderPopup.jsx";
@@ -56,6 +57,7 @@ const ordersMock = [
 
 function UserDashboard() {
   const { id } = useParams();
+  const [username, setUsername] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
@@ -70,6 +72,13 @@ function UserDashboard() {
     return () => window.removeEventListener("resize", searchbarScreenResize);
   }, []);
 
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
   return (
     <>
       <div className="user-dashboard-container">
@@ -78,7 +87,7 @@ function UserDashboard() {
             <span style={{ color: "#FFCF33" }}>My Account</span>
           </h1>
           <h2>
-            Welcome, <span style={{ color: "#FFCF33" }}>Username!</span>
+            Welcome, <span style={{ color: "#FFCF33" }}>{username}!</span>
           </h2>
         </div>
 
@@ -123,15 +132,6 @@ function UserDashboard() {
                     Profile
                   </a>
                 </span>
-              </li>
-              <li>
-                <img
-                  width="21"
-                  height="21"
-                  src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/open-pane.png"
-                  alt="open-pane"
-                />
-                <span>Log Out</span>
               </li>
             </ul>
           </div>
