@@ -32,18 +32,16 @@ function OrderPopup({ order, onClose }) {
       if (!order) return;
 
       try {
-        // 1. Get order_details for this order
         const res = await api.get(`/orderdetails/${order._id}`);
-        const details = res.data; // array of order_details
+        const details = res.data;
 
-        // 2. Fetch product_name for each item
         const detailsWithNames = await Promise.all(
           details.map(async (d) => {
             try {
               const productRes = await api.get(`/products/${d.product_id}`);
               return {
                 ...d,
-                product_name: productRes.data.product_name, // merge name
+                product_name: productRes.data.product_name,
               };
             } catch (err) {
               console.error("Error fetching product:", err);
