@@ -111,6 +111,7 @@ export async function login(req, res) {
 
       return res.status(200).json({
         message: "Admin login successful",
+        username: admin.username,
         accessToken,
         role: "admin",
       });
@@ -132,8 +133,9 @@ export async function login(req, res) {
 
       return res.status(200).json({
         message: "Customer login successful",
-        accessToken,
         role: "customer",
+        username: customer.username,
+        accessToken,
         customer_id: customer._id,
       });
     }
@@ -147,14 +149,19 @@ export async function login(req, res) {
 
 export async function getProfile(req, res) {
   try {
+    if (!req.user || !req.user.id || !req.user.role) {
+      return res.status(400).json({ message: "Invalid user data" });
+    }
+
     const { id, role } = req.user;
 
-    const Model = role === "admin" ? Admin : Customer;
+    const Model = role.toLowerCase() === "admin" ? Admin : Customer;
+
     const user = await Model.findById(id);
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const { password, ...userData } = user.toObject();
+    const { password, ...userData } = user;
 
     res.status(200).json(userData);
   } catch (error) {
