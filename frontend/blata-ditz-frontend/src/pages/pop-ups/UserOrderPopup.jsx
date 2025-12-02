@@ -61,63 +61,63 @@ function OrderPopup({ order, onClose }) {
   }, [order]);
 
   return (
-    <div className="user-orders-popup-overlay">
-      <div className="user-orders-popup">
-        <div className="user-edit-header">
+    <div className="user-order-popup-overlay">
+      <div className="user-order-popup">
+        <div className="user-view-header">
           <h3>View Order</h3>
           <button className="close-edit-modal-btn" onClick={onClose}>
             x
           </button>
         </div>
 
-        <div className="user-orders-popup-content">
-          <div className="orders-id">
+        <div className="user-order-popup-content">
+          <div className="order-id">
             <span className="order-id-title">ID No. </span>
             <span className="order-id-no">{order._id || "N/A"}</span>
           </div>
 
           <div className="order-columns">
             {/* LEFT COLUMN */}
-            <div className="first-column">
-              <div className="order-details">
+            <div className="left-column">
+              <div className="order-detail">
                 <span className="order-detail-title">Date</span>
                 <span className="order-detail-value">{formattedDate}</span>
               </div>
 
-              <div className="order-details">
+              <div className="order-detail">
                 <span className="order-detail-title">Customer Contact</span>
                 <span className="order-detail-value">
                   {customerInfo?.phone || "N/A"}
                 </span>
               </div>
 
-              <div className="order-details">
+              <div className="order-detail">
                 <span className="order-detail-title">Shipping Address</span>
                 <span className="order-detail-value">
-                  {order.customer?.address}
+                  {customerInfo?.address || "N/A"}
                 </span>
               </div>
             </div>
 
             {/* RIGHT COLUMN */}
-            <div className="second-column">
-              <div className="order-details">
+            <div className="right-column">
+              <div className="order-detail">
                 <span className="order-detail-title">Payment Method</span>
                 <span className="order-detail-value">
                   {order.payment_method || "N/A"}
                 </span>
               </div>
 
-              <div className="order-details">
-                <div className="order-details-status">
-                  <div className="details-status-payment">
+              <div className="order-detail">
+                <div className="order-detail-status">
+                  <div className="detail-status-payment">
                     <span className="order-detail-title">Payment Status</span>
                     <span className="order-detail-value">
                       {order.payment_status}
                     </span>
                   </div>
 
-                  <div className="details-status-order">
+                  <div className="detail-status-order">
                     <span className="order-detail-title">Order Status</span>
                     <span className="order-detail-value">
                       {order.order_status}
@@ -129,25 +129,21 @@ function OrderPopup({ order, onClose }) {
           </div>
 
           {/* ORDER DETAILS LIST */}
-          <div className="order-details">
+          <div className="order-detail">
             <span className="order-detail-title">Order Details</span>
 
-            <div className="order-details-columnHeader">
+            <div className="order-detail-header">
               <span>ID</span>
-              <span></span>
               <span>Item</span>
-              <span></span>
               <span>Quantity</span>
             </div>
 
-            <div className="order-details-list">
+            <div className="order-detail-list">
               {orderDetails.length > 0 ? (
                 orderDetails.map((d) => (
                   <div className="order-entry" key={d._id}>
                     <span>{d._id}</span>
-                    <span></span>
                     <span>{d.product_name}</span>
-                    <span></span>
                     <span>{d.quantity}</span>
                   </div>
                 ))
@@ -157,18 +153,18 @@ function OrderPopup({ order, onClose }) {
             </div>
 
             {/* AMOUNT TOTAL */}
-            <div className="order-details-amountbreakdown">
-              <div className="order-amountbreakdown-details">
+            <div className="order-detail-amount">
+              <div className="order-amount-row">
                 <span>Subtotal</span>
                 <span>{order.total_amount || 0}</span>
               </div>
-              <div className="order-amountbreakdown-details">
+              <div className="order-amount-row">
                 <span>Shipping</span>
                 <span>FREE</span>
               </div>
-              <div className="order-amountbreakdown-details">
+              <div className="order-amount-row">
                 <span>Total</span>
-                <span className="amountbreakdown-details-total">
+                <span className="amount-row-total">
                   {order.total_amount || 0}
                 </span>
               </div>
