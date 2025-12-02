@@ -1,26 +1,112 @@
 import "./Checkout.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import api from "../../api/api.js";
 
 import gcash from "../../assets/gcash.png";
 import visa from "../../assets/visa.png";
 import jcb from "../../assets/jcb.png";
 import mastercard from "../../assets/mastercard.png";
 
-const mockOrderOverview = [
-  {
-    id: "001",
-    image: "https://picsum.photos/200/300",
-    name: "Pulsar XBOARD QS Mechanical Gaming Keyboard with Quick Switching Technology, Win/Mac Switch Key (Black)",
-    price: "16,450.00",
-    quantity: 1,
-    shipping: "FREE",
-    subtotal: "16,450.00",
-    total: "16,450.00",
-  },
-];
-
 function CheckoutPayment({ formData }) {
   const navigate = useNavigate();
+
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [paymentMethod, setPaymentMethod] = useState("");
+
+  // Fetch cart items from backend
+  useEffect(() => {
+    const fetchCartAndProducts = async () => {
+      const customerId = localStorage.getItem("customer_id");
+      const token = localStorage.getItem("token");
+      if (!customerId || !token) return;
+
+      try {
+        const cartRes = await api.get(`/cart/${customerId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const cart = cartRes.data.cart;
+        if (!cart || !cart.items.length) {
+          setCartItems([]);
+          setLoading(false);
+          return;
+        }
+
+        const products = await Promise.all(
+          cart.items.map(async (item) => {
+            const prodRes = await api.get(`/products/${item.product_id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            const product = prodRes.data;
+
+            return {
+              id: product._id,
+              name: product.product_name,
+              price: product.unit_price,
+              quantity: item.quantity,
+              image: `http://localhost:5000${product.image}`,
+            };
+          })
+        );
+
+        setCartItems(products);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching checkout cart:", err);
+        setCartItems([]);
+        setLoading(false);
+      }
+    };
+
+    fetchCartAndProducts();
+  }, []);
+
+  // Concatenate shipping address
+  const shippingAddress = `${formData.street}, ${formData.city}, ${formData.region}, ${formData.postal} — Phone: ${formData.phone}`;
+
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const handlePlaceOrder = async () => {
+    if (!paymentMethod) {
+      alert("Please select a payment method.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch("http://localhost:5000/cart/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          payment_method: paymentMethod,
+          shipping_address: shippingAddress,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        alert("Order failed: " + error.message);
+        return;
+      }
+
+      // Clear localStorage cart
+      localStorage.removeItem("cart");
+
+      navigate("/checkout/processing");
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("An error occurred while placing your order.");
+    }
+  };
 
   return (
     <div className="checkout-container">
@@ -37,46 +123,39 @@ function CheckoutPayment({ formData }) {
 
       <div className="payment-container">
         <div className="checkout-payment-details">
-          <div className="payment-contact">
-            <span>Contact</span>
-            <span className="contact-details">
-              <span>{formData.email}</span>
-              <span>{formData.phone}</span>
-            </span>
-          </div>
+          {/* ADDRESS */}
           <div className="payment-contact">
             <span>Address</span>
-            <span>
-              {formData.street}, {formData.postal}, {formData.city},{" "}
-              {formData.region}
-            </span>
+            <span>{shippingAddress}</span>
           </div>
 
+          {/* PAYMENT METHOD */}
           <div className="payment-method">
             <h1>Payment Method</h1>
             <div className="method-selection">
-              <div className="method">
+              <label className="method">
                 <div className="method-label">
                   <input
                     type="radio"
                     name="payment"
                     value="gcash"
-                    className="payment"
-                  />{" "}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
                   GCash
                 </div>
                 <div className="logo-container">
                   <img src={gcash} />
                 </div>
-              </div>
-              <div className="method">
+              </label>
+
+              <label className="method">
                 <div className="method-label">
                   <input
                     type="radio"
                     name="payment"
-                    value="card"
-                    className="payment"
-                  />{" "}
+                    value="credit_card"
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
                   Credit or Debit Card
                 </div>
                 <div className="logo-container card-logos">
@@ -84,63 +163,80 @@ function CheckoutPayment({ formData }) {
                   <img src={mastercard} />
                   <img src={jcb} />
                 </div>
-              </div>
-              <div className="method">
+              </label>
+
+              <label className="method">
                 <div className="method-label">
                   <input
                     type="radio"
                     name="payment"
                     value="cod"
-                    className="payment"
-                  />{" "}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
                   Cash on Delivery
                 </div>
                 <div className="logo-container"></div>
-              </div>
+              </label>
             </div>
           </div>
 
+          {/* BUTTONS */}
           <div className="info-buttons">
             <Link to="/checkout/information" className="return-cart-btn">
               &gt; &nbsp; Return to Information
             </Link>
+
             <button
               type="button"
               className="proceed-btn"
-              onClick={() => navigate("/checkout/processing")}
+              onClick={handlePlaceOrder}
             >
               Place Order
             </button>
           </div>
         </div>
 
+        {/* ORDER OVERVIEW */}
         <div className="order-overview-container">
-          {mockOrderOverview.map((s) => (
-            <div className="order-overview" key={s.id}>
-              <div className="order-products">
-                <img className="product-img" src={s.image} />
-                <span>x{s.quantity}</span>
-                <div className="overview-name-price">
-                  <span>{s.name}</span>
-                  <span className="overview-price">₱{s.price}</span>
+          {loading ? (
+            <p>Loading your cart...</p>
+          ) : cartItems.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
+            <>
+              {cartItems.map((item) => (
+                <div className="order-product-row" key={item.id}>
+                  <div className="order-products">
+                    <img
+                      className="product-img"
+                      src={item.image}
+                      alt={item.name}
+                    />
+                    <span>x{item.quantity}</span>
+                    <div className="overview-name-price">
+                      <span>{item.name}</span>
+                      <span className="overview-price">₱{item.price}</span>
+                    </div>
+                  </div>
+                  <div className="overview-subtotal">
+                    <span>Subtotal</span>
+                    <span>₱{(item.price * item.quantity).toFixed(2)}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="order-amount">
-                <div className="overview-subtotal">
-                  <span>Subtotal</span>
-                  <span>₱{s.subtotal}</span>
-                </div>
+              ))}
+
+              <div className="order-overview-total">
                 <div className="overview-shipping">
                   <span>Shipping</span>
-                  <span>{s.shipping}</span>
+                  <span>FREE</span>
                 </div>
                 <div className="overview-total">
                   <span>Total</span>
-                  <span style={{ color: "#ffcf33" }}>₱{s.total}</span>
+                  <span style={{ color: "#ffcf33" }}>₱{total.toFixed(2)}</span>
                 </div>
               </div>
-            </div>
-          ))}
+            </>
+          )}
         </div>
       </div>
     </div>

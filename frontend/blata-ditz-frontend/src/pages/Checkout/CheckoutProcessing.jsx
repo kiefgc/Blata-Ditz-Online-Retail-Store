@@ -9,19 +9,21 @@ function CheckoutProcessing() {
   const [countdown, setCountdown] = useState(3);
 
   useEffect(() => {
-    const timer1 = setTimeout(() => {
+    const timer = setTimeout(() => {
       setStage("success");
-    }, 3000);
+    }, 3000); // 3 seconds processing
 
-    return () => clearTimeout(timer1);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     if (stage === "success") {
       const interval = setInterval(() => {
         setCountdown((prev) => {
-          if (prev === 1) {
+          if (prev <= 1) {
+            clearInterval(interval);
             navigate("/");
+            return 0;
           }
           return prev - 1;
         });
