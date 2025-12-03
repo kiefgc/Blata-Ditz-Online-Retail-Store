@@ -183,7 +183,7 @@ function AdminUsers() {
             <div className="users-columnHeader">
               <span>Email</span>
               <span>Full Name</span>
-              <span>Email</span>
+
               <span>Username</span>
               <span>Created At</span>
               <span>Phone Number</span>
@@ -195,7 +195,7 @@ function AdminUsers() {
                   <span>
                     {s.first_name} {s.last_name}
                   </span>
-                  <span>{s.email}</span>
+
                   <span>{s.username || "-"}</span>
                   <span>{s.created_at || "-"}</span>
                   <span>{s.phone}</span>
