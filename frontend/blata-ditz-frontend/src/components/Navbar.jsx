@@ -46,6 +46,20 @@ function Navbar({ searchQuery, setSearchQuery }) {
     }
   };
 
+  const handleOrdersClick = (e) => {
+    e.preventDefault();
+
+    const role = localStorage.getItem("role");
+
+    if (role === "customer") {
+      navigate("/dashboard/orders");
+    } else if (role === "admin") {
+      navigate("/admin/orders");
+    } else {
+      navigate("/");
+    }
+  };
+
   useEffect(() => {
     const searchbarScreenResize = () => {
       if (window.innerWidth >= 830) {
@@ -246,7 +260,9 @@ function Navbar({ searchQuery, setSearchQuery }) {
                     <a href="#" onClick={handleProfileClick}>
                       Profile
                     </a>
-                    <a href="#">Orders</a>
+                    <a href="#" onClick={handleOrdersClick}>
+                      Orders
+                    </a>
                     <a href="#" onClick={handleLogout} className="logout-link">
                       Logout
                     </a>
