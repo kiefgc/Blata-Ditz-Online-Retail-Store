@@ -85,6 +85,11 @@ li {
   height: fit-content;
   min-height: 60vh;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.155);
+  background-color: #131416;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-top: 2vh;
+  margin-bottom: 5vh;
 }
 
 .product-sales-section-header {
@@ -92,7 +97,7 @@ li {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items:  center;
+  align-items: center;
 }
 
 .product-sales-section-header h2 {
@@ -113,7 +118,7 @@ li {
 .prodsales-table-header,
 .prodsales-table-rows {
   display: grid;
-  grid-template-columns: 90px 190px minmax(180px, 3fr) 120px 120px 80px;
+  grid-template-columns: 120px 190px minmax(180px, 3fr) 120px 120px 80px;
   gap: 15px;
   padding: 5px 10px;
   align-items: center;
@@ -131,11 +136,12 @@ li {
 }
 
 .prodsales-table-header {
-  font-weight: normal;
-  font-size: 1.25rem;
+  font-weight: 500;
+  font-size: 1.4rem !important;
   color: #ffcf33;
   margin-bottom: 10px;
   padding-top: 15px;
+  text-transform: uppercase;
 }
 
 .prodsales-cell,
@@ -257,9 +263,13 @@ li {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding-top: 20px; 
 
   margin-bottom: 4vh;
+
+  background-color: #131416;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-top: 2vh;
 }
 
 .stocks-alert-section-header {
@@ -268,7 +278,7 @@ li {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items:  center;
+  align-items: center;
 }
 
 .stocks-alert-section h3 {
@@ -289,12 +299,13 @@ li {
 }
 
 .lowstock-table-header {
-  font-weight: normal;
-  font-size: 1.15rem;
+  font-weight: 500;
+  font-size: 1.4rem;
   color: #ffcf33;
   margin-bottom: 10px;
   padding-top: 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
 }
 
 .lowstock-row {
@@ -334,7 +345,7 @@ li {
 .stock-qty-pill {
   padding: 5px 12px;
   border-radius: 20px;
-  background-color: #663e00; 
+  background-color: #663e00;
   color: #ffcf33;
   font-weight: bold;
   font-size: 1rem;
@@ -343,12 +354,12 @@ li {
 
 .critical-stock .stock-qty-pill {
   background-color: #8b0000;
-  color: #ffcccc; 
-  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); 
+  color: #ffcccc;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
 
 .critical-stock .lowstock-cell,
 .critical-stock .lowstock-cell-name {
-  color: #ffcccc; 
 }
 
 .no-low-stock-message {
@@ -379,4 +390,8 @@ li {
   .lowstock-table-header-cell {
     font-size: 0.85rem;
   }
+}
+
+.main-content-reports .reports-subheader {
+  font-size: 2rem;
 }

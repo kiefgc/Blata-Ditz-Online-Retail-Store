@@ -292,19 +292,9 @@ function AdminReports() {
             </ul>
           </div>
           <div className="main-content-reports">
+            <h2 className="reports-subheader">Product Sales</h2>
             <div className="product-sales-section">
-              <div className="product-sales-section-header">
-                <h2>Product Sales</h2>
-                <div className="custom-select-reports">
-                  <select>
-                    <option value="" selected disabled hidden>
-                      Sort Options
-                    </option>
-                    <option value="asc">Sales Ascending</option>
-                    <option value="desc">Sales Descending</option>
-                  </select>
-                </div>
-              </div>
+              <div className="product-sales-section-header"></div>
               <div className="product-sales-table-container">
                 {ProductSalesData.length > 0 ? (
                   <>
@@ -326,19 +316,9 @@ function AdminReports() {
               </div>
             </div>
 
+            <h2 className="reports-subheader">Low Stock Products</h2>
             <div className="stocks-alert-section">
-              <div className="stocks-alert-section-header">
-                <h3>Low Stock Products</h3>
-                <div className="custom-select-reports">
-                  <select>
-                    <option value="" selected disabled hidden>
-                      Sort Options
-                    </option>
-                    <option value="asc">Stocks Ascending</option>
-                    <option value="desc">Stocks Descending</option>
-                  </select>
-                </div>
-              </div>
+              <div className="stocks-alert-section-header"></div>
               <div className="lowstock-alert-table-container">
                 {LowStockData.length > 0 ? (
                   <LowStockAlertTable

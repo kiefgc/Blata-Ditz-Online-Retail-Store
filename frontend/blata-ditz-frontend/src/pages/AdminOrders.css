@@ -271,6 +271,7 @@ li {
 .order-details-status {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 2rem;
   overflow-x: auto;
 }
@@ -298,6 +299,7 @@ li {
   width: 13rem;
   margin-top: 3px;
   cursor: pointer;
+  color: white;
 }
 
 .order-details-columnHeader,
@@ -382,4 +384,13 @@ li {
 .amountbreakdown-details-total {
   font-weight: 600;
   color: #ffcf33;
+}
+
+.update-order-button {
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  padding: 10px 20px !important;
+  min-width: fit-content !important;
+  max-width: 8vw !important;
 }
