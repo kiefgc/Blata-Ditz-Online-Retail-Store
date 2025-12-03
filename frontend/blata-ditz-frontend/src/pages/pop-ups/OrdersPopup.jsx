@@ -72,7 +72,10 @@ function OrderPopup({ order, onClose }) {
       <div className="admin-orders-popup">
         <div className="admin-edit-header">
           <h3>View Order</h3>
-          <button className="close-edit-modal-btn" onClick={onClose}>
+          <button
+            className="close-edit-modal-btn orderpopup-close"
+            onClick={onClose}
+          >
             x
           </button>
         </div>

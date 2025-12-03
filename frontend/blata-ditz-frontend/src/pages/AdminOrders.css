@@ -40,6 +40,12 @@ li {
   font-weight: 500;
 }
 
+.orderpopup-close {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+}
 .close-edit-modal-btn {
   background: #000;
   border: none;
@@ -157,11 +163,11 @@ li {
 .admin-orders-columnHeader,
 .admin-orders-list {
   display: grid;
-  grid-template-columns: 0.7fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
   font-size: 1.6rem;
   color: #ffcf33;
   justify-content: center;
-  padding-left: 5vw;
+  padding-left: 2vw;
   gap: 1rem;
   align-items: center;
 }
@@ -213,6 +219,7 @@ li {
   flex-direction: column;
   overflow: hidden;
   overflow-y: auto;
+  overflow-x: auto;
 }
 
 .admin-orders-popup-content {
@@ -249,6 +256,7 @@ li {
   border-radius: 10px;
   padding: 1rem;
   overflow: hidden;
+  overflow-x: auto;
 }
 
 .order-detail-title {
@@ -292,14 +300,6 @@ li {
   cursor: pointer;
 }
 
-.order-details-columnHeader {
-  display: grid;
-  grid-template-columns: 1fr 0.3fr 1fr 3fr 1fr;
-  margin-bottom: 8px;
-  color: #ffcf33;
-  margin-top: 8px;
-  font-size: 1.6rem;
-}
 .order-details-columnHeader,
 .order-details-list,
 .order-details-amountbreakdown {
@@ -310,6 +310,36 @@ li {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.order-details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-details-table thead {
+  color: #ffcf33;
+}
+
+.order-details-table thead,
+.order-details-table tbody {
+  display: grid;
+  grid-template-columns: 150px 70px 1fr 90px;
+  padding: 0 1rem;
+}
+
+.order-details-table thead tr {
+  display: contents;
+}
+
+.order-details-table tbody tr {
+  display: contents;
+}
+
+.order-details-table th,
+.order-details-table td {
+  padding: 10px 12px;
+  text-align: left;
 }
 
 .order-entry {
