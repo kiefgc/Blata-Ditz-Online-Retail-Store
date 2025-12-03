@@ -157,6 +157,8 @@
   max-height: 100vh;
   margin-bottom: 5rem;
   overflow-y: scroll;
+
+  font-size: 1.5rem;
 }
 
 .item {
@@ -304,6 +306,10 @@
 .featuredright {
   width: 70%;
   padding-left: 30px;
+
+  p {
+    font-size: 1.5rem;
+  }
 }
 
 .featuredgames {

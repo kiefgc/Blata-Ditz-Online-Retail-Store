@@ -96,11 +96,11 @@ function UserDashboard() {
         <div className="dashboard">
           <div className="sidebar">
             <ul>
-              <li>
+              <li className="selectedli">
                 <img
                   width="24"
                   height="24"
-                  src="https://img.icons8.com/?size=100&id=U5JRqX4RSgfj&format=png&color=FFFFFF"
+                  src="https://img.icons8.com/?size=100&id=U5JRqX4RSgfj&format=png&color=ffcf33"
                   alt="home--v1"
                 />
                 <span>

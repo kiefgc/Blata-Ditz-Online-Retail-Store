@@ -58,6 +58,7 @@
   font-weight: 300;
   padding-bottom: 0.6rem;
   width: 100%;
+  color: white;
 }
 
 .info-title {
@@ -206,9 +207,8 @@
   overflow: hidden;
 }
 
-.payment {
+input[type="radio"] {
   accent-color: #ffcf33;
-  margin-right: 15px;
 }
 
 .logo-container {

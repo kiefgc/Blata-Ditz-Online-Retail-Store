@@ -18,6 +18,7 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
 
   const [fieldBeingEdit, setFieldBeingEdit] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const editField = (field, value, setValue) => {
     const isEditing = fieldBeingEdit === field;
@@ -63,6 +64,7 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
       const res = await api.patch(`/suppliers/${supplier._id}`, payload);
 
       console.log("Updated!", res.data);
+      setShowSuccessModal(true);
     } catch (err) {
       console.error("Update failed:", err);
     }
@@ -268,6 +270,31 @@ export const ViewEditPopup = ({ type, supplier, onClose }) => {
                 onClick={confirmDelete}
               >
                 Confirm Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccessModal && (
+        <div className="success-backdrop">
+          <div className="success-modal">
+            <h3>Update Successful!</h3>
+            <p>
+              The details for{" "}
+              <strong>{supplier?.supplier_name || "the supplier"}</strong> have
+              been successfully updated.
+            </p>
+
+            <div className="confirmation-actions">
+              <button
+                className="delete-supplier-final-btn"
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  onClose(); // Close the main view/edit popup as well
+                }}
+              >
+                Done
               </button>
             </div>
           </div>

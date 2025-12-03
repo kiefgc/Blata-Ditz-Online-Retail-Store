@@ -1,6 +1,6 @@
 #root {
   margin: 0 auto;
-  height: fit-content;
+  height: 100%;
 }
 
 ul,
@@ -106,7 +106,8 @@ li {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-top: 1.5rem;
+  margin-top: 1.5vh;
+  margin-bottom: 1.5vh;
 }
 
 .user-profile-base {
@@ -150,7 +151,7 @@ input[type="text"] {
 }
 
 .user-profile-info .form-group input[type="text"],
-.user-profile-pw .form-group input[type="text"],
+.user-profile-pw .form-group input[type="password"],
 .user-profile-address .form-group input[type="text"] {
   display: block;
   padding: 1.5rem;
