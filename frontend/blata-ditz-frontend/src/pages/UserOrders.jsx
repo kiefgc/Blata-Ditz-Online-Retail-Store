@@ -96,11 +96,11 @@ function UserDashboard() {
                   </a>
                 </span>
               </li>
-              <li>
+              <li className="selectedli">
                 <img
                   width="24"
                   height="24"
-                  src="https://img.icons8.com/ios-filled/50/FFFFFF/purchase-order--v1.png"
+                  src="https://img.icons8.com/ios-filled/50/ffcf33/purchase-order--v1.png"
                   alt="purchase-order--v1"
                 />
                 <span>

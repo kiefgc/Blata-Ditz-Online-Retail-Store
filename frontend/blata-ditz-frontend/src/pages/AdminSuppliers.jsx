@@ -157,7 +157,11 @@ function AdminSuppliers() {
                 />
               </div>
 
-              <button type="button" onClick={() => openPopup("add")}>
+              <button
+                type="button"
+                className="addsupplier"
+                onClick={() => openPopup("add")}
+              >
                 Add Supplier
               </button>
             </div>
@@ -166,34 +170,36 @@ function AdminSuppliers() {
             {loading ? (
               <p>Loading suppliers...</p>
             ) : (
-              <table className="supplier-table">
-                <thead>
-                  <tr className="supplier-table-header">
-                    <th>Supplier Name</th>
-                    <th>Contact Person</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Active</th>
-                    <th>Created At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredSuppliers.map((s) => (
-                    <tr
-                      key={s._id}
-                      onClick={() => openPopup("view", s)}
-                      className="supplier-row"
-                    >
-                      <td>{s.supplier_name}</td>
-                      <td>{s.contact_person}</td>
-                      <td>{s.email}</td>
-                      <td>{s.phone}</td>
-                      <td>{s.is_active ? "Active" : "Inactive"}</td>
-                      <td>{new Date(s.created_at).toLocaleDateString()}</td>
+              <div className="supplier-table-container">
+                <table className="supplier-table">
+                  <thead>
+                    <tr className="supplier-table-header">
+                      <th>Supplier Name</th>
+                      <th>Contact Person</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Active</th>
+                      <th>Created At</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filteredSuppliers.map((s) => (
+                      <tr
+                        key={s._id}
+                        onClick={() => openPopup("view", s)}
+                        className="supplier-row"
+                      >
+                        <td>{s.supplier_name}</td>
+                        <td>{s.contact_person}</td>
+                        <td>{s.email}</td>
+                        <td>{s.phone}</td>
+                        <td>{s.is_active ? "Active" : "Inactive"}</td>
+                        <td>{new Date(s.created_at).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </div>
