@@ -149,7 +149,12 @@ function OrderPopup({ order, onClose }) {
                 </div>
 
                 {/* Single update button for admin */}
-                <button onClick={handleUpdateOrder}>Update</button>
+                <button
+                  className="update-order-button"
+                  onClick={handleUpdateOrder}
+                >
+                  Update
+                </button>
               </div>
             </div>
           </div>
