@@ -5,46 +5,98 @@ import api from "../api/api.js";
 import "./UserProfile.css";
 import ConfirmPopup from "./pop-ups/ConfirmPopup.jsx";
 
-const ordersMock = [
-  {
-    id: "001",
-    date: "06-11-2025",
-    productName:
-      "Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2",
-    amount: "₱16,450.00",
-    paymentStatus: "PENDING",
-    orderStatus: "PENDING",
-    customer: {
-      firstName: "Dana",
-      lastName: "Alania",
-      email: "dana.alania@fmail.com",
-      contact: "+63 976 348 5930",
-      address: "578 Eymard Sweets, 1354, Quezon City, Metro Manila",
-    },
-    details: [
-      {
-        itemId: "001",
-        qty: 2,
-        name: "Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2",
-        price: "₱16,450.00",
-        image: "/assets/item.png",
-      },
-    ],
-  },
-];
-
 function UserDashboard() {
   const { id } = useParams();
   const [username, setUsername] = useState("");
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  const user = ordersMock[0].customer;
-  const [firstName, setfirstName] = useState(ordersMock[0].customer.firstName);
-  const [lastName, setlastName] = useState(ordersMock[0].customer.lastName);
-  const [email, setEmail] = useState(ordersMock[0].customer.email);
-  const [address, setAddress] = useState(ordersMock[0].customer.address);
-  const [contactNum, setContactNum] = useState(ordersMock[0].customer.contact);
+  const [user, setUser] = useState({
+    username: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    address: "",
+  });
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [contactNum, setContactNum] = useState("");
+
+  const [newPassword, setNewPassword] = useState("");
+  const [reEnterPassword, setReEnterPassword] = useState("");
+
+  const handleSaveChanges = async () => {
+    try {
+      const updatedData = {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        phone: contactNum,
+        address: address,
+      };
+
+      const response = await api.patch("authentication/users/me", updatedData);
+
+      // Optionally update state with returned data
+      setUser(response.data);
+
+      // Show confirmation popup
+      setShowPopup(true);
+    } catch (error) {
+      console.error("Error updating user info:", error);
+      alert("Failed to save changes. Please try again.");
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword !== reEnterPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    try {
+      // Assuming the backend accepts a PATCH to /users/me with { password: "..." }
+      await api.patch("authentication/users/me", { password: newPassword });
+
+      // Clear fields after successful change
+      setNewPassword("");
+      setReEnterPassword("");
+
+      // Show confirmation popup
+      setShowPopup(true);
+    } catch (error) {
+      console.error("Error changing password:", error);
+      alert("Failed to change password. Please try again.");
+    }
+  };
+
+  const handleSaveAddress = async () => {
+    try {
+      const updatedData = {
+        address: address,
+        phone: contactNum,
+      };
+
+      const response = await api.patch("authentication/users/me", updatedData);
+
+      // Optionally update local user state
+      setUser((prev) => ({
+        ...prev,
+        address: response.data.address,
+        phone: response.data.phone,
+      }));
+
+      // Show confirmation popup
+      setShowPopup(true);
+    } catch (error) {
+      console.error("Error updating address:", error);
+      alert("Failed to save changes. Please try again.");
+    }
+  };
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -62,6 +114,25 @@ function UserDashboard() {
     if (storedUsername) {
       setUsername(storedUsername);
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await api.get("/authentication/users/me");
+        setUser(response.data);
+        // Optionally also set input fields
+        setFirstName(response.data.first_name);
+        setLastName(response.data.last_name);
+        setEmail(response.data.email);
+        setAddress(response.data.address);
+        setContactNum(response.data.phone);
+      } catch (err) {
+        console.error("Error fetching user info:", err);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   return (
@@ -134,7 +205,7 @@ function UserDashboard() {
                   <input
                     type="text"
                     value={firstName}
-                    onChange={(e) => setfirstName(e.target.value)}
+                    onChange={(e) => setFirstName(e.target.value)}
                     className="inputField"
                   />
                 </div>
@@ -158,10 +229,10 @@ function UserDashboard() {
                 </div>
               </div>
               <div className="button-container">
-                {" "}
-                <button type="button" onClick={() => setShowPopup(true)}>
+                <button type="button" onClick={handleSaveChanges}>
                   Save Changes
                 </button>
+
                 {showPopup && (
                   <ConfirmPopup onClose={() => setShowPopup(false)} />
                 )}
@@ -174,16 +245,28 @@ function UserDashboard() {
               <div className="user-profile-base user-profile-pw">
                 <div className="form-group">
                   <label>New Password</label>
-                  <input type="text" placeholder="New Password" />
+                  <input
+                    type="password"
+                    placeholder="New Password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="inputField"
+                  />
                 </div>
                 <div className="form-group">
                   <label>Re-enter Password</label>
-                  <input type="text" placeholder="Re-enter Password" />
+                  <input
+                    type="password"
+                    placeholder="Re-enter Password"
+                    value={reEnterPassword}
+                    onChange={(e) => setReEnterPassword(e.target.value)}
+                    className="inputField"
+                  />
                 </div>
               </div>
               <div className="button-container">
                 {" "}
-                <button type="button" onClick={() => setShowPopup(true)}>
+                <button type="button" onClick={handleChangePassword}>
                   Save Changes
                 </button>
                 {showPopup && (
@@ -196,26 +279,6 @@ function UserDashboard() {
                 <span style={{ color: "#FFCF33" }}>Saved Address</span>
               </h1>
               <div className="user-profile-base user-profile-address">
-                <div className="container">
-                  <div className="form-group">
-                    <label>First Name</label>
-                    <input
-                      type="text"
-                      value={firstName}
-                      onChange={(e) => setfirstName(e.target.value)}
-                      className="inputField"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Last Name:</label>
-                    <input
-                      type="text"
-                      value={lastName}
-                      onChange={(e) => setlastName(e.target.value)}
-                      className="inputField"
-                    />
-                  </div>
-                </div>
                 <div className="form-group">
                   <label>Address:</label>
                   <input
@@ -237,7 +300,7 @@ function UserDashboard() {
               </div>
               <div className="button-container">
                 {" "}
-                <button type="button" onClick={() => setShowPopup(true)}>
+                <button type="button" onClick={handleSaveAddress}>
                   Save Changes
                 </button>
                 {showPopup && (

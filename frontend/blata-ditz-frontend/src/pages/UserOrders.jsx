@@ -6,60 +6,36 @@ import "./UserOrders.css";
 import "./Landing.css";
 import OrderPopup from "./pop-ups/UserOrderPopup.jsx";
 
-const ordersMock = [
-  {
-    id: "001",
-    date: "06-11-2025",
-    productName:
-      "Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2",
-    amount: "₱16,450.00",
-    paymentStatus: "PENDING",
-    orderStatus: "PENDING",
-    customer: {
-      email: "dana.alania@fmail.com",
-      contact: "+63 976 348 5930",
-      address: "578 Eymard Sweets, 1354, Quezon City, Metro Manila",
-    },
-    details: [
-      {
-        itemId: "001",
-        qty: 2,
-        name: "Transnovo 24-in-1 Game Card Storage Case for Nintendo Switch 2",
-        price: "₱16,450.00",
-        image: "/assets/item.png",
-      },
-    ],
-  },
-
-  {
-    id: "002",
-    productName: "Gaming Mouse RGB Pro",
-    date: "06-12-2025",
-    amount: "₱5,999.00",
-    paymentStatus: "PAID",
-    orderStatus: "COMPLETED",
-    customer: {
-      email: "dana.alania@fmail.com",
-      contact: "+63 976 348 5930",
-      address: "578 Eymard Sweets, 1354, Quezon City, Metro Manila",
-    },
-    details: [
-      {
-        itemId: "002",
-        qty: 1,
-        name: "Gaming Mouse RGB Pro",
-        price: "₱5,999.00",
-        image: "/assets/item.png",
-      },
-    ],
-  },
-];
-
 function UserDashboard() {
   const { id } = useParams();
   const [username, setUsername] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const orderHeaders = [
+    "All",
+    "pending",
+    "processing",
+    "completed",
+    "cancelled",
+  ];
+
+  const filteredOrders =
+    activeFilter === "All"
+      ? orders
+      : orders.filter((order) => order.order_status === activeFilter);
+
+  const loadOrderDetails = async (order) => {
+    try {
+      const response = await api.get(`/orderdetails/${order._id}`);
+      const orderWithDetails = { ...order, details: response.data };
+      setSelectedOrder(orderWithDetails);
+    } catch (err) {
+      console.error("Error loading order details:", err);
+    }
+  };
 
   useEffect(() => {
     const searchbarScreenResize = () => {
@@ -77,6 +53,19 @@ function UserDashboard() {
     if (storedUsername) {
       setUsername(storedUsername);
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await api.get("/orders");
+        setOrders(response.data);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      }
+    };
+
+    fetchOrders();
   }, []);
 
   return (
@@ -153,34 +142,38 @@ function UserDashboard() {
               </div>
 
               <div className="user-orders-tab">
-                {" "}
                 <ul>
-                  {" "}
-                  <li>All</li> <li>To Pay</li> <li>To Ship</li>{" "}
-                  <li>To Receive</li> <li>Completed</li> <li>Cancelled</li>{" "}
-                </ul>{" "}
+                  {orderHeaders.map((header) => (
+                    <li
+                      key={header}
+                      className={activeFilter === header ? "active-filter" : ""}
+                      onClick={() => setActiveFilter(header)}
+                    >
+                      {header.charAt(0).toUpperCase() + header.slice(1)}{" "}
+                      {/* Capitalize */}
+                    </li>
+                  ))}
+                </ul>
               </div>
 
               <div className="user-orders-columnHeader">
                 <span>Order ID</span>
-                <span>Product Name</span>
                 <span>Date</span>
                 <span>Status</span>
                 <span>Total Amount</span>
               </div>
 
               {/* LIST */}
-              {ordersMock.map((order) => (
+              {filteredOrders.map((order) => (
                 <div
-                  key={order.id}
+                  key={order._id}
                   className="user-orders-list"
-                  onClick={() => setSelectedOrder(order)}
+                  onClick={() => loadOrderDetails(order)}
                 >
-                  <span>{order.id}</span>
-                  <span>{order.productName}</span>
-                  <span>{order.date}</span>
-                  <span>{order.orderStatus}</span>
-                  <span>{order.amount}</span>
+                  <span>{order._id}</span>
+                  <span>{new Date(order.order_date).toLocaleDateString()}</span>
+                  <span>{order.order_status}</span>
+                  <span>₱{order.total_amount.toFixed(2)}</span>
                 </div>
               ))}
             </div>

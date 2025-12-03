@@ -133,7 +133,6 @@ function OrderPopup({ order, onClose }) {
             <span className="order-detail-title">Order Details</span>
 
             <div className="order-detail-header">
-              <span>ID</span>
               <span>Item</span>
               <span>Quantity</span>
             </div>
@@ -142,7 +141,6 @@ function OrderPopup({ order, onClose }) {
               {orderDetails.length > 0 ? (
                 orderDetails.map((d) => (
                   <div className="order-entry" key={d._id}>
-                    <span>{d._id}</span>
                     <span>{d.product_name}</span>
                     <span>{d.quantity}</span>
                   </div>
