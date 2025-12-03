@@ -214,7 +214,7 @@ function UserDashboard() {
                   <input
                     type="text"
                     value={lastName}
-                    onChange={(e) => setlastName(e.target.value)}
+                    onChange={(e) => setLastName(e.target.value)}
                     className="inputField"
                   />
                 </div>

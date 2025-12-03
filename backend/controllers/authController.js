@@ -255,7 +255,10 @@ export async function updateProfile(req, res) {
     if (result.modifiedCount === 0)
       return res.status(400).json({ message: "No changes made" });
 
-    res.status(200).json({ message: "Profile updated successfully" });
+    const updatedUser = await Model.findById(id);
+    if (updatedUser?.password) delete updatedUser.password;
+
+    res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
