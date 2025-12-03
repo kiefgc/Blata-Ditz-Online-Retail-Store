@@ -8,19 +8,20 @@
 /* banner section */
 .banner-container {
   width: 100%;
-  height: 50vh;
+  min-height: 20vh;
   background-color: #070705;
   border-radius: 10px;
   border: 1px solid #d5d6d9;
-  padding: 7rem;
+  padding: 2rem 7rem;
   overflow: hidden;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 5vh !important;
+  margin-bottom: 3vh !important;
   transition: 0.5 ease;
+  overflow: hidden;
 }
 .text-banner {
   display: flex;
@@ -166,13 +167,14 @@
   border-radius: 8px;
   overflow: hidden;
   border: 0.5px solid #d5d6d9;
-  height: 40vh;
+  height: 390px;
   display: flex;
   flex-direction: column;
 }
 
 .item-img {
-  height: 57%;
+  flex: 0 0 60%;
+  overflow: hidden;
 }
 
 .item-img img {
@@ -182,11 +184,10 @@
 }
 
 .item-content {
-  padding: 1rem 2rem 0.1rem 2rem;
-  justify-content: space-between;
+  padding: 1rem 2rem;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
 }
 .item-details {
   display: flex;
@@ -210,6 +211,7 @@
 }
 
 .view-item-btn {
+  margin-top: auto;
   margin-bottom: 1rem;
   background-color: #070709;
   border: 0.5px solid #d5d6d9;
@@ -228,7 +230,6 @@
 
 .featured-container {
   width: 100%;
-  height: 60vh;
 
   display: flex;
   flex-direction: row;
@@ -291,7 +292,7 @@
 .featuredimage {
   height: 70%;
   width: auto;
-
+  max-height: 60%;
   user-select: none;
 }
 

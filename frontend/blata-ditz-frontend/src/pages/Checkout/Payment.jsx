@@ -113,7 +113,7 @@ function CheckoutPayment({ formData }) {
       <div className="checkout-header">
         <h1>Order Placement</h1>
 
-        <Link to="/checkout/information">
+        <Link to="/checkout">
           <span>Information </span>
         </Link>
 
@@ -182,7 +182,7 @@ function CheckoutPayment({ formData }) {
 
           {/* BUTTONS */}
           <div className="info-buttons">
-            <Link to="/checkout/information" className="return-cart-btn">
+            <Link to="/checkout" className="return-cart-btn">
               &gt; &nbsp; Return to Information
             </Link>
 

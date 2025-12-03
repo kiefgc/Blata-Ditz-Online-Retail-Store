@@ -103,7 +103,7 @@ function OrderPopup({ order, onClose }) {
             <div className="right-column">
               <div className="order-detail">
                 <span className="order-detail-title">Payment Method</span>
-                <span className="order-detail-value">
+                <span className="order-detail-value user-order-status">
                   {order.payment_method || "N/A"}
                 </span>
               </div>
@@ -112,14 +112,14 @@ function OrderPopup({ order, onClose }) {
                 <div className="order-detail-status">
                   <div className="detail-status-payment">
                     <span className="order-detail-title">Payment Status</span>
-                    <span className="order-detail-value">
+                    <span className="order-detail-value user-order-status">
                       {order.payment_status}
                     </span>
                   </div>
 
                   <div className="detail-status-order">
                     <span className="order-detail-title">Order Status</span>
-                    <span className="order-detail-value">
+                    <span className="order-detail-value user-order-status">
                       {order.order_status}
                     </span>
                   </div>
@@ -129,7 +129,7 @@ function OrderPopup({ order, onClose }) {
           </div>
 
           {/* ORDER DETAILS LIST */}
-          <div className="order-detail">
+          <div className="order-detail user-order-detail">
             <span className="order-detail-title">Order Details</span>
 
             <div className="order-detail-header">

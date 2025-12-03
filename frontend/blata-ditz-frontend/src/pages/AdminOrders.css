@@ -315,6 +315,7 @@ li {
 .order-details-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 1.6rem;
 }
 
 .order-details-table thead {
@@ -324,7 +325,7 @@ li {
 .order-details-table thead,
 .order-details-table tbody {
   display: grid;
-  grid-template-columns: 150px 70px 1fr 90px;
+  grid-template-columns: 240px 90px 1.3fr 90px;
   padding: 0 1rem;
 }
 

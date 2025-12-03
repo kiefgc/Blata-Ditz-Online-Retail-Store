@@ -345,3 +345,13 @@ li {
   font-weight: 600;
   color: #ffcf33;
 }
+
+.user-order-status {
+  text-transform: uppercase;
+}
+
+.user-order-detail .order-detail-header,
+.user-order-detail .order-entry {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
