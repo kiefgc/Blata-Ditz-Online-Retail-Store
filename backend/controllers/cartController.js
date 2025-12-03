@@ -145,6 +145,14 @@ export async function checkoutCart(req, res) {
     const customer_id = req.user.id;
 
     const cart = await Cart.findByCustomerId(customer_id);
+
+    if (!customer.username || !customer.email || !customer.phone) {
+      return res.status(400).json({
+        message:
+          "Please complete your profile (username, email, phone) before checking out.",
+      });
+    }
+
     if (!cart || !cart.items.length) {
       return res.status(400).json({ message: "Cart is empty" });
     }
