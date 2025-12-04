@@ -65,7 +65,10 @@ function OrderPopup({ order, onClose }) {
       <div className="user-order-popup">
         <div className="user-view-header">
           <h3>View Order</h3>
-          <button className="close-edit-modal-btn" onClick={onClose}>
+          <button
+            className="close-edit-modal-btn close-btn-userorder"
+            onClick={onClose}
+          >
             x
           </button>
         </div>
@@ -154,7 +157,7 @@ function OrderPopup({ order, onClose }) {
             <div className="order-detail-amount">
               <div className="order-amount-row">
                 <span>Subtotal</span>
-                <span>{order.total_amount || 0}</span>
+                <span>₱{order.total_amount || 0}</span>
               </div>
               <div className="order-amount-row">
                 <span>Shipping</span>
@@ -163,7 +166,7 @@ function OrderPopup({ order, onClose }) {
               <div className="order-amount-row">
                 <span>Total</span>
                 <span className="amount-row-total">
-                  {order.total_amount || 0}
+                  ₱{order.total_amount || 0}
                 </span>
               </div>
             </div>
