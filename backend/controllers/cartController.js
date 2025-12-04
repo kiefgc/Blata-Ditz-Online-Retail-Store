@@ -1,5 +1,6 @@
 import { Cart } from "../models/Cart.js";
 import * as orderController from "./orderController.js";
+import { Customer } from "../models/Customer.js";
 
 export async function getCart(req, res) {
   try {
@@ -143,6 +144,8 @@ export async function deleteCart(req, res) {
 export async function checkoutCart(req, res) {
   try {
     const customer_id = req.user.id;
+
+    const customer = await Customer.findById(customer_id);
 
     const cart = await Cart.findByCustomerId(customer_id);
 
