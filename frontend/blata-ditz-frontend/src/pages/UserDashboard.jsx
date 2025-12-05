@@ -165,7 +165,7 @@ function UserDashboard() {
                     {new Date(order.order_date).toISOString().split("T")[0]}
                   </span>
                   <span>{order.order_status}</span>
-                  <span>{order.total_amount}</span>
+                  <span>₱{order.total_amount}</span>
                 </div>
               ))}
             </div>

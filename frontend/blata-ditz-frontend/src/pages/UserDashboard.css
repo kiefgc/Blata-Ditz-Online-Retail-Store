@@ -309,3 +309,14 @@ li {
   font-weight: 600;
   color: #ffcf33;
 }
+
+.user-orders-list span {
+  text-transform: uppercase;
+}
+
+.close-btn-userorder {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+}
