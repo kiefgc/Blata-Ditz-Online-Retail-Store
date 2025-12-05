@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../../api/api";
 import "../AdminOrders.css";
 
-function OrderPopup({ order, onClose }) {
+function OrderPopup({ order, onClose, onUpdateSuccess }) {
   const [orderDetails, setOrderDetails] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState(
     order.payment_status?.toUpperCase() || "PENDING"
@@ -26,24 +26,6 @@ function OrderPopup({ order, onClose }) {
     fetchOrderDetails();
   }, [order._id]);
 
-  useEffect(() => {
-    const fetchAllOrders = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await api.get("/orders", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setOrders(response.data || []);
-      } catch (error) {
-        console.error("Error fetching all orders:", error);
-      }
-    };
-
-    fetchAllOrders();
-  }, []);
-
   const handleUpdateOrder = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -60,7 +42,9 @@ function OrderPopup({ order, onClose }) {
         }
       );
 
+      onUpdateSuccess();
       alert("Order updated successfully!");
+      onClose();
     } catch (error) {
       console.error("Order update error:", error.response || error);
       alert(error.response?.data?.message || "Failed to update order.");

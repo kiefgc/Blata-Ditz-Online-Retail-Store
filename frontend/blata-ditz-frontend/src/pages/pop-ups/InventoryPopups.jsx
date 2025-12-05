@@ -325,7 +325,7 @@ export const ProductCreateModal = ({ brandName, onClose }) => {
   );
 };
 
-export const ProductEditModal = ({ initialProduct, onClose }) => {
+export const ProductEditModal = ({ initialProduct, onClose, onSuccess }) => {
   const [categories, setCategories] = useState([]);
 
   const [product, setProduct] = useState({
@@ -511,6 +511,9 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
       });
 
       console.log("Product and inventory updated successfully");
+      if (onSuccess) {
+        onSuccess();
+      }
       onClose();
     } catch (err) {
       console.error("Failed to update:", err);
@@ -544,7 +547,7 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
           <div className="product-edit-body">
             <div className="edit-left-panel">
               <p className="product-id">
-                ID No. <span>{product.id}</span>
+                ID No. <span>{product._id}</span>
               </p>
 
               {/* Product Name */}
@@ -556,11 +559,6 @@ export const ProductEditModal = ({ initialProduct, onClose }) => {
                     id="product_name"
                     value={product.product_name || ""}
                     onChange={handleChange}
-                  />
-                  <img
-                    src="https://img.icons8.com/material-outlined/24/FFFFFF/pencil--v1.png"
-                    alt="edit"
-                    className="edit-icon"
                   />
                 </div>
               </div>

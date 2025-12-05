@@ -126,7 +126,7 @@ li {
 .user-orders-tab {
   background-color: #010101;
   border-radius: 5px;
-  border: 1px solid #d5d6d9;
+  border: none;
   width: auto;
   padding: 1rem 2rem;
   overflow: hidden;
@@ -136,40 +136,56 @@ li {
 .user-orders-tab ul {
   display: flex;
   flex-direction: row;
-  gap: 3.2rem;
+  gap: 3rem;
   justify-content: space-evenly;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
+  font-weight: 600;
   text-transform: uppercase;
   color: #ffcf33;
   flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.user-orders-container {
+  background-color: #131416;
+  border-radius: 8px;
+  padding-top: 30px;
 }
 
 .user-orders-columnHeader,
 .user-orders-list {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr 1fr;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   color: #ffcf33;
   justify-content: center;
-  padding-left: 5vw;
   gap: 1rem;
   align-items: center;
+  background-image: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);\
+}
+
+.user-orders-columnHeader {
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: 500;
+
+  padding-bottom: 15px;
 }
 
 .user-orders-list {
-  color: white;
-  background-image: linear-gradient(to top, #131416, #070709);
+  color: #ccc;
   padding-top: 3rem;
-  padding-bottom: 3rem;
-  border-radius: 15px;
-  margin-bottom: 5px;
   overflow: hidden;
   cursor: pointer;
 }
 
 .user-orders-list:hover {
-  background-image: none;
-  background-color: #131416;
+  background-color: #1a1a1c;
+}
+
+.user-orders-list:last-child {
+  border-bottom: none;
 }
 
 .user-orders-list span,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "./AdminSuppliers.css";
 import api from "../api/api.js";
@@ -11,26 +11,32 @@ function AdminSuppliers() {
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const triggerRefresh = () => {
+    setRefreshTrigger((prev) => prev + 1);
+  };
 
   const openPopup = (type, supplier = null) => {
     setPopupType(type);
     setSelectedSupplier(supplier);
   };
 
-  useEffect(() => {
-    const fetchSuppliers = async () => {
-      try {
-        const response = await api.get("/suppliers");
-        setSuppliers(response.data);
-      } catch (err) {
-        console.error("Error fetching suppliers:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSuppliers();
+  const fetchSuppliers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/suppliers");
+      setSuppliers(response.data);
+    } catch (err) {
+      console.error("Error fetching suppliers:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, [fetchSuppliers, refreshTrigger]);
 
   useEffect(() => {
     const resizeHandler = () => {
@@ -211,6 +217,7 @@ function AdminSuppliers() {
           type={popupType}
           supplier={selectedSupplier}
           onClose={() => setPopupType(null)}
+          onUpdateSuccess={triggerRefresh}
         />
       )}
     </>

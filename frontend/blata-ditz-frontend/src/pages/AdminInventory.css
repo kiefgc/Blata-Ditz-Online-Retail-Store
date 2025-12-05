@@ -87,36 +87,53 @@ li {
 
 .inventory-list {
   margin-top: 20px;
-  background-color: black;
+  background-color: transparent;
   border-radius: 8px;
   padding: 10px 20px;
+}
+
+.product-table-wrapper {
+  background-color: #131416;
+  border-radius: 8px !important;
 }
 
 .product-table-header,
 .product-table-rows {
   display: grid;
   grid-template-columns: 1.25fr 3fr 1fr 1fr 1fr 1fr;
-  gap: 15px;
-  padding: 5px 10px;
+  gap: 1px;
+  padding: 5px 15px;
   align-items: center;
 }
 
 .product-table-rows {
   margin-bottom: 10px;
+  background-color: #131416;
 }
 
 .product-row-clickable {
   display: contents;
   cursor: pointer;
-  border-bottom: 1px solid #222;
+}
+
+.product-row-clickable:hover > .product-cell {
+  background-color: #1a1a1c;
+}
+
+.product-row-clickable > .product-cell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .product-table-header {
-  font-weight: normal;
-  font-size: 1.25rem;
-  color: #ffcf33;
   margin-bottom: 10px;
-  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.table-header-cell {
+  font-weight: normal;
+  font-size: 1.4rem !important;
+  color: #ffcf33 !important;
+  text-transform: uppercase;
 }
 
 .product-cell,
@@ -127,7 +144,8 @@ li {
   min-height: 70px;
   margin-bottom: 0;
   padding: 5px 0;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  color: #ccc;
 }
 
 .product-cell-active,
@@ -140,6 +158,10 @@ li {
   min-height: 70px;
 }
 
+.product-id-inventory {
+  word-break: break-all;
+}
+
 .product-cell-image img {
   width: 100px;
   height: 60px;
@@ -149,11 +171,12 @@ li {
 
 .product-cell-name {
   display: block;
-  font-size: 1.5rem;
-
+  font-size: 1.3rem;
+  padding-left: 20px;
   padding-right: 30px;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
+  display: flex;
 }
 
 .brand-header {
@@ -164,7 +187,7 @@ li {
   background-color: #070709;
   border-radius: 5px;
   cursor: pointer;
-  color: #fff;
+  color: #ccc;
   transition: background-color 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
@@ -180,8 +203,8 @@ li {
 .brand-name {
   flex-grow: 1;
 
-  font-size: 1.75rem;
-  font-weight: 400;
+  font-size: 1.5rem;
+  font-weight: 500;
 }
 
 .brand-dropdown-icon {
@@ -191,21 +214,16 @@ li {
   transform: rotate(180deg);
 }
 
-.add-product-row {
-  display: flex;
-  flex-direction: column;
-  padding: 15px 0 20px 0;
-  margin-top: 1px;
-  border-top: 2px dotted #333;
-}
-
-.edit-hint {
+.edit-hint-table {
+  width: 100%;
   font-style: italic;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+
+  margin-left: 1vw;
   margin-right: auto;
 }
 
-.add-product-btn {
+.add-product-btn-table {
   background: none;
   color: #ffcf33;
   border: 1px solid #ffcf33;
@@ -213,8 +231,6 @@ li {
   padding: 10px 20px;
   border-radius: 6px;
   margin-top: 2vh;
-  margin-left: auto;
-  margin-right: auto;
 
   font-size: 1rem;
   font-weight: 500;
@@ -519,19 +535,7 @@ li {
   text-align: center;
 }
 
-.add-product-btn {
-  background-color: #070709;
-  color: #ffcf33;
-  border: 1px solid #ffcf33;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.add-product-btn:hover {
+.add-product-btn-table:hover {
   background-color: rgba(255, 207, 51, 0.1); /* Light yellow overlay on hover */
 }
 
@@ -840,7 +844,7 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it's above the edit modal */
+  z-index: 1000;
 }
 
 .confirmation-modal {
@@ -855,7 +859,7 @@ li {
 
 .confirmation-modal h3 {
   font-size: 1.75rem;
-  color: #ffcf33; /* Red color for warning */
+  color: #ffcf33;
   margin-top: 0;
   margin-bottom: 15px;
 }
@@ -873,7 +877,7 @@ li {
 }
 
 .delete-product-final-btn {
-  background-color: #ffcf33; /* Red color for final delete button */
+  background-color: #ffcf33;
   color: black;
   border: none;
   padding: 10px 20px;
@@ -909,4 +913,15 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield; /* Standard property */
+}
+
+.add-product-row-table {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 2vh;
+  padding-bottom: 2vh;
 }
