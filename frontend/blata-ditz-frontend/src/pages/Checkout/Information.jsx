@@ -152,28 +152,32 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
             <p>Your cart is empty.</p>
           ) : (
             <>
-              {cartItems.map((item) => (
-                <div className="order-product-row" key={item.id}>
-                  <div className="order-products">
-                    <img
-                      className="product-img"
-                      src={item.image}
-                      alt={item.name}
-                    />
-                    <span>x{item.quantity}</span>
-                    <div className="overview-name-price">
-                      <span>{item.name}</span>
-                      <span className="overview-price">₱{item.price}</span>
+              <div className="order-products-list">
+                {cartItems.map((item) => (
+                  <div className="order-product-row" key={item.id}>
+                    <div className="order-products">
+                      <img
+                        className="product-img"
+                        src={item.image}
+                        alt={item.name}
+                      />
+                      <span>x{item.quantity}</span>
+                      <div className="overview-name-price">
+                        <span>{item.name}</span>
+                        <span className="overview-price">
+                          ₱{(item.price * item.quantity).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="overview-subtotal">
-                    <span>Subtotal</span>
-                    <span>₱{(item.price * item.quantity).toFixed(2)}</span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
 
               <div className="order-overview-total">
+                <div className="overview-subtotal">
+                  <span>Subtotal</span>
+                  <span>₱{total.toFixed(2)}</span>
+                </div>
                 <div className="overview-shipping">
                   <span>Shipping</span>
                   <span>FREE</span>
