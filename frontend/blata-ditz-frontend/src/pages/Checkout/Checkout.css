@@ -126,18 +126,27 @@
 .order-overview-container {
   background-color: #131416;
   border: 1px solid #d5d6d9;
-  min-height: 60vh;
-  height: auto;
+  height: clamp(450px, 60vh, 650px);
+  overflow-y: auto;
   width: 40%;
   border-radius: 10px;
   padding: 2rem;
-}
-.order-overview {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+}
+.order-overview-total {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+}
+
+.order-products-list {
+  flex: 1;
   overflow-y: auto;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  flex-direction: column;
+  display: flex;
 }
 .order-products {
   font-size: 1.4rem;
@@ -183,7 +192,7 @@
 
 .overview-total {
   font-size: 2rem;
-  margin-top: 15px;
+  margin-top: 7px;
   font-weight: 700;
 }
 
@@ -194,10 +203,10 @@
   flex-direction: column;
   gap: 2rem;
 }
+
 .payment-contact {
-  display: flex;
-  flex-direction: row;
-  gap: 3rem;
+  display: grid;
+  grid-template-columns: 0.3fr 1fr;
 }
 
 .contact-details {

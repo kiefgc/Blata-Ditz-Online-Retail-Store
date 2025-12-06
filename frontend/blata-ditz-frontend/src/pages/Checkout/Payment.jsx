@@ -14,6 +14,7 @@ function CheckoutPayment({ formData }) {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [user, setUser] = useState([]);
 
   // Fetch cart items from backend
   useEffect(() => {
@@ -23,6 +24,12 @@ function CheckoutPayment({ formData }) {
       if (!customerId || !token) return;
 
       try {
+        /* fetch user */
+        const response = await api.get("authentication/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(response.data);
+
         const cartRes = await api.get(`/cart/${customerId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -64,7 +71,7 @@ function CheckoutPayment({ formData }) {
   }, []);
 
   // Concatenate shipping address
-  const shippingAddress = `${formData.street}, ${formData.city}, ${formData.region}, ${formData.postal} — Phone: ${formData.phone}`;
+  const shippingAddress = `${formData.street}, ${formData.city}, ${formData.region}, ${formData.postal}`;
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -125,7 +132,11 @@ function CheckoutPayment({ formData }) {
         <div className="checkout-payment-details">
           {/* ADDRESS */}
           <div className="payment-contact">
-            <span>Address</span>
+            <span>Contact Number</span>
+            <span>{user.phone}</span>
+          </div>
+          <div className="payment-contact">
+            <span>Shipping Address</span>
             <span>{shippingAddress}</span>
           </div>
 
@@ -204,28 +215,32 @@ function CheckoutPayment({ formData }) {
             <p>Your cart is empty.</p>
           ) : (
             <>
-              {cartItems.map((item) => (
-                <div className="order-product-row" key={item.id}>
-                  <div className="order-products">
-                    <img
-                      className="product-img"
-                      src={item.image}
-                      alt={item.name}
-                    />
-                    <span>x{item.quantity}</span>
-                    <div className="overview-name-price">
-                      <span>{item.name}</span>
-                      <span className="overview-price">₱{item.price}</span>
+              <div className="order-products-list">
+                {cartItems.map((item) => (
+                  <div className="order-product-row" key={item.id}>
+                    <div className="order-products">
+                      <img
+                        className="product-img"
+                        src={item.image}
+                        alt={item.name}
+                      />
+                      <span>x{item.quantity}</span>
+                      <div className="overview-name-price">
+                        <span>{item.name}</span>
+                        <span className="overview-price">
+                          ₱{(item.price * item.quantity).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="overview-subtotal">
-                    <span>Subtotal</span>
-                    <span>₱{(item.price * item.quantity).toFixed(2)}</span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
 
               <div className="order-overview-total">
+                <div className="overview-subtotal">
+                  <span>Subtotal</span>
+                  <span>₱{total.toFixed(2)}</span>
+                </div>
                 <div className="overview-shipping">
                   <span>Shipping</span>
                   <span>FREE</span>
