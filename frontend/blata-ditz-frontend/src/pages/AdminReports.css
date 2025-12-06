@@ -304,8 +304,8 @@ li {
   color: #ffcf33;
   margin-bottom: 10px;
   padding-top: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .lowstock-row {
@@ -356,10 +356,6 @@ li {
   background-color: #8b0000;
   color: #ffcccc;
   box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
-}
-
-.critical-stock .lowstock-cell,
-.critical-stock .lowstock-cell-name {
 }
 
 .no-low-stock-message {
