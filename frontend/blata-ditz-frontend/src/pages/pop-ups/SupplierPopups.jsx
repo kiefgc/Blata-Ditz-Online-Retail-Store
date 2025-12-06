@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import api from "../../api/api";
 import "./SupplierPopups.css";
 
-export const ViewEditPopup = ({ type, supplier, onClose, onUpdateSuccess }) => {
+export const ViewEditPopup = ({ type, supplier, onClose }) => {
   const [supplierName, setSupplierName] = useState(
     supplier?.supplier_name || ""
   );
@@ -64,7 +64,6 @@ export const ViewEditPopup = ({ type, supplier, onClose, onUpdateSuccess }) => {
       const res = await api.patch(`/suppliers/${supplier._id}`, payload);
 
       console.log("Updated!", res.data);
-      onUpdateSuccess();
       setShowSuccessModal(true);
     } catch (err) {
       console.error("Update failed:", err);
@@ -77,7 +76,6 @@ export const ViewEditPopup = ({ type, supplier, onClose, onUpdateSuccess }) => {
     try {
       await api.delete(`/suppliers/${supplier._id}`);
       alert("Supplier deleted successfully!");
-      onUpdateSuccess();
       setShowDeleteConfirmation(false);
       onClose();
     } catch (err) {
@@ -163,7 +161,6 @@ export const ViewEditPopup = ({ type, supplier, onClose, onUpdateSuccess }) => {
     try {
       await api.post("/suppliers", newSupplier); // is_active already boolean
       alert("Supplier added successfully");
-      onUpdateSuccess();
       onClose();
     } catch (err) {
       console.error("Error adding supplier:", err);

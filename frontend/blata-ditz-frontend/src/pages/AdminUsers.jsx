@@ -174,11 +174,7 @@ function AdminUsers() {
                 onChange={(e) => setSearchId(e.target.value)}
               />
             </div>
-            <button
-              type="button"
-              className="user-search"
-              onClick={fetchUserById}
-            >
+            <button type="button" onClick={fetchUserById}>
               Search
             </button>
           </div>

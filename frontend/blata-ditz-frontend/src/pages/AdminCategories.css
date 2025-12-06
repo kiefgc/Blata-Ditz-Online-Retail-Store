@@ -14,7 +14,7 @@ li {
   display: flex;
   flex-direction: column;
   padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 8vw, 8rem);
-  color: #ccc;
+  color: #f0f0f0;
   min-height: 100vh;
 }
 

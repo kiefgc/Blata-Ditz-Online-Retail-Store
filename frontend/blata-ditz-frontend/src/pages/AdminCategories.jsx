@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminCategories.css";
 import api from "../api/api.js";
@@ -19,12 +19,6 @@ function AdminCategories() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categoryToUpdate, setCategoryToUpdate] = useState(null);
 
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
-  const triggerRefresh = () => {
-    setRefreshTrigger((prev) => prev + 1);
-  };
-
   useEffect(() => {
     const searchbarScreenResize = () => {
       if (window.innerWidth >= 830) {
@@ -39,29 +33,29 @@ function AdminCategories() {
     };
   }, []);
 
-  const fetchCategories = useCallback(async () => {
-    try {
-      const res = await api.get("/categories");
-      const data = res.data;
-
-      const mapped = data.map((item) => ({
-        id: item._id,
-        name: item.category_name,
-        description: item.description,
-        isActive: item.is_active,
-        createdAt: item.created_at,
-        updatedAt: item.updated_at,
-      }));
-
-      setCategories(mapped);
-    } catch (error) {
-      console.error("Failed to fetch categories:", error);
-    }
-  }, []);
-
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get("/categories");
+        const data = res.data;
+
+        const mapped = data.map((item) => ({
+          id: item._id,
+          name: item.category_name,
+          description: item.description,
+          isActive: item.is_active,
+          createdAt: item.created_at,
+          updatedAt: item.updated_at,
+        }));
+
+        setCategories(mapped);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+
     fetchCategories();
-  }, [fetchCategories, refreshTrigger]);
+  }, []);
 
   const handleCardClick = (category) => {
     if (category.isAction) {
@@ -98,7 +92,7 @@ function AdminCategories() {
         updatedAt: saved.updated_at,
       };
 
-      triggerRefresh();
+      setCategories((prev) => [...prev, mapped]);
       handleCloseModal();
     } catch (error) {
       console.error("Failed to create category:", error);
@@ -162,7 +156,6 @@ function AdminCategories() {
       );
 
       handleCloseModal();
-      triggerRefresh();
     } catch (error) {
       console.error("Failed to update category:", error);
     }
@@ -175,7 +168,6 @@ function AdminCategories() {
       setCategories((prev) => prev.filter((cat) => cat.id !== categoryId));
 
       handleCloseModal();
-      triggerRefresh();
     } catch (error) {
       console.error("Failed to delete category:", error);
     }

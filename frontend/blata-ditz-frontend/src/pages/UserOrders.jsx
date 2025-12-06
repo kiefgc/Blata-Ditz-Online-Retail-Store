@@ -155,30 +155,27 @@ function UserDashboard() {
                   ))}
                 </ul>
               </div>
-              <div className="user-orders-container">
-                <div className="user-orders-columnHeader">
-                  <span>Order ID</span>
-                  <span>Date</span>
-                  <span>Status</span>
-                  <span>Total Amount</span>
-                </div>
 
-                {/* LIST */}
-                {filteredOrders.map((order) => (
-                  <div
-                    key={order._id}
-                    className="user-orders-list"
-                    onClick={() => loadOrderDetails(order)}
-                  >
-                    <span>{order._id}</span>
-                    <span>
-                      {new Date(order.order_date).toLocaleDateString()}
-                    </span>
-                    <span>{order.order_status}</span>
-                    <span>₱{order.total_amount.toFixed(2)}</span>
-                  </div>
-                ))}
+              <div className="user-orders-columnHeader">
+                <span>Order ID</span>
+                <span>Date</span>
+                <span>Status</span>
+                <span>Total Amount</span>
               </div>
+
+              {/* LIST */}
+              {filteredOrders.map((order) => (
+                <div
+                  key={order._id}
+                  className="user-orders-list"
+                  onClick={() => loadOrderDetails(order)}
+                >
+                  <span>{order._id}</span>
+                  <span>{new Date(order.order_date).toLocaleDateString()}</span>
+                  <span>{order.order_status}</span>
+                  <span>₱{order.total_amount.toFixed(2)}</span>
+                </div>
+              ))}
             </div>
 
             {selectedOrder && (

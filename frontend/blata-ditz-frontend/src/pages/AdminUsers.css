@@ -77,7 +77,6 @@ li {
   padding-top: 1.3rem;
   border-radius: 10px;
   padding: 1rem;
-  color: #ccc;
 }
 .users-columnHeader,
 .user-entry {
@@ -86,14 +85,8 @@ li {
   width: 100%;
   font-size: 1.4rem;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 0.1px solid #d5d6d986;
 }
-
-.users-columnHeader {
-  font-size: 1.5rem;
-  text-transform: uppercase;
-}
-
 .users-columnHeader span,
 .user-entry span {
   white-space: normal;
@@ -110,9 +103,4 @@ li {
 .users-list {
   overflow-y: auto;
   height: 50vh;
-}
-
-.user-search {
-  text-transform: uppercase;
-  font-size: 1.2rem !important;
 }

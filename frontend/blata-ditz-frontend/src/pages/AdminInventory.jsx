@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdminInventory.css";
 import api from "../api/api.js";
@@ -9,7 +9,7 @@ import {
 
 const ProductRow = ({ product, onEditClick }) => (
   <div className="product-row-clickable" onClick={() => onEditClick(product)}>
-    <div className="product-cell product-id-inventory">{product._id}</div>
+    <div className="product-cell">{product._id}</div>
     <div className="product-cell product-cell-name">{product.product_name}</div>
     <div className="product-cell product-cell-stock">
       {product.stock_quantity ?? 0}
@@ -28,12 +28,7 @@ const ProductRow = ({ product, onEditClick }) => (
   </div>
 );
 
-const ProductTable = ({
-  products,
-  onEditClick,
-  onAddProductClick,
-  supplierName,
-}) => (
+const ProductTable = ({ products, onEditClick }) => (
   <div className="product-table-wrapper">
     <div className="product-table-header">
       <div className="table-header-cell">Product ID</div>
@@ -44,27 +39,13 @@ const ProductTable = ({
       <div className="table-header-cell">Last Restock</div>
     </div>
     <div className="product-table-rows">
-      {products.length > 0 ? (
-        products.map((product) => (
-          <ProductRow
-            key={product._id}
-            product={product}
-            onEditClick={onEditClick}
-          />
-        ))
-      ) : (
-        <div className="no-products-table-message">
-          No inventory items found for {supplierName}.
-        </div>
-      )}
-      <div className="add-product-row-table">
-        <div className="edit-hint-table">
-          Click on product row to edit details
-        </div>
-        <button className="add-product-btn-table" onClick={onAddProductClick}>
-          + Add New Product
-        </button>
-      </div>
+      {products.map((product) => (
+        <ProductRow
+          key={product._id}
+          product={product}
+          onEditClick={onEditClick}
+        />
+      ))}
     </div>
   </div>
 );
@@ -75,66 +56,54 @@ function AdminInventory() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createModalSupplier, setCreateModalSupplier] = useState("");
   const [editingProduct, setEditingProduct] = useState(null);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
-  const fetchSuppliers = useCallback(async () => {
-    try {
-      // Fetch suppliers
-      const res = await api.get("/suppliers");
-      const suppliersData = res.data;
-
-      // Fetch all inventory
-      const invRes = await api.get("/inventory");
-      const inventoryData = invRes.data;
-
-      // Initialize open state
-
-      setOpenSuppliers((prevOpenState) => {
-        const newOpenState = {};
-        suppliersData.forEach((supplier) => {
-          newOpenState[supplier.supplier_name] = prevOpenState.hasOwnProperty(
-            supplier.supplier_name
-          )
-            ? prevOpenState[supplier.supplier_name]
-            : false;
-        });
-        return newOpenState;
-      });
-
-      // Fetch products per supplier and merge with inventory
-      const suppliersWithProducts = await Promise.all(
-        suppliersData.map(async (supplier) => {
-          const prodRes = await api.get(`/products/supplier/${supplier._id}`);
-          const products = prodRes.data;
-
-          const productsWithInventory = products.map((prod) => {
-            const inv = inventoryData.find((i) => i.product_id === prod._id);
-            return {
-              ...prod,
-              stock_quantity: inv?.stock_quantity ?? 0,
-              reorder_level: inv?.reorder_level ?? "-",
-              max_stock_level: inv?.max_stock_level ?? "-",
-              last_restocked: inv?.last_restocked ?? null,
-            };
-          });
-
-          return { ...supplier, products: productsWithInventory };
-        })
-      );
-
-      setSuppliers(suppliersWithProducts);
-    } catch (error) {
-      console.error("Error fetching suppliers/products/inventory:", error);
-    }
-  }, [setSuppliers, setOpenSuppliers]);
 
   useEffect(() => {
-    fetchSuppliers();
-  }, [fetchSuppliers, refreshTrigger]);
+    const fetchSuppliers = async () => {
+      try {
+        // Fetch suppliers
+        const res = await api.get("/suppliers");
+        const suppliersData = res.data;
 
-  const triggerRefresh = () => {
-    setRefreshTrigger((prev) => prev + 1);
-  };
+        // Fetch all inventory
+        const invRes = await api.get("/inventory");
+        const inventoryData = invRes.data;
+
+        // Initialize open state
+        const openState = {};
+        suppliersData.forEach(
+          (supplier) => (openState[supplier.supplier_name] = false)
+        );
+        setOpenSuppliers(openState);
+
+        // Fetch products per supplier and merge with inventory
+        const suppliersWithProducts = await Promise.all(
+          suppliersData.map(async (supplier) => {
+            const prodRes = await api.get(`/products/supplier/${supplier._id}`);
+            const products = prodRes.data;
+
+            const productsWithInventory = products.map((prod) => {
+              const inv = inventoryData.find((i) => i.product_id === prod._id);
+              return {
+                ...prod,
+                stock_quantity: inv?.stock_quantity ?? 0,
+                reorder_level: inv?.reorder_level ?? "-",
+                max_stock_level: inv?.max_stock_level ?? "-",
+                last_restocked: inv?.last_restocked ?? null,
+              };
+            });
+
+            return { ...supplier, products: productsWithInventory };
+          })
+        );
+
+        setSuppliers(suppliersWithProducts);
+      } catch (error) {
+        console.error("Error fetching suppliers/products/inventory:", error);
+      }
+    };
+
+    fetchSuppliers();
+  }, []);
 
   const toggleSupplier = (supplierName) => {
     setOpenSuppliers((prev) => ({
@@ -291,27 +260,27 @@ function AdminInventory() {
                       <ProductTable
                         products={supplier.products}
                         onEditClick={handleOpenEditModal}
-                        onAddProductClick={() =>
-                          handleOpenCreateModal(supplier)
-                        }
                       />
                     )}
                   {openSuppliers[supplier.supplier_name] &&
                     supplier.products.length === 0 && (
-                      <>
-                        <p className="no-products-message">
-                          No inventory items found for {supplier.supplier_name}.
-                        </p>
-                        <div className="add-product-row">
-                          <button
-                            className="add-product-btn"
-                            onClick={() => handleOpenCreateModal(supplier)}
-                          >
-                            + Add New Product to {supplier.supplier_name}
-                          </button>
-                        </div>
-                      </>
+                      <p className="no-products-message">
+                        No inventory items found for {supplier.supplier_name}.
+                      </p>
                     )}
+                  {openSuppliers[supplier.supplier_name] && (
+                    <div className="add-product-row">
+                      <div className="edit-hint">
+                        Click on product row to edit details
+                      </div>
+                      <button
+                        className="add-product-btn"
+                        onClick={() => handleOpenCreateModal(supplier)}
+                      >
+                        + Add New Product to {supplier.supplier_name}
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -323,7 +292,6 @@ function AdminInventory() {
         <ProductCreateModal
           brandName={createModalSupplier}
           onClose={handleCloseCreateModal}
-          onSuccess={triggerRefresh}
         />
       )}
 
@@ -331,7 +299,6 @@ function AdminInventory() {
         <ProductEditModal
           initialProduct={editingProduct}
           onClose={handleCloseEditModal}
-          onSuccess={triggerRefresh}
         />
       )}
     </>

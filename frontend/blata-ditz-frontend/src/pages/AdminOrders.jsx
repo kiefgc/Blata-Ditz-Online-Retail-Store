@@ -3,7 +3,7 @@ import "./AdminOrders.css";
 import "./Landing.css";
 import api from "../api/api.js";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import OrderPopup from "./pop-ups/OrdersPopup.jsx";
@@ -11,12 +11,6 @@ import OrderPopup from "./pop-ups/OrdersPopup.jsx";
 function AdminOrders() {
   const [selectedTab, setSelectedTab] = useState("All");
   const [orders, setOrders] = useState([]);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-
-  const triggerRefresh = () => {
-    setRefreshTrigger((prev) => prev + 1);
-  };
-
   const filteredOrders = orders.filter((order) => {
     switch (selectedTab) {
       case "To Pay":
@@ -37,25 +31,25 @@ function AdminOrders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showSmallSearchbar, setShowSmallSearchbar] = useState(false);
 
-  const fetchOrders = useCallback(async () => {
-    try {
-      const response = await api.get("/orders");
-      const data = response.data;
-
-      if (Array.isArray(data)) {
-        setOrders(data);
-      } else {
-        console.error("Expected array, got:", data);
-        setOrders([]);
-      }
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-    }
-  }, []);
-
   useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await api.get("/orders");
+        const data = response.data;
+
+        if (Array.isArray(data)) {
+          setOrders(data);
+        } else {
+          console.error("Expected array, got:", data);
+          setOrders([]);
+        }
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
     fetchOrders();
-  }, [fetchOrders, refreshTrigger]);
+  }, []);
 
   useEffect(() => {
     const resizeHandler = () => {
@@ -193,43 +187,41 @@ function AdminOrders() {
                 ))}
               </ul>
             </div>
-            <div className="admin-orders-container">
-              <div className="admin-orders-columnHeader">
-                <span>Order ID</span>
-                <span>Total Amount</span>
-                <span>Date</span>
-                <span>Payment</span>
-                <span>Status</span>
-              </div>
-
-              {/* LIST */}
-              {filteredOrders.map((order) => (
-                <div
-                  key={order._id}
-                  className="admin-orders-list"
-                  onClick={() => setSelectedOrder(order)} // <-- THIS opens the popup
-                >
-                  <span>{order._id}</span>
-
-                  <span>
-                    ₱
-                    {order.total_amount.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                    })}
-                  </span>
-
-                  <span>{new Date(order.order_date).toLocaleDateString()}</span>
-
-                  <span className="payment-status">
-                    {order.payment_status.toUpperCase()}
-                  </span>
-
-                  <span className="order-status">
-                    {order.order_status.toUpperCase()}
-                  </span>
-                </div>
-              ))}
+            <div className="admin-orders-columnHeader">
+              <span>Order ID</span>
+              <span>Total Amount</span>
+              <span>Date</span>
+              <span>Payment</span>
+              <span>Status</span>
             </div>
+
+            {/* LIST */}
+            {filteredOrders.map((order) => (
+              <div
+                key={order._id}
+                className="admin-orders-list"
+                onClick={() => setSelectedOrder(order)} // <-- THIS opens the popup
+              >
+                <span>{order._id}</span>
+
+                <span>
+                  ₱
+                  {order.total_amount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}
+                </span>
+
+                <span>{new Date(order.order_date).toLocaleDateString()}</span>
+
+                <span className="payment-status">
+                  {order.payment_status.toUpperCase()}
+                </span>
+
+                <span className="order-status">
+                  {order.order_status.toUpperCase()}
+                </span>
+              </div>
+            ))}
           </div>
 
           {/* POPUP */}
@@ -237,7 +229,6 @@ function AdminOrders() {
             <OrderPopup
               order={selectedOrder}
               onClose={() => setSelectedOrder(null)}
-              onUpdateSuccess={triggerRefresh}
             />
           )}
         </div>

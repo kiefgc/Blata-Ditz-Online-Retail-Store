@@ -10,6 +10,7 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
 
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState([]);
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -23,6 +24,12 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
       if (!customerId || !token) return;
 
       try {
+        /* fetch user */
+        const response = await api.get("authentication/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(response.data);
+
         const cartRes = await api.get(`/cart/${customerId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -78,14 +85,18 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
       <div className="information-container">
         <div className="checkout-customer-details">
           {/* Only show the required address fields */}
-          <div className="info-input">
-            <span className="info-title">Phone Number</span>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={updateField}
-            />
+          <div className="display-user-info">
+            <div className="info-input">
+              <span className="info-title">Username</span>
+              <span className="fixedInfo">{user.username}</span>
+              <span className="info-title">Email</span>
+              <span className="fixedInfo">{user.email}</span>
+            </div>
+
+            <div className="info-input">
+              <span className="info-title">Phone Number</span>
+              <span className="fixedInfo">{user.phone}</span>
+            </div>
           </div>
           <div className="info-input">
             <span className="info-title">Street No.</span>
@@ -126,8 +137,8 @@ function CheckoutInformation({ formData, setFormData, handleContinue }) {
             </div>
           </div>
 
-          <div className="info-buttons">
-            <button className="proceed-btn" onClick={handleContinue}>
+          <div className="info-buttons to-payment">
+            <button className="proceed-btn " onClick={handleContinue}>
               Continue to Payment
             </button>
           </div>

@@ -82,7 +82,7 @@ li {
 .main-content h1 {
   margin-top: 0;
   margin-bottom: 1rem;
-  font-size: 2rem;
+  font-size: 2.4rem;
 }
 
 .main-content button {
@@ -92,12 +92,10 @@ li {
   background-color: #ffcf33;
   color: black;
   padding: 18px 24px;
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.6rem;
+  font-weight: 500;
   cursor: pointer;
   float: right;
-
-  text-transform: uppercase;
 }
 
 .button-container {
@@ -114,7 +112,7 @@ li {
 
 .user-profile-base {
   color: white;
-  background-color: #131416;
+  background-image: linear-gradient(to top, #292b30, #070709);
   font-size: 1.6rem;
   align-items: center;
   border: 1px solid #d5d6d9;
@@ -128,7 +126,7 @@ li {
 
 .user-profile-info {
   grid-template-columns: 2fr 2fr 2fr;
-  gap: 6rem;
+  gap: 1rem;
   justify-content: center;
 }
 
@@ -149,7 +147,7 @@ input[type="text"] {
 .user-profile-address .form-group label {
   display: block;
   margin-bottom: 2rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .user-profile-info .form-group input[type="text"],
@@ -157,7 +155,7 @@ input[type="text"] {
 .user-profile-address .form-group input[type="text"] {
   display: block;
   padding: 1.5rem;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   background-color: #131416;
   border-color: #d5d6d9;
 }
