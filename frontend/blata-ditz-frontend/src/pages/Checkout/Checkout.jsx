@@ -11,7 +11,7 @@ export default function Checkout() {
     const saved = localStorage.getItem("checkoutForm");
     return saved
       ? JSON.parse(saved)
-      : { phone: "", street: "", postal: "", city: "", region: "" };
+      : { street: "", postal: "", city: "", region: "" };
   });
 
   const handleContinue = () => {

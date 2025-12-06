@@ -44,7 +44,7 @@
 .info-input {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+
   width: 100%;
 }
 
@@ -59,6 +59,20 @@
   padding-bottom: 0.6rem;
   width: 100%;
   color: white;
+}
+
+.display-user-info {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+.fixedInfo {
+  font-size: 1.6rem;
+  font-weight: 300;
+  padding-bottom: 0.6rem;
+  width: 100%;
+  color: white;
+  margin-bottom: 15px;
 }
 
 .info-title {
@@ -85,6 +99,10 @@
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.to-payment {
+  justify-content: flex-end;
 }
 
 .return-cart-btn {
